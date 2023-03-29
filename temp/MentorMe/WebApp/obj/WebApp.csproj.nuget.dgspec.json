@@ -4,6 +4,551 @@
     "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\WebApp.csproj": {}
   },
   "projects": {
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.Contracts\\App.DAL.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.Contracts\\App.DAL.Contracts.csproj",
+        "projectName": "App.DAL.Contracts",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.Contracts\\App.DAL.Contracts.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj",
+        "projectName": "App.DAL.EF",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.Contracts\\App.DAL.Contracts.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.Contracts\\App.DAL.Contracts.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.EF\\Base.DAL.EF.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.EF\\Base.DAL.EF.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj",
+        "projectName": "App.Domain",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj",
+        "projectName": "Base.DAL.Contracts",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.EF\\Base.DAL.EF.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.EF\\Base.DAL.EF.csproj",
+        "projectName": "Base.DAL.EF",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.EF\\Base.DAL.EF.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.EF\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DAL.Contracts\\Base.DAL.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj",
+        "projectName": "Base.Domain.Contracts",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj",
+        "projectName": "Base.DomainEntity",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\WebApp.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -25,7 +570,14 @@
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -40,23 +592,33 @@
           "dependencies": {
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.3, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.3, )"
             },
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.3, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.2, )"
+              "version": "[7.0.3, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
             }
           },
           "imports": [

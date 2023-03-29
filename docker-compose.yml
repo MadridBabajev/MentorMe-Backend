@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  mb-distributed-22-23s-postgres-v1:
+    container_name: mb-distributed-22-23s-postgres-v1
+    image: "postgres:15.2-bullseye"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      # external:internal
+      - "5445:5432"
+    volumes:
+      - mb-distributed-22-23s-postgres-v1-volume:/var/lib/postgresql/data
+
+volumes:
+  mb-distributed-22-23s-postgres-v1-volume:
