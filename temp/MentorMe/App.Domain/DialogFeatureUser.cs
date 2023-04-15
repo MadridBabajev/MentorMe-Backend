@@ -1,5 +1,4 @@
-﻿using Base.DAL.Contracts;
-using Base.DomainEntity;
+﻿using Base.DomainEntity;
 
 namespace Domain;
 

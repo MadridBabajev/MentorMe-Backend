@@ -11,14 +11,10 @@ public static class AppDataInit
     private static readonly Guid StudentId = Guid.NewGuid();
 
     public static void MigrateDatabase(ApplicationDbContext context)
-    {
-        context.Database.Migrate();
-    }
+        => context.Database.Migrate();
 
     public static void DropDatabase(ApplicationDbContext context)
-    {
-        context.Database.EnsureDeleted();
-    }
+        => context.Database.EnsureDeleted();
 
     public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
