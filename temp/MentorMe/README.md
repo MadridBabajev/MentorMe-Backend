@@ -30,7 +30,6 @@ dotnet ef database update --project App.DAL.EF --startup-project WebApp --contex
 Add nuget packages
 - Microsoft.VisualStudio.Web.CodeGeneration.Design
 - Microsoft.EntityFrameworkCore.SqlServer
--
 ~~~bash
 # install tooling
 dotnet tool install --global dotnet-aspnet-codegenerator
@@ -38,9 +37,9 @@ dotnet tool update --global dotnet-aspnet-codegenerator
 
 cd WebApp
 # MVC
-dotnet aspnet-codegenerator controller -m Entity -name EntityController -outDir Controllers -dc ApplicationDbContext  -udl --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -m Student -name StudentsController -outDir Controllers -dc ApplicationDbContext  -udl --referenceScriptLibraries -f
 # Rest API
-dotnet aspnet-codegenerator controller -m Entity -name EntityController -outDir Api -api -dc ApplicationDbContext -udl --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -m Student -name StudentsController -outDir ApiControllers -api -dc ApplicationDbContext -udl -f
 ~~~
 
 # 3. Run Docker Compose
@@ -61,10 +60,15 @@ cd WebApp
 dotnet aspnet-codegenerator identity -dc DAL.EF.App.ApplicationDbContext --userClass AppUser -f 
 ~~~
 
-# 5. Run the live server
+# 5. Required Nuget packages
+* Microsoft.AspNetCore.Authentication.JwtBearer
+* Microsoft.IdentityModel.Tokens
+* ...
+
+# 6. Run the live server
 
 ~~~bash
-dotnet watch run -project WebApp
+dotnet watch run --project WebApp
 ~~~
 
 # Student Data

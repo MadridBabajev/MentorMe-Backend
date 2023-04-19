@@ -1,5 +1,6 @@
 using Base.DAL.Contracts;
 using Domain;
+using Domain.Entities;
 
 namespace App.DAL.Contracts;
 

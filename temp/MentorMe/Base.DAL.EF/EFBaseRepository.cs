@@ -22,6 +22,7 @@ public abstract class EFBaseRepository<TEntity, TKey, TDbContext> : IBaseReposit
 {
     protected TDbContext RepositoryDbContext;
     protected DbSet<TEntity> RepositoryDbSet;
+    private IBaseRepository<TEntity, TKey>? _baseRepositoryImplementation;
 
     public EFBaseRepository(TDbContext dataContext)
     {
@@ -33,7 +34,7 @@ public abstract class EFBaseRepository<TEntity, TKey, TDbContext> : IBaseReposit
     {
         return await RepositoryDbSet.ToListAsync();
     }
- 
+
     public virtual async Task<TEntity?> FindAsync(TKey id)
     {
         return await RepositoryDbSet.FindAsync(id);

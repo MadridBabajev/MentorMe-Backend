@@ -14,10 +14,14 @@ public class AppUOW : EFBaseUOW<ApplicationDbContext>, IAppUOW
 
     private IStudentsRepository? _studentsRepository;
     private ITutorsRepository? _tutorsRepository;
+    private ILessonsRepository? _lessonsRepository;
 
     public IStudentsRepository StudentsRepository =>
         _studentsRepository ??= new StudentsRepository(UowDbContext);
     
     public ITutorsRepository TutorsRepository =>
         _tutorsRepository ??= new TutorsRepository(UowDbContext);
+    
+    public ILessonsRepository LessonsRepository =>
+        _lessonsRepository ??= new LessonsRepository(UowDbContext);
 }

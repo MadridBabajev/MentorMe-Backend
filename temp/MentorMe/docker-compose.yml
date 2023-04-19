@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  mb-distributed-22-23s-postgres-v1:
-    container_name: mb-distributed-22-23s-postgres-v1
+  mb-distributed-22-23s-postgres-v2:
+    container_name: mb-distributed-22-23s-postgres-v2
     image: "postgres:15.2-bullseye"
     restart: unless-stopped
     environment:
@@ -16,7 +16,7 @@ services:
       # external:internal
       - "5445:5432"
     volumes:
-      - mb-distributed-22-23s-postgres-v1-volume:/var/lib/postgresql/data
+      - mb-distributed-22-23s-postgres-v2-volume:/var/lib/postgresql/data
 
 volumes:
-  mb-distributed-22-23s-postgres-v1-volume:
+  mb-distributed-22-23s-postgres-v2-volume:

@@ -188,8 +188,8 @@
               "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj": {
                 "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain.Contracts\\Base.Domain.Contracts.csproj"
               },
-              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj": {
-                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj"
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain\\Base.Domain.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain\\Base.Domain.csproj"
               }
             }
           }
@@ -472,14 +472,14 @@
         }
       }
     },
-    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj": {
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain\\Base.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj",
-        "projectName": "Base.DomainEntity",
-        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\Base.DomainEntity.csproj",
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain\\Base.Domain.csproj",
+        "projectName": "Base.Domain",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain\\Base.Domain.csproj",
         "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.DomainEntity\\obj\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Base.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -549,6 +549,144 @@
         }
       }
     },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj",
+        "projectName": "Helpers",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.29.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.29.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.13, 6.0.13]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj",
+        "projectName": "Public.DTO",
+        "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj",
+        "packagesPath": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Madrid Babajev\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\WebApp.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -576,6 +714,12 @@
               },
               "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
                 "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj"
+              },
+              "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj": {
+                "projectPath": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj"
               }
             }
           }
@@ -590,6 +734,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[7.0.5, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.3, )"
@@ -601,6 +749,10 @@
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
               "version": "[7.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
@@ -614,11 +766,15 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[7.0.4, )"
+              "version": "[7.0.6, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[7.0.3, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.29.0, )"
             }
           },
           "imports": [

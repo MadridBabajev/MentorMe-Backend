@@ -1,13 +1,18 @@
-﻿using Domain;
+﻿using Domain.Entities;
+using Domain.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace App.DAL.EF;
 
-public class ApplicationDbContext: DbContext
+public class ApplicationDbContext: IdentityDbContext<AppUser, AppRole, Guid>
 {
+    public DbSet<AppRefreshToken> AppRefreshTokens { get; set; } = default!;
+    public DbSet<AppUser> AppUsers { get; set; } = default!;
+    
     public DbSet<Student> Students { get; set; } = default!;
-    public DbSet<StudentPaymentMethod> StudentPaymentMethod { get; set; } = default!;
+    public DbSet<StudentPaymentMethod> StudentPaymentMethods { get; set; } = default!;
     public DbSet<StudentSubject> StudentSubjects { get; set; } = default!;
     public DbSet<Tutor> Tutors { get; set; } = default!;
     public DbSet<TutorBankingDetails> TutorBankingDetails { get; set; } = default!;
@@ -22,8 +27,7 @@ public class ApplicationDbContext: DbContext
     public DbSet<LessonParticipation> LessonParticipations { get; set; } = default!;
     public DbSet<Cancellation> Cancellations { get; set; } = default!;
     public DbSet<Payment> Payments { get; set; } = default!;
-
-    public DbSet<DialogFeatureUser> DialogFeatureUsers { get; set; } = default!;
+    
     public DbSet<Message> Messages { get; set; } = default!;
     public DbSet<Dialog> Dialogs { get; set; } = default!;
     public DbSet<DialogParticipant> DialogParticipants { get; set; } = default!;
@@ -38,19 +42,22 @@ public class ApplicationDbContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        // TODO make additional configurations here
         // TODO var persons = ctx.Users.AsNoTracking().ToList() - For No-Tracking approach
         // Remove Cascade delete on all the entities
-        // foreach (var relationship in modelBuilder.Model
-        //              .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-        // {
-        //     relationship.DeleteBehavior = DeleteBehavior.Restrict;
-        // }
+        foreach (var relationship in modelBuilder.Model
+                     .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { 
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+    {
+        
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+        }
     }
     private readonly IConfiguration _configuration;
     

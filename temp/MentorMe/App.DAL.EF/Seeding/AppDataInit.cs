@@ -66,6 +66,7 @@ public static class AppDataInit
         context.SaveChanges();
     }
 
+    // TODO seed lessons, dialogs, etc.
     // private static void SeedAppDataTrainingPlan(ApplicationDbContext context)
     // {
     //     if (context.TrainingPlans.Any()) return;

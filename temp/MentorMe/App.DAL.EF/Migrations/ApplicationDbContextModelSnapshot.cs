@@ -22,7 +22,7 @@ namespace App.DAL.EF.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Cancellation", b =>
+            modelBuilder.Entity("Domain.Entities.Cancellation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Cancellations");
                 });
 
-            modelBuilder.Entity("Domain.Dialog", b =>
+            modelBuilder.Entity("Domain.Entities.Dialog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,34 +85,17 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Dialogs");
                 });
 
-            modelBuilder.Entity("Domain.DialogFeatureUser", b =>
+            modelBuilder.Entity("Domain.Entities.DialogParticipant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("EntityComment")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DialogFeatureUsers");
-                });
-
-            modelBuilder.Entity("Domain.DialogParticipant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("AppUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("DialogFeatureUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("DialogId")
                         .HasColumnType("uuid");
@@ -125,14 +108,14 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DialogFeatureUserId");
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("DialogId");
 
                     b.ToTable("DialogParticipants");
                 });
 
-            modelBuilder.Entity("Domain.Lesson", b =>
+            modelBuilder.Entity("Domain.Entities.Lesson", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +168,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Lessons");
                 });
 
-            modelBuilder.Entity("Domain.LessonParticipation", b =>
+            modelBuilder.Entity("Domain.Entities.LessonParticipation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,7 +195,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("LessonParticipations");
                 });
 
-            modelBuilder.Entity("Domain.LessonPayment", b =>
+            modelBuilder.Entity("Domain.Entities.LessonPayment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -249,10 +232,13 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("LessonPayments");
                 });
 
-            modelBuilder.Entity("Domain.Message", b =>
+            modelBuilder.Entity("Domain.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AppUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
@@ -262,9 +248,6 @@ namespace App.DAL.EF.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DialogFeatureUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("DialogId")
                         .HasColumnType("uuid");
@@ -280,24 +263,24 @@ namespace App.DAL.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DialogFeatureUserId");
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("DialogId");
 
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("Domain.Notification", b =>
+            modelBuilder.Entity("Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("DialogFeatureUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("EntityComment")
                         .HasColumnType("text");
@@ -322,15 +305,12 @@ namespace App.DAL.EF.Migrations
                     b.Property<DateTime>("Time")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("WasSeen")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DialogFeatureUserId");
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("LessonId");
 
@@ -341,7 +321,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.Payment", b =>
+            modelBuilder.Entity("Domain.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -381,7 +361,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("Domain.Review", b =>
+            modelBuilder.Entity("Domain.Entities.Review", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -418,93 +398,30 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("Domain.Student", b =>
+            modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AppUserType")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(7, 2)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("DialogFeatureUserId")
+                    b.Property<Guid>("AppUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
-                    b.Property<bool>("IsBlocked")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("MobilePhone")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("character varying(14)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("NotificationsEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
+                    b.Property<string>("EntityComment")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DialogFeatureUserId")
+                    b.HasIndex("AppUserId")
                         .IsUnique();
 
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Domain.StudentPaymentMethod", b =>
+            modelBuilder.Entity("Domain.Entities.StudentPaymentMethod", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -533,10 +450,10 @@ namespace App.DAL.EF.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentPaymentMethod");
+                    b.ToTable("StudentPaymentMethods");
                 });
 
-            modelBuilder.Entity("Domain.StudentSubject", b =>
+            modelBuilder.Entity("Domain.Entities.StudentSubject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -563,7 +480,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("StudentSubjects");
                 });
 
-            modelBuilder.Entity("Domain.Subject", b =>
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -593,7 +510,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("Domain.Tag", b =>
+            modelBuilder.Entity("Domain.Entities.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -630,99 +547,36 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("Domain.Tutor", b =>
+            modelBuilder.Entity("Domain.Entities.Tutor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("AppUserType")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(7, 2)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("DialogFeatureUserId")
+                    b.Property<Guid>("AppUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Email")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EntityComment")
                         .HasColumnType("text");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
 
                     b.Property<decimal>("HourlyRate")
                         .HasColumnType("decimal(4, 2)");
 
-                    b.Property<int>("HoursTutored")
+                    b.Property<int>("MinutesTutored")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsBlocked")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("MobilePhone")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("character varying(14)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("NotificationsEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DialogFeatureUserId")
+                    b.HasIndex("AppUserId")
                         .IsUnique();
 
                     b.ToTable("Tutors");
                 });
 
-            modelBuilder.Entity("Domain.TutorAvailability", b =>
+            modelBuilder.Entity("Domain.Entities.TutorAvailability", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -753,7 +607,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("TutorAvailabilities");
                 });
 
-            modelBuilder.Entity("Domain.TutorBankingDetails", b =>
+            modelBuilder.Entity("Domain.Entities.TutorBankingDetails", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -786,7 +640,7 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("TutorBankingDetails");
                 });
 
-            modelBuilder.Entity("Domain.TutorSubject", b =>
+            modelBuilder.Entity("Domain.Entities.TutorSubject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -807,18 +661,271 @@ namespace App.DAL.EF.Migrations
                     b.ToTable("TutorSubjects");
                 });
 
-            modelBuilder.Entity("Domain.Cancellation", b =>
+            modelBuilder.Entity("Domain.Identity.AppRefreshToken", b =>
                 {
-                    b.HasOne("Domain.Lesson", "Lesson")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AppUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpirationDT")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("PreviousExpirationDT")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("PreviousRefreshToken")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("AppRefreshTokens");
+                });
+
+            modelBuilder.Entity("Domain.Identity.AppRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Identity.AppUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AppUserType")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(7, 2)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("MobilePhone")
+                        .IsRequired()
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("NotificationsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Cancellation", b =>
+                {
+                    b.HasOne("Domain.Entities.Lesson", "Lesson")
                         .WithOne("Cancellation")
-                        .HasForeignKey("Domain.Cancellation", "LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Domain.Entities.Cancellation", "LessonId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", "Student")
                         .WithMany("Cancellations")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Lesson");
@@ -826,41 +933,42 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Domain.DialogParticipant", b =>
+            modelBuilder.Entity("Domain.Entities.DialogParticipant", b =>
                 {
-                    b.HasOne("Domain.DialogFeatureUser", "DialogFeatureUser")
-                        .WithMany("Participants")
-                        .HasForeignKey("DialogFeatureUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                        .WithMany("Participations")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Dialog", "Dialog")
+                    b.HasOne("Domain.Entities.Dialog", "Dialog")
                         .WithMany("Participants")
                         .HasForeignKey("DialogId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Dialog");
-
-                    b.Navigation("DialogFeatureUser");
                 });
 
-            modelBuilder.Entity("Domain.Lesson", b =>
+            modelBuilder.Entity("Domain.Entities.Lesson", b =>
                 {
-                    b.HasOne("Domain.Student", null)
+                    b.HasOne("Domain.Entities.Student", null)
                         .WithMany("Lessons")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Subject", "Subject")
+                    b.HasOne("Domain.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tutor", "Tutor")
+                    b.HasOne("Domain.Entities.Tutor", "Tutor")
                         .WithMany("Lessons")
                         .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Subject");
@@ -868,18 +976,18 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Domain.LessonParticipation", b =>
+            modelBuilder.Entity("Domain.Entities.LessonParticipation", b =>
                 {
-                    b.HasOne("Domain.Lesson", "Lesson")
+                    b.HasOne("Domain.Entities.Lesson", "Lesson")
                         .WithMany("LessonParticipations")
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Lesson");
@@ -887,30 +995,30 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Domain.LessonPayment", b =>
+            modelBuilder.Entity("Domain.Entities.LessonPayment", b =>
                 {
-                    b.HasOne("Domain.Lesson", "Lesson")
+                    b.HasOne("Domain.Entities.Lesson", "Lesson")
                         .WithMany("Payments")
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Payment", "Payment")
+                    b.HasOne("Domain.Entities.Payment", "Payment")
                         .WithMany("LessonPayments")
                         .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", "Student")
                         .WithMany("LessonPayments")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tutor", "Tutor")
+                    b.HasOne("Domain.Entities.Tutor", "Tutor")
                         .WithMany("LessonPayments")
                         .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Lesson");
@@ -922,44 +1030,48 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Domain.Message", b =>
+            modelBuilder.Entity("Domain.Entities.Message", b =>
                 {
-                    b.HasOne("Domain.DialogFeatureUser", "DialogFeatureUser")
+                    b.HasOne("Domain.Identity.AppUser", "AppUser")
                         .WithMany("Messages")
-                        .HasForeignKey("DialogFeatureUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Dialog", "Dialog")
+                    b.HasOne("Domain.Entities.Dialog", "Dialog")
                         .WithMany("Messages")
                         .HasForeignKey("DialogId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Dialog");
-
-                    b.Navigation("DialogFeatureUser");
                 });
 
-            modelBuilder.Entity("Domain.Notification", b =>
+            modelBuilder.Entity("Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("Domain.DialogFeatureUser", "DialogFeatureUser")
+                    b.HasOne("Domain.Identity.AppUser", "AppUser")
                         .WithMany("Notifications")
-                        .HasForeignKey("DialogFeatureUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Lesson", "Lesson")
+                    b.HasOne("Domain.Entities.Lesson", "Lesson")
                         .WithMany("Notifications")
-                        .HasForeignKey("LessonId");
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.LessonPayment", "LessonPayment")
+                    b.HasOne("Domain.Entities.LessonPayment", "LessonPayment")
                         .WithMany()
-                        .HasForeignKey("LessonPaymentId");
+                        .HasForeignKey("LessonPaymentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Message", "Message")
+                    b.HasOne("Domain.Entities.Message", "Message")
                         .WithMany()
-                        .HasForeignKey("MessageId");
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("DialogFeatureUser");
+                    b.Navigation("AppUser");
 
                     b.Navigation("Lesson");
 
@@ -968,18 +1080,18 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Message");
                 });
 
-            modelBuilder.Entity("Domain.Review", b =>
+            modelBuilder.Entity("Domain.Entities.Review", b =>
                 {
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", "Student")
                         .WithMany("Reviews")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tutor", "Tutor")
+                    b.HasOne("Domain.Entities.Tutor", "Tutor")
                         .WithMany("Reviews")
                         .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -987,40 +1099,40 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Domain.Student", b =>
+            modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
-                    b.HasOne("Domain.DialogFeatureUser", "DialogFeatureUser")
-                        .WithOne("StudentProfile")
-                        .HasForeignKey("Domain.Student", "DialogFeatureUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                        .WithOne("Student")
+                        .HasForeignKey("Domain.Entities.Student", "AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("DialogFeatureUser");
+                    b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Domain.StudentPaymentMethod", b =>
+            modelBuilder.Entity("Domain.Entities.StudentPaymentMethod", b =>
                 {
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", "Student")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Domain.StudentSubject", b =>
+            modelBuilder.Entity("Domain.Entities.StudentSubject", b =>
                 {
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", "Student")
                         .WithMany("StudentSubjects")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Subject", "Subject")
+                    b.HasOne("Domain.Entities.Subject", "Subject")
                         .WithMany("StudentSubjects")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -1028,18 +1140,18 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("Domain.Tag", b =>
+            modelBuilder.Entity("Domain.Entities.Tag", b =>
                 {
-                    b.HasOne("Domain.Lesson", "Lesson")
+                    b.HasOne("Domain.Entities.Lesson", "Lesson")
                         .WithMany("Tags")
                         .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tutor", "Tutor")
+                    b.HasOne("Domain.Entities.Tutor", "Tutor")
                         .WithMany("Tags")
                         .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Lesson");
@@ -1047,47 +1159,48 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Domain.Tutor", b =>
+            modelBuilder.Entity("Domain.Entities.Tutor", b =>
                 {
-                    b.HasOne("Domain.DialogFeatureUser", "DialogFeatureUser")
-                        .WithOne("TutorProfile")
-                        .HasForeignKey("Domain.Tutor", "DialogFeatureUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                        .WithOne("Tutor")
+                        .HasForeignKey("Domain.Entities.Tutor", "AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("DialogFeatureUser");
+                    b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("Domain.TutorAvailability", b =>
+            modelBuilder.Entity("Domain.Entities.TutorAvailability", b =>
                 {
-                    b.HasOne("Domain.Tutor", null)
+                    b.HasOne("Domain.Entities.Tutor", null)
                         .WithMany("Availabilities")
-                        .HasForeignKey("TutorId");
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Domain.TutorBankingDetails", b =>
+            modelBuilder.Entity("Domain.Entities.TutorBankingDetails", b =>
                 {
-                    b.HasOne("Domain.Tutor", "Tutor")
+                    b.HasOne("Domain.Entities.Tutor", "Tutor")
                         .WithOne("BankingDetails")
-                        .HasForeignKey("Domain.TutorBankingDetails", "TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Domain.Entities.TutorBankingDetails", "TutorId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Domain.TutorSubject", b =>
+            modelBuilder.Entity("Domain.Entities.TutorSubject", b =>
                 {
-                    b.HasOne("Domain.Subject", "Subject")
+                    b.HasOne("Domain.Entities.Subject", "Subject")
                         .WithMany("TutorSubjects")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tutor", "Tutor")
+                    b.HasOne("Domain.Entities.Tutor", "Tutor")
                         .WithMany("TutorSubjects")
                         .HasForeignKey("TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Subject");
@@ -1095,27 +1208,76 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tutor");
                 });
 
-            modelBuilder.Entity("Domain.Dialog", b =>
+            modelBuilder.Entity("Domain.Identity.AppRefreshToken", b =>
+                {
+                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                        .WithMany("AppRefreshTokens")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Domain.Identity.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Domain.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("Domain.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("Domain.Identity.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("Domain.Identity.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Dialog", b =>
                 {
                     b.Navigation("Messages");
 
                     b.Navigation("Participants");
                 });
 
-            modelBuilder.Entity("Domain.DialogFeatureUser", b =>
-                {
-                    b.Navigation("Messages");
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("Participants");
-
-                    b.Navigation("StudentProfile");
-
-                    b.Navigation("TutorProfile");
-                });
-
-            modelBuilder.Entity("Domain.Lesson", b =>
+            modelBuilder.Entity("Domain.Entities.Lesson", b =>
                 {
                     b.Navigation("Cancellation");
 
@@ -1128,12 +1290,12 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tags");
                 });
 
-            modelBuilder.Entity("Domain.Payment", b =>
+            modelBuilder.Entity("Domain.Entities.Payment", b =>
                 {
                     b.Navigation("LessonPayments");
                 });
 
-            modelBuilder.Entity("Domain.Student", b =>
+            modelBuilder.Entity("Domain.Entities.Student", b =>
                 {
                     b.Navigation("Cancellations");
 
@@ -1148,14 +1310,14 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("StudentSubjects");
                 });
 
-            modelBuilder.Entity("Domain.Subject", b =>
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
                 {
                     b.Navigation("StudentSubjects");
 
                     b.Navigation("TutorSubjects");
                 });
 
-            modelBuilder.Entity("Domain.Tutor", b =>
+            modelBuilder.Entity("Domain.Entities.Tutor", b =>
                 {
                     b.Navigation("Availabilities");
 
@@ -1170,6 +1332,21 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("Tags");
 
                     b.Navigation("TutorSubjects");
+                });
+
+            modelBuilder.Entity("Domain.Identity.AppUser", b =>
+                {
+                    b.Navigation("AppRefreshTokens");
+
+                    b.Navigation("Messages");
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("Participations");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Tutor");
                 });
 #pragma warning restore 612, 618
         }
