@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "YWLJVYzn/DvRjAyxauQDYLi1WxY+m9/0Lkqi8NNvZnc=",
+  "Hash": "UGeRsocTgULQhMqJh/0ltRCn1lbz4qs8U27cfVQuFuM=",
   "Source": "WebApp",
   "BasePath": "_content/WebApp",
   "Mode": "Default",
@@ -1035,40 +1035,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Madrid Babajev\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\7.0.3\\staticwebassets\\V5\\lib\\jquery\\LICENSE.txt"
-    },
-    {
-      "Identity": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\WebApp.styles.css",
-      "SourceId": "WebApp",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
-      "BasePath": "_content/WebApp",
-      "RelativePath": "WebApp.styles.css",
-      "AssetKind": "All",
-      "AssetMode": "CurrentProject",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ApplicationBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\WebApp.styles.css"
-    },
-    {
-      "Identity": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\WebApp.bundle.scp.css",
-      "SourceId": "WebApp",
-      "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
-      "BasePath": "_content/WebApp",
-      "RelativePath": "WebApp.bundle.scp.css",
-      "AssetKind": "All",
-      "AssetMode": "Reference",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "ScopedCss",
-      "AssetTraitValue": "ProjectBundle",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\WebApp.bundle.scp.css"
     },
     {
       "Identity": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\css\\site.css",

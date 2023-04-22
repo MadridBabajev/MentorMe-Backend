@@ -41,6 +41,7 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         const string firstname = "TestFirst";
         const string lastname = "TestLast";
         const string password = "Foo.bar1";
+        const string isTutor = "Tutor";
 
         var registerData = new
         {
@@ -49,6 +50,7 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
             Password = password,
             Firstname = firstname,
             Lastname = lastname,
+            IsTutor = isTutor.Equals("Tutor")
         };
         var data = JsonContent.Create(registerData);
 
@@ -57,8 +59,9 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
 
         // Assert
         var responseContent = await response.Content.ReadAsStringAsync();
+        
         Assert.Equal(true, response.IsSuccessStatusCode);
-        VerifyJwtContent(responseContent, email, mobile, firstname, lastname, DateTime.Now.AddSeconds(2).ToUniversalTime());
+        VerifyJwtContent(responseContent, email, mobile, firstname, lastname, isTutor, DateTime.Now.AddSeconds(2).ToUniversalTime());
     }
 
     [Fact(DisplayName = "POST - login user")]
@@ -69,10 +72,11 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         const string firstname = "TestFirst";
         const string lastname = "TestLast";
         const string password = "Foo.bar1";
+        const string isTutor = "Tutor";
         const int expiresInSeconds = 1;
 
         // Arrange
-        await RegisterNewUser(email, mobile, password, firstname, lastname, expiresInSeconds);
+        await RegisterNewUser(email, mobile, password, firstname, lastname, isTutor, expiresInSeconds);
 
 
         var URL = "/api/v1/identity/account/login?expiresInSeconds=1";
@@ -81,6 +85,7 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         {
             Email = email,
             Password = password,
+            isTutor = isTutor.Equals("Tutor")
         };
 
         var data = JsonContent.Create(loginData);
@@ -91,8 +96,13 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         var responseContent = await response.Content.ReadAsStringAsync();
 
         // Assert
+        if (!response.IsSuccessStatusCode)
+        {
+            _testOutputHelper.WriteLine($"Response content: {responseContent}");
+        }
         Assert.Equal(true, response.IsSuccessStatusCode);
-        VerifyJwtContent(responseContent, email, mobile, firstname, lastname,
+        
+        VerifyJwtContent(responseContent, email, mobile, firstname, lastname, isTutor,
             DateTime.Now.AddSeconds(expiresInSeconds + 1).ToUniversalTime());
     }
 
@@ -104,11 +114,12 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         const string firstname = "TestFirst";
         const string lastname = "TestLast";
         const string password = "Foo.bar1";
+        const string isTutor = "Tutor";
         const int expiresInSeconds = 3;
         const string URL = "/api/v1/lessons";
 
         // Arrange
-        var jwt = await RegisterNewUser(email, mobile, password, firstname, lastname, expiresInSeconds);
+        var jwt = await RegisterNewUser(email, mobile, password, firstname, lastname, isTutor, expiresInSeconds);
         var jwtResponse = JsonSerializer.Deserialize<JWTResponse>(jwt, _camelCaseJsonSerializerOptions);
 
 
@@ -142,11 +153,12 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         const string firstname = "TestFirst";
         const string lastname = "TestLast";
         const string password = "Foo.bar1";
+        const string isTutor = "Tutor";
         const int expiresInSeconds = 3;
         const string URL = "/api/v1/lessons";
 
         // Arrange
-        var jwt = await RegisterNewUser(email, mobile, password, firstname, lastname, expiresInSeconds);
+        var jwt = await RegisterNewUser(email, mobile, password, firstname, lastname, isTutor, expiresInSeconds);
         var jwtResponse = JsonSerializer.Deserialize<JWTResponse>(jwt, _camelCaseJsonSerializerOptions);
         
         // let the jwt expire
@@ -186,7 +198,7 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         Assert.Equal(true, response3.IsSuccessStatusCode);
     }
     
-    private void VerifyJwtContent(string jwt, string email, string mobile, string firstname, string lastname,
+    private void VerifyJwtContent(string jwt, string email, string mobile, string firstname, string lastname, string userType, 
         DateTime validToIsSmallerThan)
     {
         var jwtResponse = JsonSerializer.Deserialize<JWTResponse>(jwt, _camelCaseJsonSerializerOptions);
@@ -201,10 +213,11 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         Assert.Equal(mobile, jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value);
         Assert.Equal(firstname, jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value);
         Assert.Equal(lastname, jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value);
+        Assert.Equal(userType, jwtToken.Claims.FirstOrDefault(c => c.Type == "UserType")?.Value);
         Assert.True(jwtToken.ValidTo < validToIsSmallerThan);
     }
 
-    private async Task<string> RegisterNewUser(string email, string mobile, string password, string firstname, string lastname,
+    private async Task<string> RegisterNewUser(string email, string mobile, string password, string firstname, string lastname, string isTutor,
         int expiresInSeconds)
     {
         var URL = $"/api/v1/identity/account/register?expiresInSeconds={expiresInSeconds}";
@@ -216,6 +229,7 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
             Password = password,
             Firstname = firstname,
             Lastname = lastname,
+            IsTutor = isTutor.Equals("Tutor") // Change this line
         };
 
         var data = JsonContent.Create(registerData);
@@ -226,7 +240,7 @@ public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Progra
         // Assert
         Assert.Equal(true, response.IsSuccessStatusCode);
 
-        VerifyJwtContent(responseContent, email, mobile, firstname, lastname,
+        VerifyJwtContent(responseContent, email, mobile, firstname, lastname, isTutor,
             DateTime.Now.AddSeconds(expiresInSeconds + 1).ToUniversalTime());
 
         return responseContent;

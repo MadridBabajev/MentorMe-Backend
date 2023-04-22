@@ -56,8 +56,6 @@ C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.csproj.CoreCompileInputs.cache
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.RazorAssemblyInfo.cache
-C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.RazorAssemblyInfo.cs
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\staticwebassets\msbuild.WebApp.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\staticwebassets\msbuild.build.WebApp.props
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.WebApp.props
@@ -65,9 +63,7 @@ C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\staticwebassets.pack.json
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\staticwebassets.development.json
-C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\scopedcss\bundle\WebApp.styles.css
-C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\scopedcss\projectbundle\WebApp.bundle.scp.css
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.csproj.CopyComplete
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\WebApp.dll
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\obj\Debug\net7.0\refint\WebApp.dll
@@ -332,3 +328,12 @@ C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\Public.DTO.dll
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\Helpers.pdb
 C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\Public.DTO.pdb
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\BrowserDebugHost.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\BrowserDebugHost.runtimeconfig.json
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\BrowserDebugProxy.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\Microsoft.CodeAnalysis.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\BlazorDebugProxy\Newtonsoft.Json.dll
+C:\Users\Madrid Babajev\AllProjects\RiderProjects\icd0021-22-23-s\temp\MentorMe\WebApp\bin\Debug\net7.0\Microsoft.AspNetCore.Components.WebAssembly.Server.dll

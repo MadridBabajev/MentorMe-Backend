@@ -19,4 +19,6 @@ public class Register
 
     [StringLength(128, MinimumLength = 1, ErrorMessage = "Incorrect length")]
     public string Lastname { get; set; } = default!;
+
+    public bool IsTutor { get; set; } = default!;
 }

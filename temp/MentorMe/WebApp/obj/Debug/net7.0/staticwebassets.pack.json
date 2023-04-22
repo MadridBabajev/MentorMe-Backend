@@ -1,10 +1,6 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\WebApp.bundle.scp.css",
-      "PackagePath": "staticwebassets\\WebApp.bundle.scp.css"
-    },
-    {
       "Id": "C:\\Users\\Madrid Babajev\\AllProjects\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

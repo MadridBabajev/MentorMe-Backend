@@ -24,6 +24,7 @@ public static class IdentityHelpers
         
         var claimsList = claims.ToList();
         claimsList.Add(new Claim(ClaimTypes.MobilePhone, mobilePhone));
+        // claimsList.Add(new Claim("UserType", userType));
         
         var token = new JwtSecurityToken(
             issuer: issuer,

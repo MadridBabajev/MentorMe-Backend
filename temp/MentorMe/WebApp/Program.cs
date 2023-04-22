@@ -53,16 +53,29 @@ builder.Services
     });
 
 // MVC Pages
-builder.Services.AddControllersWithViews();
+// builder.Services.AddControllersWithViews();
 
 // Cors
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("CorsAllowAll", policy =>
+//     {
+//         policy.AllowAnyHeader();
+//         policy.AllowAnyMethod();
+//         policy.AllowAnyOrigin();
+//     });
+// });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsAllowAll", policy =>
     {
-        policy.AllowAnyHeader();
-        policy.AllowAnyMethod();
-        policy.AllowAnyOrigin();
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithExposedHeaders("WWW-Authenticate") // Add this line to expose the WWW-Authenticate header
+            .Build(); // Add this line to build the policy
     });
 });
 
@@ -99,7 +112,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+// app.MapRazorPages();
 
 // ===================== Run the Web server and wait for requests =====================
 
