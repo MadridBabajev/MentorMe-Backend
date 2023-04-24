@@ -56,16 +56,6 @@ builder.Services
 // builder.Services.AddControllersWithViews();
 
 // Cors
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("CorsAllowAll", policy =>
-//     {
-//         policy.AllowAnyHeader();
-//         policy.AllowAnyMethod();
-//         policy.AllowAnyOrigin();
-//     });
-// });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsAllowAll", policy =>
@@ -102,7 +92,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseCors("CorsAllowAll");
@@ -118,7 +107,7 @@ app.MapControllerRoute(
 
 app.Run();
 
-static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
+static async void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
 {
     using var serviceScope = app.ApplicationServices
         .GetRequiredService<IServiceScopeFactory>()
@@ -164,7 +153,7 @@ static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
     if (configuration.GetValue<bool>("DataInit:SeedIdentity"))
     {
         logger.LogInformation("Seeding identity");
-        AppDataInit.SeedIdentity(userManager, roleManager);
+        await AppDataInit.SeedIdentity(userManager, roleManager);
     }
 
     if (configuration.GetValue<bool>("DataInit:SeedData"))

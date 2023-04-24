@@ -117,6 +117,7 @@ public class AccountController : ControllerBase
             _configuration.GetValue<string>("JWT:Issuer")!,
             _configuration.GetValue<string>("JWT:Audience")!,
             appUser.MobilePhone,
+            appUser.AppUserType.ToString(),
             expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
                 ? expiresInSeconds
                 : _configuration.GetValue<int>("JWT:ExpiresInSeconds")
@@ -139,9 +140,11 @@ public class AccountController : ControllerBase
 
         // TODO right now it doesn't check for the user type
         
-        // verify username
-        var appUser = await _userManager.FindByEmailAsync(loginData.Email);
-        if (appUser == null)
+        // verify if the user exists
+        var appUsers = await _userManager.Users
+            .Where(u => u.Email == loginData.Email).ToListAsync();
+        
+        if (!appUsers.Any())
         {
             _logger.LogWarning("WebApi login failed, email {} not found", loginData.Email);
             await Task.Delay(_rnd.Next(100, 1000));
@@ -152,19 +155,33 @@ public class AccountController : ControllerBase
                 Error = "User/Password problem"
             });
         }
+
+        var appUser = IdentityHelpers.FilterOutUsers(loginData.IsTutor, appUsers);
         
-        // Check if the user is logging in with the correct user type
-        if ((loginData.IsTutor && appUser.AppUserType != EUserType.Tutor) ||
-            (!loginData.IsTutor && appUser.AppUserType != EUserType.Student))
+        if (appUser == null)
         {
-            _logger.LogWarning("WebApi login failed, wrong user type for user {}", loginData.Email);
+            _logger.LogWarning("WebApi login failed, email {} not found", loginData.Email);
             await Task.Delay(_rnd.Next(100, 1000));
+        
             return NotFound(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.NotFound,
                 Error = "User/Password problem"
             });
         }
+        
+        // Check if the user is logging in with the correct user type
+        // if ((loginData.IsTutor && appUser.AppUserType != EUserType.Tutor) ||
+        //     (!loginData.IsTutor && appUser.AppUserType != EUserType.Student))
+        // {
+        //     _logger.LogWarning("WebApi login failed, wrong user type for user {}", loginData.Email);
+        //     await Task.Delay(_rnd.Next(100, 1000));
+        //     return NotFound(new RestApiErrorResponse
+        //     {
+        //         Status = HttpStatusCode.NotFound,
+        //         Error = "User/Password problem"
+        //     });
+        // }
 
         // verify username and password
         var result = await _signInManager.CheckPasswordSignInAsync(appUser, loginData.Password, false);
@@ -227,6 +244,7 @@ public class AccountController : ControllerBase
             _configuration["JWT:Issuer"]!,
             _configuration["JWT:Audience"]!,
             appUser.MobilePhone,
+            appUser.AppUserType.ToString(),
             expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
                 ? expiresInSeconds
                 : _configuration.GetValue<int>("JWT:ExpiresInSeconds")
@@ -240,7 +258,6 @@ public class AccountController : ControllerBase
 
         return Ok(res);
     }
-
 
     [HttpPost]
     public async Task<ActionResult> RefreshToken(
@@ -355,6 +372,7 @@ public class AccountController : ControllerBase
             _configuration["JWT:Issuer"]!,
             _configuration["JWT:Audience"]!,
             appUser.MobilePhone,
+            appUser.AppUserType.ToString(),
             expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
                 ? expiresInSeconds
                 : _configuration.GetValue<int>("JWT:ExpiresInSeconds")
@@ -424,6 +442,4 @@ public class AccountController : ControllerBase
 
         return Ok(new {TokenDeleteCount = deleteCount});
     }
-
-
 }

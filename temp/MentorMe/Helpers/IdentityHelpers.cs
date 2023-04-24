@@ -1,7 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Domain.Enums;
+using Domain.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Public.DTO.v1.Identity;
 
 namespace Helpers;
 
@@ -15,7 +18,7 @@ public static class IdentityHelpers
     }
     
     public static string GenerateJwt(IEnumerable<Claim> claims, string key,
-        string issuer, string audience, string mobilePhone,
+        string issuer, string audience, string mobilePhone, string userType,
         int expiresInSeconds)
     {
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -24,7 +27,7 @@ public static class IdentityHelpers
         
         var claimsList = claims.ToList();
         claimsList.Add(new Claim(ClaimTypes.MobilePhone, mobilePhone));
-        // claimsList.Add(new Claim("UserType", userType));
+        claimsList.Add(new Claim("UserType", userType));
         
         var token = new JwtSecurityToken(
             issuer: issuer,
@@ -33,9 +36,9 @@ public static class IdentityHelpers
             expires: expires,
             signingCredentials: signingCredentials
         );
+        
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
 
     public static bool ValidateToken(string jwt,  string key,
         string issuer, string audience, bool ignoreExpiration = true)
@@ -74,5 +77,22 @@ public static class IdentityHelpers
             ValidateIssuer = true,
             ValidateAudience = true
         };
+    }
+    
+    public static AppUser? FilterOutUsers(bool isTutor, List<AppUser> appUsers)
+    {
+        foreach (var user in appUsers)
+        {
+            switch (isTutor)
+            {
+                case true 
+                    when user.AppUserType == EUserType.Tutor:
+                    return user;
+                case false 
+                    when user.AppUserType == EUserType.Student:
+                    return user;
+            }
+        }
+        return null;
     }
 }

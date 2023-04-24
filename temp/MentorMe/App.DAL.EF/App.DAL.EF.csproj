@@ -20,6 +20,7 @@
       <ProjectReference Include="..\App.DAL.Contracts\App.DAL.Contracts.csproj" />
       <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
       <ProjectReference Include="..\Base.DAL.EF\Base.DAL.EF.csproj" />
+      <ProjectReference Include="..\Helpers\Helpers.csproj" />
     </ItemGroup>
 
 </Project>
