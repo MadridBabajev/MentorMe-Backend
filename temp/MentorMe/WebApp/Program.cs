@@ -31,6 +31,7 @@ builder.Services
     .AddDefaultTokenProviders()
     .AddDefaultUI()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+    // .AddUserStore<CustomUserStore>(); // TODO implement custom user store
 
 builder.Services.AddScoped<UserManager<AppUser>>();
 builder.Services.AddScoped<RoleManager<AppRole>>();
@@ -107,7 +108,7 @@ app.MapControllerRoute(
 
 app.Run();
 
-static async void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
+static void SetupAppData(IApplicationBuilder app, IConfiguration configuration)
 {
     using var serviceScope = app.ApplicationServices
         .GetRequiredService<IServiceScopeFactory>()
@@ -153,7 +154,7 @@ static async void SetupAppData(IApplicationBuilder app, IConfiguration configura
     if (configuration.GetValue<bool>("DataInit:SeedIdentity"))
     {
         logger.LogInformation("Seeding identity");
-        await AppDataInit.SeedIdentity(userManager, roleManager);
+        AppDataInit.SeedIdentity(userManager, roleManager);
     }
 
     if (configuration.GetValue<bool>("DataInit:SeedData"))

@@ -4141,7 +4141,9 @@
         "dependencies": {
           "Base.Domain": "1.0.0",
           "Base.Domain.Contracts": "1.0.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.3",
           "Microsoft.EntityFrameworkCore.Abstractions": "7.0.3",
+          "Microsoft.Extensions.Identity.Core": "7.0.3",
           "Microsoft.Extensions.Identity.Stores": "7.0.3",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.4",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.3"

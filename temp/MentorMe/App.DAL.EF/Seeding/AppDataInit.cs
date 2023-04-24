@@ -18,7 +18,7 @@ public static class AppDataInit
     public static void DropDatabase(ApplicationDbContext context)
         => context.Database.EnsureDeleted();
 
-    public static async Task SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         var tutorData = GetTutorData();
         var studentData = GetStudentData();
@@ -26,41 +26,65 @@ public static class AppDataInit
         // Create the user with the same email, but different persona
         var studentTutorProfile = GetStudentTutorProfile();
 
-        await CreateUser(tutorData, userManager);
-        await CreateUser(studentData, userManager);
-        await CreateUser(studentTutorProfile, userManager);
+        CreateUser(tutorData, userManager);
+        CreateUser(studentData, userManager);
+        // await CreateUser(studentTutorProfile, userManager);
     }
 
-    private static async Task CreateUser((Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool isBlocked, bool notificationsEnabled, EUserType userType) userData, UserManager<AppUser> userManager)
+    private static void CreateUser((Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool isBlocked, bool notificationsEnabled, EUserType userType) userData, UserManager<AppUser> userManager)
     {
-        List<AppUser> appUsers = await userManager.Users
-            .Where(u => u.Email == userData.email).ToListAsync();
-        AppUser? user;
-        IdentityResult result;
-        if (!appUsers.Any())
+        // TODO Implement better identity seeding 
+        // TODO currently it is not possible to create 2 users with the same email
+        var user = userManager.FindByEmailAsync(userData.email).Result;
+        if (user == null)
         {
-            user = CreateNewUser(userData);
-            result = userManager.CreateAsync(user, userData.pwd).Result;
+            user = new AppUser
+            {
+                Id = userData.Id,
+                Email = userData.email,
+                UserName = userData.email,
+                FirstName = userData.firstName,
+                LastName = userData.lastName,
+                MobilePhone = userData.mobilePhone,
+                AppUserType = userData.userType,
+                NotificationsEnabled = userData.notificationsEnabled,
+                IsBlocked = userData.isBlocked,
+                EmailConfirmed = true,
+            };
+            var result = userManager.CreateAsync(user, userData.pwd).Result;
             if (!result.Succeeded)
             {
                 throw new ApplicationException($"Cannot seed users, {result}");
             }
-            return;
-        }
-        user = IdentityHelpers.FilterOutUsers(userData.userType == EUserType.Tutor, appUsers);
-
-        if (user!.AppUserType == userData.userType)
-        {
-            throw new ApplicationException("Cannot seed users, user with the same type and email already exists");
-        }
-        user = CreateNewUser(userData);
-        result = userManager.CreateAsync(user, userData.pwd).Result;
-        if (!result.Succeeded)
-        {
-            throw new ApplicationException($"Cannot seed users, {result}");
         }
         
-        // TODO data seeding fails
+        // List<AppUser> appUsers = await userManager.Users
+        //     .Where(u => u.Email == userData.email).ToListAsync();
+        // AppUser? user;
+        // IdentityResult result;
+        // if (!appUsers.Any())
+        // {
+        //     user = CreateNewUser(userData);
+        //     result = userManager.CreateAsync(user, userData.pwd).Result;
+        //     if (!result.Succeeded)
+        //     {
+        //         throw new ApplicationException($"Cannot seed users, {result}");
+        //     }
+        //     return;
+        // }
+        // user = IdentityHelpers.FilterOutUsers(userData.userType == EUserType.Tutor, appUsers);
+        //
+        // if (user!.AppUserType != userData.userType)
+        // {
+        //     throw new ApplicationException("Cannot seed users, user with the same type and email already exists");
+        // }
+        // user = CreateNewUser(userData);
+        // result = userManager.CreateAsync(user, userData.pwd).Result;
+        // if (!result.Succeeded)
+        // {
+        //     throw new ApplicationException($"Cannot seed users, {result}");
+        // }
+        //
     }
 
     private static AppUser CreateNewUser((Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool isBlocked, bool notificationsEnabled, EUserType userType) userData)
