@@ -8,8 +8,7 @@ namespace Domain.Entities;
 public class Tutor: BaseDomainEntity, IDomainEntityId
 {
     [Column(TypeName = "decimal(4, 2)")] 
-    public double HourlyRate { get; set; } = 10.0;
-    public int MinutesTutored { get; set; } = 0;
+    public double HourlyRate { get; set; } = 15.0;
 
     // Nav
     public Guid AppUserId { get; set; }

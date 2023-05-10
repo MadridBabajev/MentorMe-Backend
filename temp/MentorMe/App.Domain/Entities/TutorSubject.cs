@@ -1,10 +1,11 @@
+using Base.DomainEntity;
+
 namespace Domain.Entities;
 
-public class TutorSubject
+public class TutorSubject: BaseDomainEntity
 {
-    public Guid Id { get; set; }
     public Guid TutorId { get; set; }
-    public Tutor Tutor { get; set; } = default!;
+    public Tutor? Tutor { get; set; }
     public Guid SubjectId { get; set; }
-    public Subject Subject { get; set; } = default!;
+    public Subject? Subject { get; set; }
 }

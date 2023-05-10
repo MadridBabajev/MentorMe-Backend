@@ -24,6 +24,16 @@ public class AppUser : IdentityUser<Guid>, IDomainEntityId
     public EUserType AppUserType { get; set; } = EUserType.Student;
     [Column(TypeName = "decimal(7, 2)")] 
     public double Balance { get; set; } = 0.0;
+
+    public ECountry Country { get; set; } = ECountry.Estonia;
+    
+    [MaxLength(64)]
+    public string Title { get; set; } = "";
+    
+    [MaxLength(2048)]
+    public string Bio { get; set; } = "";
+
+    public byte[]? ProfilePicture { get; set; }
     
     // nav
     public Tutor? Tutor { get; set; }

@@ -9,7 +9,7 @@
 # C:\Program Files\Docker\Docker\resources\bin  
 # C:\Program Files\dotnet 
 # cd to the main directory: 
-# cd AllProjects/RiderProjects/icd0021-22-23-s/temp/MentorMe
+# cd RiderProjects\icd0021-22-23-s\temp\MentorMe
 
 # install or update
 dotnet tool install --global dotnet-ef
@@ -63,7 +63,11 @@ dotnet aspnet-codegenerator identity -dc DAL.EF.App.ApplicationDbContext --userC
 # 5. Required Nuget packages
 * Microsoft.AspNetCore.Authentication.JwtBearer
 * Microsoft.IdentityModel.Tokens
-* ...
+* AutoMapper.Extensions.Microsoft.DependencyInjection
+* Swashbuckle.AspNetCore.SwaggerGen
+* Asp.Versioning.ApiExplorer
+* Microsoft.AspNetCore.Mvc.Versioning
+* Asp.Versioning.Mvc.ApiExplorer
 
 # 6. Run the live server
 

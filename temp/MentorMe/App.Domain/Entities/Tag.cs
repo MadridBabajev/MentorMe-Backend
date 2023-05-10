@@ -14,7 +14,7 @@ public class Tag: BaseDomainEntity
     
     // Nav
     public Guid TutorId { get; set; }
-    public Tutor Tutor { get; set; } = default!;
+    public Tutor? Tutor { get; set; }
     public Guid LessonId { get; set; }
-    public Lesson Lesson { get; set; } = default!;
+    public Lesson? Lesson { get; set; }
 }

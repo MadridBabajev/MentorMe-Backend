@@ -15,7 +15,9 @@ public class Review: BaseDomainEntity
     
     // Nav
     public Guid StudentId { get; set; }
-    public Student Student { get; set; } = default!;
+    public Student? Student { get; set; }
     public Guid TutorId { get; set; }
-    public Tutor Tutor { get; set; } = default!;
+    public Tutor? Tutor { get; set; }
+    public Guid LessonId { get; set; }
+    public Lesson? Lesson { get; set; }
 }

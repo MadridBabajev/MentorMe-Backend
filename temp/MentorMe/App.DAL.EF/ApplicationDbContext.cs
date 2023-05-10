@@ -56,7 +56,8 @@ public class ApplicationDbContext: IdentityDbContext<AppUser, AppRole, Guid>
         
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+            // optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlite(_configuration.GetConnectionString("SQLiteConnection"));
         }
     }
     private readonly IConfiguration _configuration;

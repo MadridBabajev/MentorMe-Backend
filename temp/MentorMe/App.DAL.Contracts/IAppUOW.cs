@@ -1,12 +1,15 @@
-﻿namespace App.DAL.Contracts;
+﻿using Base.DAL.Contracts;
+
+namespace App.DAL.Contracts;
 
 // ReSharper disable once InconsistentNaming
-public interface IAppUOW
+public interface IAppUOW : IBaseUOW
 {
     // list all the repositories
     IStudentsRepository StudentsRepository { get; }
     ITutorsRepository TutorsRepository { get; }
 
     ILessonsRepository LessonsRepository { get; }
+    ISubjectsRepository SubjectsRepository { get; }
 }
 

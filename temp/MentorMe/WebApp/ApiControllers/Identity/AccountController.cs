@@ -1,10 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Mime;
 using System.Security.Claims;
 using App.DAL.EF;
+using Asp.Versioning;
 using Domain.Enums;
 using Domain.Identity;
 using Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +17,12 @@ using Public.DTO.v1.Identity;
 
 namespace WebApp.ApiControllers.Identity;
 
+/// <summary>
+/// Controller responsible for account related actions.
+/// </summary>
 [ApiController]
-[Route("api/v1/identity/[controller]/[action]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/identity/[controller]/[action]")]
 public class AccountController : ControllerBase
 {
     private readonly SignInManager<AppUser> _signInManager;
@@ -25,6 +32,14 @@ public class AccountController : ControllerBase
     private readonly Random _rnd = new();
     private readonly ApplicationDbContext _context;
 
+    /// <summary>
+    /// Initializes a new instance of the AccountController class.
+    /// </summary>
+    /// <param name="signInManager">Provides the APIs for user sign in.</param>
+    /// <param name="userManager">Provides the APIs for managing user in a persistence store.</param>
+    /// <param name="configuration">Represents a set of key/value application configuration properties.</param>
+    /// <param name="logger">Represents a type used to perform logging.</param>
+    /// <param name="context">The database context.</param>
     public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager,
         IConfiguration configuration, ILogger<AccountController> logger, ApplicationDbContext context)
     {
@@ -35,6 +50,16 @@ public class AccountController : ControllerBase
         _context = context;
     }
 
+    /// <summary>
+    /// Register new user to the system.
+    /// </summary>
+    /// <param name="registrationData">User registration data.</param>
+    /// <param name="expiresInSeconds">Optional, overrides default JWT token expiration value.</param>
+    /// <returns>JWTResponse with JWT and refresh token.</returns>
+    [HttpPost]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(JWTResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RestApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<JWTResponse>> Register([FromBody] Register registrationData,
         [FromQuery]
         int expiresInSeconds)
@@ -42,28 +67,33 @@ public class AccountController : ControllerBase
         if (expiresInSeconds <= 0) expiresInSeconds = int.MaxValue;
 
         // is user already registered
-        var appUser = await _userManager.FindByEmailAsync(registrationData.Email);
-        if (appUser != null)
+        var existingUsers = await _userManager.Users.Where(u => u.Email == registrationData.Email).ToListAsync();
+
+        var isTutorProfileExists = existingUsers.Any(u => u.AppUserType == EUserType.Tutor);
+        var isStudentProfileExists = existingUsers.Any(u => u.AppUserType == EUserType.Student);
+
+        if ((registrationData.IsTutor && isTutorProfileExists) || (!registrationData.IsTutor && isStudentProfileExists))
         {
-            _logger.LogWarning("User with email {} is already registered", registrationData.Email);
+            _logger.LogWarning("User with email {} is already registered with the given user type", registrationData.Email);
             return BadRequest(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.BadRequest,
-                Error = $"User with email {registrationData.Email} is already registered"
+                Error = $"User with email {registrationData.Email} is already registered with the given user type"
             });
         }
 
         // register user
         var refreshToken = new AppRefreshToken();
-        appUser = new AppUser
+        var appUser = new AppUser
         {
             Email = registrationData.Email,
             MobilePhone = registrationData.MobilePhone,
-            UserName = registrationData.Email,
+            UserName = $"{registrationData.Email}_{(registrationData.IsTutor ? "Tutor" : "Student")}",
             FirstName = registrationData.Firstname,
             LastName = registrationData.Lastname,
             AppUserType = registrationData.IsTutor ? EUserType.Tutor : EUserType.Student,
-            AppRefreshTokens = new List<AppRefreshToken> {refreshToken}
+            AppRefreshTokens = new List<AppRefreshToken> {refreshToken},
+            Country = registrationData.Country
         };
         refreshToken.AppUser = appUser;
 
@@ -86,7 +116,6 @@ public class AccountController : ControllerBase
             new(ClaimTypes.GivenName, appUser.FirstName),
             new(ClaimTypes.Surname, appUser.LastName),
             new("UserType", appUser.AppUserType.ToString()),
-            
         });
 
         if (!result.Succeeded)
@@ -133,6 +162,16 @@ public class AccountController : ControllerBase
         return Ok(res);
     }
 
+    /// <summary>
+    /// Log in to the system 
+    /// </summary>
+    /// <param name="loginData">User login info.</param>
+    /// <param name="expiresInSeconds">optional, override default value.</param>
+    /// <returns>JWTResponse with JWT and refresh token</returns>
+    [HttpPost]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(JWTResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RestApiErrorResponse), StatusCodes.Status400BadRequest)]
     [HttpPost]
     public async Task<ActionResult<JWTResponse>> LogIn([FromBody] Login loginData, [FromQuery] int expiresInSeconds)
     {
@@ -171,17 +210,17 @@ public class AccountController : ControllerBase
         }
         
         // Check if the user is logging in with the correct user type
-        // if ((loginData.IsTutor && appUser.AppUserType != EUserType.Tutor) ||
-        //     (!loginData.IsTutor && appUser.AppUserType != EUserType.Student))
-        // {
-        //     _logger.LogWarning("WebApi login failed, wrong user type for user {}", loginData.Email);
-        //     await Task.Delay(_rnd.Next(100, 1000));
-        //     return NotFound(new RestApiErrorResponse
-        //     {
-        //         Status = HttpStatusCode.NotFound,
-        //         Error = "User/Password problem"
-        //     });
-        // }
+        if ((loginData.IsTutor && appUser.AppUserType != EUserType.Tutor) ||
+            (!loginData.IsTutor && appUser.AppUserType != EUserType.Student))
+        {
+            _logger.LogWarning("WebApi login failed, wrong user type for user {}", loginData.Email);
+            await Task.Delay(_rnd.Next(100, 1000));
+            return NotFound(new RestApiErrorResponse
+            {
+                Status = HttpStatusCode.NotFound,
+                Error = "User/Password problem"
+            });
+        }
 
         // verify username and password
         var result = await _signInManager.CheckPasswordSignInAsync(appUser, loginData.Password, false);
@@ -202,7 +241,7 @@ public class AccountController : ControllerBase
         {
             _logger.LogWarning("Could not get ClaimsPrincipal for user {}", loginData.Email);
             await Task.Delay(_rnd.Next(100, 1000));
-            return NotFound(new RestApiErrorResponse()
+            return NotFound(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.NotFound,
                 Error = "User/Password problem"
@@ -259,12 +298,16 @@ public class AccountController : ControllerBase
         return Ok(res);
     }
 
+    /// <summary>
+    /// Refreshes the JWT token for a user.
+    /// </summary>
+    /// <param name="refreshTokenModel">The refresh token model.</param>
+    /// <param name="expiresInSeconds">The new JWT token expiration duration in seconds.</param>
+    /// <returns>The new JWT and refresh token, or an error message if the operation fails.</returns>
     [HttpPost]
     public async Task<ActionResult> RefreshToken(
-        [FromBody]
-        RefreshTokenModel refreshTokenModel,
-        [FromQuery]
-        int expiresInSeconds)
+        [FromBody] RefreshTokenModel refreshTokenModel,
+        [FromQuery] int expiresInSeconds)
     {
         if (expiresInSeconds <= 0) expiresInSeconds = int.MaxValue;
 
@@ -275,7 +318,7 @@ public class AccountController : ControllerBase
             jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(refreshTokenModel.Jwt);
             if (jwtToken == null)
             {
-                return BadRequest(new RestApiErrorResponse()
+                return BadRequest(new RestApiErrorResponse
                 {
                     Status = HttpStatusCode.BadRequest,
                     Error = "No token"
@@ -284,7 +327,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.BadRequest,
                 Error = $"Cant parse the token, {e.Message}"
@@ -295,7 +338,7 @@ public class AccountController : ControllerBase
                 _configuration["JWT:Issuer"]!,
                 _configuration["JWT:Audience"]!))
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.BadRequest,
                 Error = "JWT validation fail"
@@ -305,7 +348,7 @@ public class AccountController : ControllerBase
         var userEmail = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
         if (userEmail == null)
         {
-            return BadRequest(new RestApiErrorResponse()
+            return BadRequest(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.BadRequest,
                 Error = "No email in jwt"
@@ -335,7 +378,7 @@ public class AccountController : ControllerBase
 
         if (appUser.AppRefreshTokens == null || appUser.AppRefreshTokens.Count == 0)
         {
-            return NotFound(new RestApiErrorResponse()
+            return NotFound(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.NotFound,
                 Error = $"RefreshTokens collection is null or empty - {appUser.AppRefreshTokens?.Count}"
@@ -344,7 +387,7 @@ public class AccountController : ControllerBase
 
         if (appUser.AppRefreshTokens.Count != 1)
         {
-            return NotFound(new RestApiErrorResponse()
+            return NotFound(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.NotFound,
                 Error = "More than one valid refresh token found"
@@ -358,7 +401,7 @@ public class AccountController : ControllerBase
         if (claimsPrincipal == null)
         {
             _logger.LogWarning("Could not get ClaimsPrincipal for user {}", userEmail);
-            return NotFound(new RestApiErrorResponse()
+            return NotFound(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.NotFound,
                 Error = "User/Password problem"
@@ -400,7 +443,12 @@ public class AccountController : ControllerBase
         return Ok(res);
     }
 
-    [Authorize]
+    /// <summary>
+    /// Logs out a user by invalidating their refresh token.
+    /// </summary>
+    /// <param name="logout">The logout request containing the refresh token to invalidate.</param>
+    /// <returns>An OK result if the logout is successful, otherwise an error message.</returns>
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost]
     public async Task<ActionResult> Logout(
         [FromBody]
@@ -417,7 +465,7 @@ public class AccountController : ControllerBase
             .SingleOrDefaultAsync();
         if (appUser == null)
         {
-            return NotFound(new RestApiErrorResponse()
+            return NotFound(new RestApiErrorResponse
             {
                 Status = HttpStatusCode.NotFound,
                 Error = "User/Password problem"

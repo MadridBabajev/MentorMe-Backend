@@ -12,8 +12,6 @@ public class Payment: BaseDomainEntity
     public double Amount { get; set; }
     [Column(TypeName = "decimal(5, 2)")] 
     public double? AdditionalFees { get; set; }
-    [Column(TypeName = "decimal(5, 2)")] 
-    public double? Taxes { get; set; }
     [MinLength(2)]
     [MaxLength(128)]
     public string Description { get; set; } = default!;
