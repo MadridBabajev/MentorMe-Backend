@@ -589,7 +589,7 @@ namespace App.DAL.EF.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DayOfTheWeak")
+                    b.Property<int>("DayOfTheWeek")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("EntityComment")

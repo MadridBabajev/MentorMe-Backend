@@ -10,7 +10,7 @@ public interface ISubjectsRepository : IBaseRepository<Subject>, ISubjectsReposi
     // add here custom methods for repo only
     
     public Task<IEnumerable<BLLSubjectListElement>> AllSubjectsAsync();
-    public Task<BLLSubjectDetails?> FindAsyncWithDetails(Guid id);
+    public Task<Subject?> FindAsyncWithDetails(Guid id);
 }
 
 public interface ISubjectsRepositoryCustom<TEntity>

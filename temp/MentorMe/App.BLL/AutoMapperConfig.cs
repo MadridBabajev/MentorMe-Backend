@@ -20,13 +20,5 @@ public class AutoMapperConfig: Profile
                 options.MapFrom(src => src.StudentSubjects!.Count)
         );
 
-        // CreateMap<BLLTutorSearch, Public.DTO.v1.TutorSearch>()
-        //     .ForMember(
-        //         dest => dest.EventCount,
-        //         options =>
-        //             options.MapFrom(src => src.PlanEvents!.Count)
-        //     );
-
-        // CreateMap<DAL.DTO.TrainingPlanWithEventCount, Public.DTO.v1.TrainingPlan>();
     }
 }

@@ -20,7 +20,8 @@ public class SubjectsController : ControllerBase
 {
     private readonly IAppBLL _bll;
     private readonly SubjectsMapper _mapper;
-    
+    private readonly SubjectDetailsMapper _detailsMapper;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SubjectsController"/> class.
     /// </summary>
@@ -30,6 +31,7 @@ public class SubjectsController : ControllerBase
     {
         _bll = bll;
         _mapper = new SubjectsMapper(autoMapper);
+        _detailsMapper = new SubjectDetailsMapper(autoMapper);
     }
 
     /// <summary>
@@ -41,13 +43,14 @@ public class SubjectsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Subject>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SubjectListElement>>> GetAllSubjects()
     {
+        // TODO: Implement adding removing subjects for tutors and students
         // Retrieve subjects from the database
         var subjects = await _bll.SubjectsService.AllSubjects();
         return subjects.Select(e => _mapper.MapListSubject(e)).ToList();
     }
 
     /// <summary>
-    /// Get the subject image by subject ID.
+    /// Get the subject details.
     /// </summary>
     /// <param name="subjectId">The ID of the subject.</param>
     /// <returns>The image file associated with the subject.</returns>
@@ -55,11 +58,11 @@ public class SubjectsController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetSubjectImage(Guid subjectId)
+    public async Task<IActionResult> GetSubjectDetails(Guid subjectId)
     {
         // Retrieve subject image from the database
         var subject = await _bll.SubjectsService.FindAsync(subjectId);
-        if (subject != null) return Ok(_mapper.MapDetailsSubject(subject));
+        if (subject != null) return Ok(_detailsMapper.MapDetailsSubject(subject));
         return NotFound(new RestApiErrorResponse
         {
             Status = HttpStatusCode.NotFound,

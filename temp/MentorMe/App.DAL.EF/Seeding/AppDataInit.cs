@@ -201,6 +201,7 @@ public static class AppDataInit
             Description = DescriptionFiller,
             SubjectPicture = LoadImageAsBytes(Path.Combine(basePath, "backend_img.jpg"))
         });
+        context.SaveChanges();
     }
     
     private static void SeedStudentTutorSubjects(ApplicationDbContext context, DataGuids guids)
@@ -249,6 +250,7 @@ public static class AppDataInit
                 TutorId = guids.Tutor2Id,
                 SubjectId = backendProgrammingSubject.Id
             });
+        context.SaveChanges();
     }
     
     private static void SeedStudentPaymentMethods(ApplicationDbContext context, DataGuids dataGuids)
@@ -311,35 +313,35 @@ public static class AppDataInit
                 TutorId = dataGuids.Tutor1Id,
                 FromHours = TimeSpan.FromHours(9),
                 ToHours = TimeSpan.FromHours(12),
-                DayOfTheWeak = EAvailabilityDayOfTheWeak.Monday
+                DayOfTheWeek = EAvailabilityDayOfTheWeek.Monday
             },
             new TutorAvailability
             {
                 TutorId = dataGuids.Tutor1Id,
                 FromHours = TimeSpan.FromHours(14),
                 ToHours = TimeSpan.FromHours(18),
-                DayOfTheWeak = EAvailabilityDayOfTheWeak.Wednesday
+                DayOfTheWeek = EAvailabilityDayOfTheWeek.Wednesday
             },
             new TutorAvailability
             {
                 TutorId = dataGuids.Tutor2Id,
                 FromHours = TimeSpan.FromHours(10),
                 ToHours = TimeSpan.FromHours(15),
-                DayOfTheWeak = EAvailabilityDayOfTheWeak.Tuesday
+                DayOfTheWeek = EAvailabilityDayOfTheWeek.Tuesday
             },
             new TutorAvailability
             {
                 TutorId = dataGuids.Tutor2Id,
                 FromHours = TimeSpan.FromHours(16),
                 ToHours = TimeSpan.FromHours(20),
-                DayOfTheWeak = EAvailabilityDayOfTheWeak.Thursday
+                DayOfTheWeek = EAvailabilityDayOfTheWeek.Thursday
             },
             new TutorAvailability
             {
                 TutorId = dataGuids.Tutor2Id,
                 FromHours = TimeSpan.FromHours(13),
                 ToHours = TimeSpan.FromHours(15),
-                DayOfTheWeak = EAvailabilityDayOfTheWeak.Saturday
+                DayOfTheWeek = EAvailabilityDayOfTheWeek.Saturday
             });
     }
     
@@ -451,6 +453,7 @@ public static class AppDataInit
                 Penalty = 3,
                 CancellationType = ECancellationType.ByStudent
             });
+        context.SaveChanges();
     }
     
     private static void SeedReviews(ApplicationDbContext context)

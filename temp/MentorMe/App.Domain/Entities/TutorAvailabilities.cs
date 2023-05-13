@@ -7,7 +7,7 @@ public class TutorAvailability: BaseDomainEntity
 {
     public TimeSpan FromHours { get; set; }
     public TimeSpan ToHours { get; set; }
-    public EAvailabilityDayOfTheWeak DayOfTheWeak { get; set; }
+    public EAvailabilityDayOfTheWeek DayOfTheWeek { get; set; }
     
     // nav
     public Guid TutorId { get; set; }

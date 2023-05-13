@@ -4,7 +4,7 @@ using BLL.DTO;
 using Public.DTO.v1;
 
 namespace Public.DTO.Mappers;
-
+// TODO: Finish off the documentation
 /// <summary>
 /// 
 /// </summary>
@@ -26,15 +26,5 @@ public class SubjectsMapper: BaseMapper<BLLSubjectListElement, SubjectListElemen
     public SubjectListElement MapListSubject(BLLSubjectListElement bllSubjectListElement)
     {
         return Mapper.Map<SubjectListElement>(bllSubjectListElement);
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="bllSubjectListElement"></param>
-    /// <returns></returns>
-    public SubjectDetails MapDetailsSubject(BLLSubjectDetails bllSubjectListElement)
-    {
-        return Mapper.Map<SubjectDetails>(bllSubjectListElement);
     }
 }

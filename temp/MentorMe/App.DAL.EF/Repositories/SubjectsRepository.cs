@@ -13,19 +13,13 @@ public class SubjectsRepository:
     {
     }
 
-    public async Task<BLLSubjectDetails?> FindAsyncWithDetails(Guid id)
+    public async Task<Subject?> FindAsyncWithDetails(Guid id)
     {
-        return await RepositoryDbContext.Subjects
-            .Select(s => new BLLSubjectDetails
-            {
-                Id = s.Id,
-                Name = s.Name,
-                Description = s.Description,
-                TaughtBy = s.TutorSubjects!.Count,
-                LearnedBy = s.StudentSubjects!.Count,
-                SubjectPicture = s.SubjectPicture
-            })
+        var x = await RepositoryDbContext.Subjects
+            .Include(s => s.TutorSubjects)
+            .Include(s => s.StudentSubjects)
             .FirstOrDefaultAsync(e => e.Id == id);
+        return x;
     }
     
     public async Task<IEnumerable<BLLSubjectListElement>> AllSubjectsAsync()

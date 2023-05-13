@@ -138,23 +138,24 @@ public class AccountController : ControllerBase
                 Error = $"User with email {registrationData.Email} is not found after registration"
             });
         }
+        
+        int expiresIn = expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            ? expiresInSeconds
+            : _configuration.GetValue<int>("JWT:ExpiresInSeconds");
 
         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser);
-        var jwt = IdentityHelpers.GenerateJwt(
+        
+        var jwt = GenerateJwt(
             claimsPrincipal.Claims,
-            _configuration.GetValue<string>("JWT:Key")!,
-            _configuration.GetValue<string>("JWT:Issuer")!,
-            _configuration.GetValue<string>("JWT:Audience")!,
-            appUser.MobilePhone,
             appUser.AppUserType.ToString(),
-            expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
-                ? expiresInSeconds
-                : _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            expiresIn
         );
+        
         var res = new JWTResponse
         {
             JWT = jwt,
             RefreshToken = refreshToken.RefreshToken,
+            ExpiresIn = expiresIn
         };
         
         var response = result.Succeeded.ToString();
@@ -275,24 +276,25 @@ public class AccountController : ControllerBase
             AppUserId = appUser.Id
         };
         _context.AppRefreshTokens.Add(refreshToken);
+        await _context.SaveChangesAsync();
         
         // generate jwt
-        var jwt = IdentityHelpers.GenerateJwt(
+        
+        int expiresIn = expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            ? expiresInSeconds
+            : _configuration.GetValue<int>("JWT:ExpiresInSeconds");
+        
+        var jwt = GenerateJwt(
             claimsPrincipal.Claims,
-            _configuration["JWT:Key"]!,
-            _configuration["JWT:Issuer"]!,
-            _configuration["JWT:Audience"]!,
-            appUser.MobilePhone,
             appUser.AppUserType.ToString(),
-            expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
-                ? expiresInSeconds
-                : _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            expiresIn
         );
 
         var res = new JWTResponse
         {
             JWT = jwt,
             RefreshToken = refreshToken.RefreshToken,
+            ExpiresIn = expiresIn
         };
 
         return Ok(res);
@@ -310,7 +312,7 @@ public class AccountController : ControllerBase
         [FromQuery] int expiresInSeconds)
     {
         if (expiresInSeconds <= 0) expiresInSeconds = int.MaxValue;
-
+        
         JwtSecurityToken jwtToken;
         // get user info from jwt
         try
@@ -325,6 +327,7 @@ public class AccountController : ControllerBase
                 });
             }
         }
+        
         catch (Exception e)
         {
             return BadRequest(new RestApiErrorResponse
@@ -356,7 +359,9 @@ public class AccountController : ControllerBase
         }
 
         // get user and tokens
-        var appUser = await _userManager.FindByEmailAsync(userEmail);
+        var appUser = await _userManager.Users
+            .Include(u => u.AppRefreshTokens)
+            .FirstOrDefaultAsync(u => u.Email == userEmail);
         if (appUser == null)
         {
             return NotFound(new RestApiErrorResponse
@@ -367,7 +372,8 @@ public class AccountController : ControllerBase
         }
 
         // load and compare refresh tokens
-        await _context.Entry(appUser).Collection(u => u.AppRefreshTokens!)
+        await _context.Entry(appUser)
+            .Collection(u => u.AppRefreshTokens!)
             .Query()
             .Where(x =>
                 (x.RefreshToken == refreshTokenModel.RefreshToken && x.ExpirationDT > DateTime.UtcNow) ||
@@ -382,15 +388,6 @@ public class AccountController : ControllerBase
             {
                 Status = HttpStatusCode.NotFound,
                 Error = $"RefreshTokens collection is null or empty - {appUser.AppRefreshTokens?.Count}"
-            });
-        }
-
-        if (appUser.AppRefreshTokens.Count != 1)
-        {
-            return NotFound(new RestApiErrorResponse
-            {
-                Status = HttpStatusCode.NotFound,
-                Error = "More than one valid refresh token found"
             });
         }
 
@@ -409,16 +406,14 @@ public class AccountController : ControllerBase
         }
 
         // generate jwt
-        var jwt = IdentityHelpers.GenerateJwt(
+        int expiresIn = expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            ? expiresInSeconds
+            : _configuration.GetValue<int>("JWT:ExpiresInSeconds");
+        
+        var jwt = GenerateJwt(
             claimsPrincipal.Claims,
-            _configuration["JWT:Key"]!,
-            _configuration["JWT:Issuer"]!,
-            _configuration["JWT:Audience"]!,
-            appUser.MobilePhone,
             appUser.AppUserType.ToString(),
-            expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
-                ? expiresInSeconds
-                : _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            expiresIn
         );
 
         // make new refresh token, keep old one still valid for some time
@@ -429,7 +424,7 @@ public class AccountController : ControllerBase
             refreshToken.PreviousExpirationDT = DateTime.UtcNow.AddMinutes(1);
 
             refreshToken.RefreshToken = Guid.NewGuid().ToString();
-            refreshToken.ExpirationDT = DateTime.UtcNow.AddDays(7);
+            refreshToken.ExpirationDT = DateTime.UtcNow.AddDays(14);
 
             await _context.SaveChangesAsync();
         }
@@ -438,6 +433,7 @@ public class AccountController : ControllerBase
         {
             JWT = jwt,
             RefreshToken = refreshToken.RefreshToken,
+            ExpiresIn = expiresIn
         };
 
         return Ok(res);
@@ -489,5 +485,21 @@ public class AccountController : ControllerBase
         var deleteCount = await _context.SaveChangesAsync();
 
         return Ok(new {TokenDeleteCount = deleteCount});
+    }
+    
+    private string GenerateJwt(IEnumerable<Claim> claims, string userType, int expiresInSeconds)
+    {
+        expiresInSeconds = expiresInSeconds < _configuration.GetValue<int>("JWT:ExpiresInSeconds")
+            ? expiresInSeconds
+            : _configuration.GetValue<int>("JWT:ExpiresInSeconds");
+
+        return IdentityHelpers.GenerateJwt(
+            claims,
+            _configuration["JWT:Key"]!,
+            _configuration["JWT:Issuer"]!,
+            _configuration["JWT:Audience"]!,
+            userType,
+            expiresInSeconds
+        );
     }
 }

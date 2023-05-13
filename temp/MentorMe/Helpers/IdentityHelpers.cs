@@ -18,7 +18,7 @@ public static class IdentityHelpers
     }
     
     public static string GenerateJwt(IEnumerable<Claim> claims, string key,
-        string issuer, string audience, string mobilePhone, string userType,
+        string issuer, string audience, string userType,
         int expiresInSeconds)
     {
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -26,7 +26,7 @@ public static class IdentityHelpers
         var expires = DateTime.Now.AddSeconds(expiresInSeconds);
         
         var claimsList = claims.ToList();
-        claimsList.Add(new Claim(ClaimTypes.MobilePhone, mobilePhone));
+        // claimsList.Add(new Claim(ClaimTypes.MobilePhone, mobilePhone));
         claimsList.Add(new Claim("UserType", userType));
         
         var token = new JwtSecurityToken(

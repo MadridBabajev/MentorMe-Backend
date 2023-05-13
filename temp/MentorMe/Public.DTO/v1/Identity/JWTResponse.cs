@@ -15,4 +15,6 @@ public class JWTResponse
     /// Smoothens the user experience
     /// </summary>
     public string RefreshToken { get; set; } = default!;
+    
+    public int ExpiresIn { get; set; }
 }

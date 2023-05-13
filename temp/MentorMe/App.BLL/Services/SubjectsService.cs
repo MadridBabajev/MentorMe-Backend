@@ -12,11 +12,13 @@ public class SubjectsService :
     BaseEntityService<BLLSubjectListElement, DomainSubject, ISubjectsRepository>, ISubjectsService
 {
     protected readonly IAppUOW Uow;
+    protected readonly IMapper<BLLSubjectDetails, DomainSubject> SubjectDetailsMapper;
 
-    public SubjectsService(IAppUOW uow, IMapper<BLLSubjectListElement, DomainSubject> mapper)
-        : base(uow.SubjectsRepository, mapper)
+    public SubjectsService(IAppUOW uow, IMapper<BLLSubjectListElement, DomainSubject> subjectListMapper, IMapper<BLLSubjectDetails, DomainSubject> subjectDetailsMapper)
+        : base(uow.SubjectsRepository, subjectListMapper)
     {
         Uow = uow;
+        SubjectDetailsMapper = subjectDetailsMapper;
     }
     
     public async Task<IEnumerable<BLLSubjectListElement>> AllSubjects()
@@ -29,9 +31,20 @@ public class SubjectsService :
         throw new NotImplementedException();
     }
 
+    Task<BLLSubjectDetails?> IBaseRepository<BLLSubjectDetails, Guid>.FindAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public new async Task<BLLSubjectDetails?> FindAsync(Guid id)
     {
-        return await Uow.SubjectsRepository.FindAsyncWithDetails(id);
+        var subject = await Uow.SubjectsRepository.FindAsyncWithDetails(id);
+
+        var x = SubjectDetailsMapper.Map(subject);
+        return x;
+        //
+        // var x = SubjectDetailsMapper.Map(await Uow.SubjectsRepository.FindAsyncWithDetails(id));
+        // return x;
     }
 
     public BLLSubjectDetails Add(BLLSubjectDetails entity)
