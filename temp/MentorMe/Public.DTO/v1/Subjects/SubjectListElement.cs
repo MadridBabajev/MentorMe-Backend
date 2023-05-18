@@ -1,4 +1,4 @@
-namespace Public.DTO.v1;
+namespace Public.DTO.v1.Subjects;
 
 public class SubjectListElement
 {

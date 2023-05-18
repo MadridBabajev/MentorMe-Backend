@@ -4334,7 +4334,8 @@
           "AutoMapper": "12.0.1",
           "BLL.DTO": "1.0.0",
           "Base.BLL": "1.0.0",
-          "Base.DAL": "1.0.0"
+          "Base.DAL": "1.0.0",
+          "Public.DTO": "1.0.0"
         },
         "compile": {
           "bin/placeholder/App.BLL.dll": {}
@@ -4350,7 +4351,8 @@
           "App.DAL.Contracts": "1.0.0",
           "BLL.DTO": "1.0.0",
           "Base.BLL.Contracts": "1.0.0",
-          "Base.DAL.Contracts": "1.0.0"
+          "Base.DAL.Contracts": "1.0.0",
+          "Public.DTO": "1.0.0"
         },
         "compile": {
           "bin/placeholder/App.BLL.Contracts.dll": {}
@@ -4366,7 +4368,8 @@
           "App.Domain": "1.0.0",
           "BLL.DTO": "1.0.0",
           "Base.DAL.Contracts": "1.0.0",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.3"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.3",
+          "Public.DTO": "1.0.0"
         },
         "compile": {
           "bin/placeholder/App.DAL.Contracts.dll": {}

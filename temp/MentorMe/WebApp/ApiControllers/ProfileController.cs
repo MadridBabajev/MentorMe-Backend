@@ -5,11 +5,14 @@ using Asp.Versioning;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Public.DTO.Mappers;
 using Public.DTO.v1;
+using Public.DTO.v1.Identity;
+using Public.DTO.v1.Profiles;
 
 namespace WebApp.ApiControllers;
 
@@ -37,99 +40,38 @@ public class ProfileController: ControllerBase
         // _detailsMapper = new SubjectDetailsMapper(autoMapper);
     }
     
-    /// <summary>
-    /// Get the student profile data.
-    /// </summary>
-    /// <param name="subjectId">The ID of the student.</param>
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(StudentProfile), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("{subjectId}")]
+    [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetStudentProfile(Guid userId)
+    public async Task<IActionResult> GetStudentProfile([FromBody] UserProfileRequest userProfileRequest)
     {
-        // Retrieve subject image from the database
-        var user = new StudentProfile
-        {
-            Id = userId,
-            FirstName = "First",
-            LastName = "Last",
-            MobilePhone = "5555555555",
-            Balance = 0.0,
-            AverageRating = 4.5,
-            Title = "title",
-            Bio = "biotext",
-            ProfilePicture = null,
-            Subjects = await _bll.SubjectsService.AllSubjects(),
-            IsPublic = false
-        };
-
-        if (user != null) return Ok(user);
-        return NotFound(new RestApiErrorResponse
-        {
-            Status = HttpStatusCode.NotFound,
-            Error = $"Couldn't find the user with id {userId}"
-        });
-
-        // var subject = await _bll.SubjectsService.FindAsync(subjectId);
-        // if (subject != null) return Ok(_detailsMapper.MapDetailsSubject(subject));
-        // return NotFound(new RestApiErrorResponse
-        // {
-        //     Status = HttpStatusCode.NotFound,
-        //     Error = $"Couldn't find the subject with id {subjectId}"
-        // });
+        
+        Guid userId = User.GetUserId();
+        return Ok(await _bll.StudentsService.GetStudentProfile(userId, userProfileRequest.VisitedUserId));
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(TutorProfile), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetTutorProfile([FromBody] UserProfileRequest userProfileRequest)
+    {
+        
+        Guid userId = User.GetUserId();
+        return Ok(await _bll.TutorsService.GetTutorProfile(userId, userProfileRequest.VisitedUserId));
     }
 
-    /// <summary>
-    /// Get the tutor profile data.
-    /// </summary>
-    /// <param name="subjectId">The ID of the tutor.</param>
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<TutorSearch>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("{subjectId}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetTutorProfile(Guid userId)
+    [HttpPost]
+    public async Task<IActionResult> GetTutorsList([FromBody] TutorSearchFilters tutorSearchFilters)
     {
-        // Retrieve subject image from the database
-        var user = new TutorProfile
-        {
-            Id = userId,
-            FirstName = "First",
-            LastName = "Last",
-            MobilePhone = "5555555555",
-            Balance = 0.0,
-            AverageRating = 4.5,
-            Title = "title",
-            Bio = "biotext",
-            ProfilePicture = null,
-            Subjects = await _bll.SubjectsService.AllSubjects(),
-            IsPublic = false,
-            HourlyRate = 15.0,
-            Availabilities = new List<TutorAvailability>
-            {
-                new()
-                {
-                    TutorId = userId,
-                    FromHours = TimeSpan.FromHours(9),
-                    ToHours = TimeSpan.FromHours(12),
-                    DayOfTheWeek = EAvailabilityDayOfTheWeek.Monday
-                },
-                new()
-                {
-                    TutorId = userId,
-                    FromHours = TimeSpan.FromHours(14),
-                    ToHours = TimeSpan.FromHours(18),
-                    DayOfTheWeek = EAvailabilityDayOfTheWeek.Wednesday
-                },
-            }
-        };
-
-        if (user != null) return Ok(user);
-        return NotFound(new RestApiErrorResponse
-        {
-            Status = HttpStatusCode.NotFound,
-            Error = $"Couldn't find the user with id {userId}"
-        });
+        
+        return Ok(await 
+            _bll.TutorsService.GetTutorsWithFilters(tutorSearchFilters));
     }
 }

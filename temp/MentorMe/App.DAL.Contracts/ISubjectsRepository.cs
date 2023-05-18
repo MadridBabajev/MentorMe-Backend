@@ -1,6 +1,7 @@
 #nullable enable
 using Base.DAL.Contracts;
 using BLL.DTO;
+using BLL.DTO.Subjects;
 using Domain.Entities;
 
 namespace App.DAL.Contracts;

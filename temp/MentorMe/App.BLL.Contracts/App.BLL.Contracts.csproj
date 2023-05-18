@@ -11,6 +11,7 @@
       <ProjectReference Include="..\Base.BLL.Contracts\Base.BLL.Contracts.csproj" />
       <ProjectReference Include="..\Base.DAL.Contracts\Base.DAL.Contracts.csproj" />
       <ProjectReference Include="..\BLL.DTO\BLL.DTO.csproj" />
+      <ProjectReference Include="..\Public.DTO\Public.DTO.csproj" />
     </ItemGroup>
 
 </Project>

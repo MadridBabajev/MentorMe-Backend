@@ -1,6 +1,6 @@
 using Base.DAL.Contracts;
 
-namespace BLL.DTO;
+namespace BLL.DTO.Subjects;
 
 // ReSharper disable once InconsistentNaming
 public class BLLSubjectListElement: IDomainEntityId

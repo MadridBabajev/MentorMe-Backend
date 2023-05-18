@@ -1,6 +1,9 @@
-namespace Public.DTO.v1;
+using Base.DAL.Contracts;
 
-public class SubjectDetails
+namespace BLL.DTO.Subjects;
+
+// ReSharper disable once InconsistentNaming
+public class BLLSubjectDetails: IDomainEntityId
 {
     public Guid Id { get; set; }
 
@@ -12,5 +15,5 @@ public class SubjectDetails
     
     public int LearnedBy { get; set; }
     
-    public byte[]? SubjectPicture { get; set; } = default!;
+    public byte[]? SubjectPicture { get; set; }
 }

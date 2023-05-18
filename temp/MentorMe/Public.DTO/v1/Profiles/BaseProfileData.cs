@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BLL.DTO;
+using BLL.DTO.Subjects;
 
-namespace Public.DTO.v1;
+namespace Public.DTO.v1.Profiles;
 
-public class UserBase
+public class BaseProfileData
 {
     public Guid Id { get; set; }
     public bool NotificationsEnabled { get; set; }
@@ -30,6 +31,8 @@ public class UserBase
 
     public byte[]? ProfilePicture { get; set; }
     public IEnumerable<BLLSubjectListElement> Subjects { get; set; }
-    
-    public bool IsPublic { get; set; }
+
+    public bool IsPublic { get; set; } = false;
+
+    public int NumberOfClasses { get; set; } = 0;
 }

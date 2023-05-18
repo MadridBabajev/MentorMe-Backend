@@ -37,6 +37,15 @@ public class Register
     public string Password { get; set; } = default!;
     
     /// <summary>
+    /// The password confirmation field.
+    /// </summary>
+    /// <remarks>
+    /// The confirmation password should be between 8 and 128 characters long.
+    /// </remarks>
+    [StringLength(128, MinimumLength = 8, ErrorMessage = "Incorrect length")]
+    public string ConfirmPassword { get; set; } = default!;
+    
+    /// <summary>
     /// The first name the user is trying to register with.
     /// </summary>
     /// <remarks>
@@ -62,5 +71,5 @@ public class Register
     /// <summary>
     /// The country the user marked when registering 
     /// </summary>
-    public ECountry Country { get; set; } = default!;
+    public string Country { get; set; } = default!;
 }

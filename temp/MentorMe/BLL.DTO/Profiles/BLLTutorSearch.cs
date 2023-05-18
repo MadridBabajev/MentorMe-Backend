@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.DAL.Contracts;
-using Domain.Identity;
+﻿using Base.DAL.Contracts;
 
-namespace BLL.DTO;
+namespace BLL.DTO.Profiles;
 
 // ReSharper disable once InconsistentNaming
 public class BLLTutorSearch : IDomainEntityId
@@ -12,12 +10,14 @@ public class BLLTutorSearch : IDomainEntityId
     public string FirstName { get; set; } = default!;
 
     public string LastName { get; set; } = default!;
-    
+
     public string Title { get; set; } = "";
     
+    public double HourlyRate { get; set; }
+    
+    public double AverageRating { get; set; }
+    
+    public int ClassesTutored { get; set; }
+
     public byte[]? ProfilePicture { get; set; }
-
-    public Guid AppUserId { get; set; }
-
-    public AppUser? AppUser { get; set; }
 }

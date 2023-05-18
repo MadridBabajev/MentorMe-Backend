@@ -1,7 +1,9 @@
 using AutoMapper;
 using Base.DAL;
 using BLL.DTO;
+using BLL.DTO.Subjects;
 using Public.DTO.v1;
+using Public.DTO.v1.Subjects;
 
 namespace Public.DTO.Mappers;
 // TODO: Finish off the documentation

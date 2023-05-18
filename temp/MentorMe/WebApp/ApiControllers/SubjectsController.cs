@@ -7,6 +7,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Public.DTO.Mappers;
 using Public.DTO.v1;
+using Public.DTO.v1.Subjects;
 
 namespace WebApp.ApiControllers;
 
@@ -68,5 +69,20 @@ public class SubjectsController : ControllerBase
             Status = HttpStatusCode.NotFound,
             Error = $"Couldn't find the subject with id {subjectId}"
         });
+    }
+    
+    /// <summary>
+    /// Get the subject details.
+    /// </summary>
+    /// <param name="subjectId">The ID of the subject.</param>
+    /// <returns>The image file associated with the subject.</returns>
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(IEnumerable<SubjectsFilterElement>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet]
+    public async Task<IActionResult> GetSubjectFilters()
+    {
+        
+        return Ok(await _bll.SubjectsService.AllSubjectFilters());
     }
 }

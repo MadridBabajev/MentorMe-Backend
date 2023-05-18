@@ -1,6 +1,6 @@
 using AutoMapper;
 using Base.DAL;
-using BLL.DTO;
+using BLL.DTO.Subjects;
 using DomainSubject = Domain.Entities.Subject;
 
 namespace App.BLL.Mappers;

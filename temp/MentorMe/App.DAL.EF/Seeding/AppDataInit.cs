@@ -27,7 +27,7 @@ namespace App.DAL.EF.Seeding;
 public static class AppDataInit
 {
     private static readonly string DescriptionFiller =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ornare mauris eu magna mollis, quis blandit ex sagittis. Pellentesque pulvinar, ligula feugiat finibus venenatis, lectus erat hendrerit dui, et malesuada nunc orci mollis ipsum. Donec egestas justo sit amet iaculis dapibus. Etiam arcu massa, hendrerit eget sapien fermentum, eleifend suscipit dolor. Duis egestas nulla lobortis lectus blandit fringilla. Maecenas felis mi, accumsan id felis eu, tincidunt gravida lorem. In non pretium lorem, in imperdiet elit. Phasellus nisl felis, cursus at ultrices id, mattis nec odio. Integer nisi tellus, venenatis non orci at, laoreet porta neque. Sed nec nibh est. Cras ut ullamcorper arcu, sed rhoncus felis.";
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ornare mauris eu magna mollis, quis blandit ex sagittis. Pellentesque pulvinar, ligula feugiat finibus venenatis, lectus erat hendrerit dui, et malesuada nunc orci mollis ipsum. Donec egestas justo sit amet iaculis dapibus. Etiam arcu massa, hendrerit eget sapien fermentum, eleifend suscipit dolor. Duis egestas nulla lobortis lectus blandit fringilla. Maecenas felis mi, accumsan id felis eu, tincidunt gravida lorem. In non pretium lorem, in imperdiet elit. Phasellus nisl felis, cursus at ultrices id, mattis nec odio. Integer nisi tellus, venenatis non orci at, laoreet porta neque.";
 
     public static void MigrateDatabase(ApplicationDbContext context)
         => context.Database.Migrate();
@@ -106,49 +106,51 @@ public static class AppDataInit
             IsBlocked = userData.isBlocked,
             EmailConfirmed = true,
             Country = userData.country,
+            Title = userData.title,
+            Bio = userData.bio
         };
 
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetStudentData(DataGuids dataGuids)
         => (dataGuids.StudentId, "testStudent@app.com", "Foo.bar.student1", "53983030",
-            "Student", "Test", false, false, EUserType.Student, ECountry.Estonia, "", "");
+            "Student", "Test", false, false, EUserType.Student, ECountry.Estonia, "Title text", DescriptionFiller);
     
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetTutor1Data(DataGuids dataGuids)
         => (dataGuids.Tutor1Id, "test1Tutor@app.com", "Foo.bar.tutor1", "53983031", 
-            "Tutor1", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "", "");
+            "Tutor1", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
     
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetTutor2Data(DataGuids dataGuids)
         => (dataGuids.Tutor2Id, "test2Tutor@app.com", "Foo.bar.tutor2", "53983032", 
-            "Tutor2", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "", "");
+            "Tutor2", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
     
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetTutor3Data(DataGuids dataGuids)
         => (dataGuids.Tutor3Id, "test3Tutor@app.com", "Foo.bar.tutor3", "53983033", 
-            "Tutor3", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "", "");
+            "Tutor3", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
 
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetTutor4Data(DataGuids dataGuids)
         => (dataGuids.Tutor4Id, "test4Tutor@app.com", "Foo.bar.tutor4", "53983034", 
-            "Tutor4", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "", "");
+            "Tutor4", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
 
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetTutor5Data(DataGuids dataGuids)
         => (dataGuids.Tutor5Id, "test5Tutor@app.com", "Foo.bar.tutor5", "53983035", 
-            "Tutor5", "Test", true, false, EUserType.Tutor, ECountry.Latvia, "", "");
+            "Tutor5", "Test", true, false, EUserType.Tutor, ECountry.Latvia, "Title text", DescriptionFiller);
     
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
         isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
         GetStudentTutorProfile(DataGuids dataGuids)
         => (dataGuids.StudentTutorAccountId, "testStudent@app.com", "Foo.bar.student1", "53983030",
-            "StudentTutor", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "", "");
+            "StudentTutor", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
 
     // TODO seed lessons, dialogs, etc.
     public static void SeedAppData(ApplicationDbContext context, IWebHostEnvironment env, DataGuids guids)

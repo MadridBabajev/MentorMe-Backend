@@ -1,14 +1,14 @@
 using AutoMapper;
 using Base.DAL;
-using BLL.DTO;
+using BLL.DTO.Subjects;
 using DomainSubject = Domain.Entities.Subject;
 
 namespace App.BLL.Mappers;
 
-public class SubjectsMapper: BaseMapper<BLLSubjectListElement, DomainSubject>
+public class SubjectsListMapper: BaseMapper<BLLSubjectListElement, DomainSubject>
 {
     // If you need to map the BLLSubjectDetails, create another mapper for it
-    public SubjectsMapper(IMapper mapper) : base(mapper)
+    public SubjectsListMapper(IMapper mapper) : base(mapper)
     {
     }
 }

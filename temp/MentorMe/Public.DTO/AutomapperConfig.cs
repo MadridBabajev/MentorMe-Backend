@@ -1,6 +1,10 @@
 using AutoMapper;
 using BLL.DTO;
+using BLL.DTO.Profiles;
+using BLL.DTO.Subjects;
 using Public.DTO.v1;
+using Public.DTO.v1.Profiles;
+using Public.DTO.v1.Subjects;
 
 namespace Public.DTO;
 
@@ -22,8 +26,11 @@ public class AutomapperConfig : Profile
         //     );
         
         // CreateMap<DAL.DTO.TrainingPlanWithEventCount, Public.DTO.v1.TrainingPlan>();
-        CreateMap<BLLTutorSearch, TutorSearch>().ReverseMap();
         CreateMap<BLLSubjectListElement, SubjectListElement>().ReverseMap();
         CreateMap<BLLSubjectDetails, SubjectDetails>().ReverseMap();
+        CreateMap<BLLSubjectsFilterElement, SubjectsFilterElement>().ReverseMap();
+        CreateMap<BLLTutorSearch, TutorSearch>().ReverseMap();
+        CreateMap<BLLTutorProfile, TutorProfile>().ReverseMap();
+        CreateMap<BLLStudentProfile, StudentProfile>().ReverseMap();
     }
 }
