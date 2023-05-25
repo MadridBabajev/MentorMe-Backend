@@ -28,8 +28,8 @@ public class TutorsService :
     public async Task<BLLTutorProfile> GetTutorProfile(Guid authorizedUserId, Guid? visitedUserId)
     {
         Tutor domainTutor = visitedUserId == null ? 
-            domainTutor = await Uow.TutorsRepository.FindTutorById(authorizedUserId) :
-            domainTutor = await Uow.TutorsRepository.FindTutorById(visitedUserId!);
+            await Uow.TutorsRepository.FindTutorById(authorizedUserId) :
+            await Uow.TutorsRepository.FindTutorById(visitedUserId);
         BLLTutorProfile bllTutor = TutorProfileMapper.Map(domainTutor)!;
         
         bllTutor.IsPublic = visitedUserId != null;

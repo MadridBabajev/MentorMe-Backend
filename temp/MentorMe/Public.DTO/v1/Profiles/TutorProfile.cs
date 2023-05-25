@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Entities;
 
 namespace Public.DTO.v1.Profiles;
 

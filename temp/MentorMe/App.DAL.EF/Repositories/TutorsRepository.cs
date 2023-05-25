@@ -3,6 +3,7 @@ using Base.DAL.EF;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Public.DTO.v1.Profiles;
+using TutorAvailability = Domain.Entities.TutorAvailability;
 
 namespace App.DAL.EF.Repositories;
 
@@ -30,6 +31,21 @@ public class TutorsRepository:
             .Include(t => t.Reviews)
             .Include(t => t.Lessons)
             .FirstAsync(t => t.AppUserId == userId);
+    }
+
+    public async Task<List<TutorAvailability>> GetTutorAvailabilities(Guid? id)
+    {
+        if(id == null)
+            throw new ArgumentNullException(nameof(id));
+
+        var tutor = await RepositoryDbSet
+            .Include(t => t.Availabilities)
+            .FirstOrDefaultAsync(t => t.AppUserId == id);
+
+        if(tutor == null)
+            throw new Exception($"Tutor with id {id} not found.");
+
+        return tutor.Availabilities!.ToList();
     }
 
     public async Task<IEnumerable<Tutor>> AllFilteredAsync(TutorSearchFilters filters)

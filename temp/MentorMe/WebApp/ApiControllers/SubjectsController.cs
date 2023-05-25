@@ -22,6 +22,7 @@ public class SubjectsController : ControllerBase
     private readonly IAppBLL _bll;
     private readonly SubjectsMapper _mapper;
     private readonly SubjectDetailsMapper _detailsMapper;
+    private readonly SubjectsFilterMapper _subjectsFilterMapper;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubjectsController"/> class.
@@ -33,6 +34,7 @@ public class SubjectsController : ControllerBase
         _bll = bll;
         _mapper = new SubjectsMapper(autoMapper);
         _detailsMapper = new SubjectDetailsMapper(autoMapper);
+        _subjectsFilterMapper = new SubjectsFilterMapper(autoMapper);
     }
 
     /// <summary>
@@ -74,7 +76,7 @@ public class SubjectsController : ControllerBase
     /// <summary>
     /// Get the subject details.
     /// </summary>
-    /// <param name="subjectId">The ID of the subject.</param>
+    /// <param name=>The ID of the subject.</param>
     /// <returns>The image file associated with the subject.</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<SubjectsFilterElement>), StatusCodes.Status200OK)]
@@ -82,7 +84,7 @@ public class SubjectsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetSubjectFilters()
     {
-        
-        return Ok(await _bll.SubjectsService.AllSubjectFilters());
+        var res = await _bll.SubjectsService.AllSubjectFilters();
+        return Ok(res.Select(s => _subjectsFilterMapper.Map(s)));
     }
 }

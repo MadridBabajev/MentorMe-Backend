@@ -43,7 +43,7 @@ namespace App.DAL.EF.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("StudentId")
+                    b.Property<Guid?>("StudentId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -337,13 +337,15 @@ namespace App.DAL.EF.Migrations
                     b.Property<string>("EntityComment")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PaymentMethod")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("StudentPaymentMethodId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("StudentPaymentMethodId");
 
                     b.ToTable("Payments");
                 });
@@ -944,15 +946,12 @@ namespace App.DAL.EF.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Student", "Student")
+                    b.HasOne("Domain.Entities.Student", null)
                         .WithMany("Cancellations")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Lesson");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.DialogParticipant", b =>
@@ -1095,6 +1094,17 @@ namespace App.DAL.EF.Migrations
                     b.Navigation("LessonPayment");
 
                     b.Navigation("Message");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("Domain.Entities.StudentPaymentMethod", "StudentPaymentMethod")
+                        .WithMany()
+                        .HasForeignKey("StudentPaymentMethodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("StudentPaymentMethod");
                 });
 
             modelBuilder.Entity("Domain.Entities.Review", b =>

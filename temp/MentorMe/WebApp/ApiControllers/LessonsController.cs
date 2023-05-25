@@ -1,117 +1,207 @@
-using App.DAL.Contracts;
-using App.DAL.EF;
-using Domain.Entities;
+using System.Net;
+using System.Net.Mime;
+using App.BLL.Contracts;
+using Asp.Versioning;
+using AutoMapper;
 using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Public.DTO.Mappers;
+using Public.DTO.v1;
+using Public.DTO.v1.Identity;
+using Public.DTO.v1.Lessons;
 
 namespace WebApp.ApiControllers;
 
-[Route("api/v1/[controller]")]
-    [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class LessonsController : ControllerBase
+/// <summary>
+/// API controller for handling requests related to profiles.
+/// </summary>
+[ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
+public class LessonsController: ControllerBase
+{
+    private readonly IAppBLL _bll;
+    private readonly ReserveLessonMapper _reserveLessonMapper;
+    private readonly LessonDataMapper _lessonDataMapper;
+    private readonly LessonListMapper _LessonListMapper;
+    // private readonly SubjectDetailsMapper _detailsMapper;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SubjectsController"/> class.
+    /// </summary>
+    /// <param name="bll">The business logic layer instance.</param>
+    /// <param name="autoMapper">The AutoMapper instance.</param>
+    public LessonsController(IAppBLL bll, IMapper autoMapper)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IAppUOW _uow;
-
-        public LessonsController(ApplicationDbContext context, IAppUOW uow)
-        {
-            _context = context;
-            _uow = uow;
-        }
-
-        // GET: api/Lessons
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Lesson>>> GetTrainingPlans()
-        {
-            var vm = await _uow.LessonsRepository.AllAsync(User.GetUserId());
-            
-            return Ok(vm);
-        }
-
-        // GET: api/Lessons/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Lesson>> GetLesson(Guid id)
-        {
-            var trainingPlan = await _uow.LessonsRepository.FindAsync(id, User.GetUserId());
-            
-            if (trainingPlan == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(trainingPlan);
-        }
-
-        // PUT: api/Lessons/5
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutLesson(Guid id, Lesson lesson)
-        // {
-        //     if (id != lesson.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(lesson).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!TrainingPlanExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-
-        // POST: api/TrainingPlans
-        // [HttpPost]
-        // public async Task<ActionResult<Lesson>> PostLesson(Lesson lesson)
-        // {
-        //     lesson.AppUserId = User.GetUserId();
-        //     
-        //     _context.TrainingPlans.Add(trainingPlan);
-        //     _uow.TrainingPlanRepository.Add(trainingPlan);
-        //
-        //     await _uow.SaveChangesAsync();
-        //     
-        //     return CreatedAtAction("GetTrainingPlan", new { id = trainingPlan.Id }, trainingPlan);
-        // }
-
-        // DELETE: api/TrainingPlans/5
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteLesson(Guid id)
-        // {
-        //     if (_context.TrainingPlans == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     var trainingPlan = await _context.TrainingPlans.FindAsync(id);
-        //     if (trainingPlan == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.TrainingPlans.Remove(trainingPlan);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return NoContent();
-        // }
-
-        // private bool TrainingPlanExists(Guid id)
-        // {
-        //     return (_context.TrainingPlans?.Any(e => e.Id == id)).GetValueOrDefault();
-        // }
+        _bll = bll;
+        _reserveLessonMapper = new ReserveLessonMapper(autoMapper);
+        _lessonDataMapper = new LessonDataMapper(autoMapper);
+        _LessonListMapper = new LessonListMapper(autoMapper);
     }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(ReserveLessonData), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetReserveLessonData([FromBody] ProfileDataRequest profileDataRequest)
+    {
+        Guid studentId = User.GetUserId();
+        var res = await _bll.LessonsService
+            .GetReserveLessonData(studentId, profileDataRequest.VisitedUserId);
+        
+        return Ok(_reserveLessonMapper.Map(res));
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(ReserveLessonResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> ReserveLesson(ReserveLessonRequest reserveLessonRequest)
+    {
+        Guid studentId = User.GetUserId();
+        
+        // Create lesson and return the lessonId
+        Guid lessonId = await _bll.LessonsService.CreateLesson(reserveLessonRequest, studentId);
+        return Ok(new ReserveLessonResponse{ LessonId = lessonId });
+    }
+
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(LessonData), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("{lessonId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetLessonData(Guid lessonId)
+    {
+        Guid userId = User.GetUserId();
+        var lesson = await _bll.LessonsService.GetLessonData(userId, lessonId);
+        
+        if (lesson == null)
+        {
+            return FormatErrorResponse("Lesson was not found");
+        }
+
+        var lessonBelongsToTheUser = _bll.LessonsService.LessonBelongsToUser(lesson, userId);
+        if (!lessonBelongsToTheUser)
+        {
+            return FormatErrorResponse("This lesson does not belong to the user");
+        }
+
+        return Ok(_lessonDataMapper.Map(lesson));
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(IEnumerable<LessonListElement>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetLessonsList()
+    {
+        Guid userId = User.GetUserId();
+        var res = await  _bll.LessonsService.GetLessonsList(userId);
+        return Ok(res.Select(l => _LessonListMapper.Map(l)));
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public Task<IActionResult> LeaveReview([FromBody] UserReview userReview)
+    {
+        try
+        {
+            Guid userId = User.GetUserId();
+            _bll.LessonsService.LeaveReview(userReview, userId);
+            
+            return Task.FromResult<IActionResult>(Ok());
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when adding a review: {e}"));
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public Task<IActionResult> AddTag([FromBody] NewTag tag)
+    {
+        try
+        {
+            Guid tutorId = User.GetUserId();
+            _bll.LessonsService.AddTag(tag, tutorId);
+            return Task.FromResult<IActionResult>(Ok());
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when adding a tag: {e}"));
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public Task<IActionResult> RemoveTag([FromBody] RemoveTag tag)
+    {
+        try
+        {
+            _bll.LessonsService.DeleteTag(tag.TagId);
+            return Task.FromResult<IActionResult>(Ok());
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when removing a tag: {e}"));
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost("{lessonId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public Task<IActionResult> CancelLesson(Guid lessonId)
+    {
+        try
+        {
+            _bll.LessonsService.CancelLesson(lessonId);
+            return Task.FromResult<IActionResult>(Ok());
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when cancelling a lesson: {e}"));
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public Task<IActionResult> AcceptDeclineLesson([FromBody] AcceptDeclineRequest acceptDeclineRequest)
+    {
+        try
+        {
+            _bll.LessonsService.AcceptDeclineLesson(acceptDeclineRequest.LessonId, acceptDeclineRequest.TutorDecision);
+            return Task.FromResult<IActionResult>(Ok());
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when accepting/declining a lesson: {e}"));
+        }
+    }
+    
+    private ActionResult FormatErrorResponse(string message) {
+        return BadRequest(new RestApiErrorResponse {
+            Status = HttpStatusCode.BadRequest,
+            Error = message
+        });
+    }
+}

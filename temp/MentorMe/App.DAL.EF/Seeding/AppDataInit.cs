@@ -45,7 +45,9 @@ public static class AppDataInit
         var tutor5Data = GetTutor5Data(guids);
 
         // Create the user with the same email, but different persona
-        var studentTutorProfile = GetStudentTutorProfile(guids);
+        
+        // TODO Tutor with the same email as a student:
+            // var studentTutorProfile = GetStudentTutorProfile(guids);
 
         CreateUser(studentData, userManager, ctx);
         CreateUser(tutor1Data, userManager, ctx);
@@ -147,7 +149,7 @@ public static class AppDataInit
             "Tutor5", "Test", true, false, EUserType.Tutor, ECountry.Latvia, "Title text", DescriptionFiller);
     
     private static (Guid Id, string email, string pwd, string mobilePhone, string firstName, string lastName, bool
-        isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio)
+        isBlocked, bool notificationsEnabled, EUserType userType, ECountry country, string title, string bio) 
         GetStudentTutorProfile(DataGuids dataGuids)
         => (dataGuids.StudentTutorAccountId, "testStudent@app.com", "Foo.bar.student1", "53983030",
             "StudentTutor", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
@@ -161,7 +163,7 @@ public static class AppDataInit
         SeedTutorBankingDetails(context, guids);
         SeedTutorAvailabilities(context, guids);
         SeedLessonsTagsAndParticipations(context, guids);
-        SeedReviews(context);
+        SeedReviews(context, guids);
         SeedPayments(context, guids);
         context.SaveChanges();
     }
@@ -262,6 +264,7 @@ public static class AppDataInit
         context.StudentPaymentMethods.AddRange(
             new StudentPaymentMethod
             {
+                Id = dataGuids.StudentPaymentMethod1Id,
                 StudentId = dataGuids.StudentId,
                 PaymentMethodType = EPaymentMethod.InApp,
                 Details = "In-app payment details",
@@ -272,6 +275,7 @@ public static class AppDataInit
             },
             new StudentPaymentMethod
             {
+                Id = dataGuids.StudentPaymentMethod2Id,
                 StudentId = dataGuids.StudentId,
                 PaymentMethodType = EPaymentMethod.Cash,
                 Details = "Cash payment",
@@ -369,6 +373,20 @@ public static class AppDataInit
         var lesson2 = new Lesson
         {
             Id = dataGuids.Lesson2Id,
+            StartTime = DateTime.UtcNow.AddDays(1),
+            EndTime = DateTime.UtcNow.AddDays(1).AddHours(1),
+            LessonDuration = 60,
+            ParticipantCount = 1,
+            IsCanceled = false,
+            LessonType = ELessonType.OneOnOne,
+            LessonState = ELessonState.Pending,
+            TutorId = dataGuids.Tutor1Id,
+            SubjectId = dataGuids.SubjectMathId
+        };
+        
+        var lesson3 = new Lesson
+        {
+            Id = dataGuids.Lesson3Id,
             StartTime = DateTime.UtcNow.AddDays(-2),
             EndTime = DateTime.UtcNow.AddDays(-2).AddHours(1),
             LessonDuration = 60,
@@ -380,9 +398,9 @@ public static class AppDataInit
             SubjectId = dataGuids.SubjectEnglishId
         };
     
-        var lesson3 = new Lesson
+        var lesson4 = new Lesson
         {
-            Id = dataGuids.Lesson3Id,
+            Id = dataGuids.Lesson4Id,
             StartTime = DateTime.UtcNow.AddDays(2),
             EndTime = DateTime.UtcNow.AddDays(2).AddHours(1),
             LessonDuration = 60,
@@ -394,9 +412,23 @@ public static class AppDataInit
             SubjectId = dataGuids.SubjectFrontEndId
         };
 
-        var lesson4 = new Lesson
+        var lesson5 = new Lesson
         {
-            Id = dataGuids.Lesson4Id,
+            Id = dataGuids.Lesson5Id,
+            StartTime = DateTime.UtcNow.AddDays(-1),
+            EndTime = DateTime.UtcNow.AddDays(-1).AddHours(1),
+            LessonDuration = 60,
+            ParticipantCount = 1,
+            IsCanceled = false,
+            LessonType = ELessonType.OneOnOne,
+            LessonState = ELessonState.Finished,
+            TutorId = dataGuids.Tutor2Id,
+            SubjectId = dataGuids.SubjectFrontEndId
+        };
+        
+        var lesson6 = new Lesson
+        {
+            Id = dataGuids.Lesson6Id,
             StartTime = DateTime.UtcNow.AddDays(-1),
             EndTime = DateTime.UtcNow.AddDays(-1).AddHours(1),
             LessonDuration = 60,
@@ -408,7 +440,7 @@ public static class AppDataInit
             SubjectId = dataGuids.SubjectBackendId
         };
 
-        context.Lessons.AddRange(lesson1, lesson2, lesson3, lesson4);
+        context.Lessons.AddRange(lesson1, lesson2, lesson3, lesson4, lesson5, lesson6);
         
         // Seed Lesson Participations
         context.LessonParticipations.AddRange(
@@ -431,6 +463,16 @@ public static class AppDataInit
             {
                 StudentId = dataGuids.StudentId,
                 LessonId = lesson4.Id
+            },
+            new LessonParticipation
+            {
+                StudentId = dataGuids.StudentId,
+                LessonId = lesson5.Id
+            },
+            new LessonParticipation
+            {
+                StudentId = dataGuids.StudentId,
+                LessonId = lesson6.Id
             }
         );
         
@@ -450,7 +492,6 @@ public static class AppDataInit
             new Cancellation
             {
                 LessonId = lesson2.Id,
-                StudentId = dataGuids.StudentId,
                 Reason = "Sickness",
                 Penalty = 3,
                 CancellationType = ECancellationType.ByStudent
@@ -458,12 +499,12 @@ public static class AppDataInit
         context.SaveChanges();
     }
     
-    private static void SeedReviews(ApplicationDbContext context)
+    private static void SeedReviews(ApplicationDbContext context, DataGuids dataGuids)
     {
         if (context.Reviews.Any()) return;
 
         // Find the finished lesson
-        var finishedLesson = context.Lessons.FirstOrDefault(l => l.LessonState == ELessonState.Finished);
+        var finishedLesson = context.Lessons.FirstOrDefault(l => l.Id == dataGuids.Lesson5Id);
 
         if (finishedLesson == null) return;
 
@@ -498,42 +539,36 @@ public static class AppDataInit
     {
         if (context.Payments.Any()) return;
 
-        // Seed Payment for canceled lesson (lesson2)
-        var paymentForCanceledLesson = new Payment
-        {
-            Amount = 15,
-            AdditionalFees = 3, // Penalty for cancellation
-            Description = "Payment for a canceled lesson",
-            PaymentMethod = EPaymentMethod.InApp,
-            PaymentStatus = EPaymentStatus.Resolved
-        };
+        var lessons = context.Lessons.ToList();
+        var studentPaymentMethodId = dataGuids.StudentPaymentMethod1Id;
 
-        context.Payments.Add(paymentForCanceledLesson);
-        context.LessonPayments.Add(new LessonPayment
+        foreach (var lesson in lessons)
         {
-            PaymentId = paymentForCanceledLesson.Id,
-            LessonId = dataGuids.Lesson2Id,
-            StudentId = dataGuids.StudentId,
-            TutorId = dataGuids.Tutor2Id
-        });
+            var payment = new Payment
+            {
+                Amount = 15,
+                Description = $"Payment for lesson {lesson.Id}",
+                StudentPaymentMethodId = studentPaymentMethodId,
+                PaymentStatus = EPaymentStatus.Reserved 
+            };
 
-        // Seed Payment for finished lesson (lesson4)
-        var paymentForFinishedLesson = new Payment
-        {
-            Amount = 15,
-            Description = "Payment for a finished lesson",
-            PaymentMethod = EPaymentMethod.InApp,
-            PaymentStatus = EPaymentStatus.Resolved
-        };
+            context.Payments.Add(payment);
 
-        context.Payments.Add(paymentForFinishedLesson);
-        context.LessonPayments.Add(new LessonPayment
-        {
-            PaymentId = paymentForFinishedLesson.Id,
-            LessonId = dataGuids.Lesson4Id,
-            StudentId = dataGuids.StudentId,
-            TutorId = dataGuids.Tutor2Id
-        });
+            var lessonPayment = new LessonPayment
+            {
+                PaymentId = payment.Id,
+                LessonId = lesson.Id,
+                StudentId = dataGuids.StudentId, 
+                TutorId = lesson.TutorId 
+            };
+
+            context.LessonPayments.Add(lessonPayment);
+
+            lesson.Payments = new List<LessonPayment>();
+            lesson.Payments.Add(lessonPayment);
+        }
+
+        context.SaveChanges();
     }
     
     private static byte[] LoadImageAsBytes(string imagePath)

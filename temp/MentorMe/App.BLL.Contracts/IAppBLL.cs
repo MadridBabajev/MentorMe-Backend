@@ -10,4 +10,6 @@ public interface IAppBLL : IBaseBLL
     IStudentsService StudentsService { get; }
 
     ISubjectsService SubjectsService { get; }
+    
+    ILessonsService LessonsService { get; }
 }

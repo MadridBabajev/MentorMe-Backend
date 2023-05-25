@@ -3,6 +3,7 @@ using System.Net.Mime;
 using App.BLL.Contracts;
 using Asp.Versioning;
 using AutoMapper;
+using BLL.DTO.Profiles;
 using Domain.Entities;
 using Domain.Enums;
 using Helpers;
@@ -25,19 +26,21 @@ namespace WebApp.ApiControllers;
 public class ProfileController: ControllerBase
 {
     private readonly IAppBLL _bll;
-    // private readonly SubjectsMapper _mapper;
-    // private readonly SubjectDetailsMapper _detailsMapper;
+    private readonly StudentProfileMapper _studentProfileMapper;
+    private readonly TutorProfileMapper _tutorProfileMapper;
+    private readonly TutorsSearchMapper _tutorsSearchMapper;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubjectsController"/> class.
     /// </summary>
     /// <param name="bll">The business logic layer instance.</param>
     /// <param name="autoMapper">The AutoMapper instance.</param>
-    public ProfileController(IAppBLL bll /*, IMapper autoMapper*/)
+    public ProfileController(IAppBLL bll, IMapper autoMapper)
     {
         _bll = bll;
-        // _mapper = new SubjectsMapper(autoMapper);
-        // _detailsMapper = new SubjectDetailsMapper(autoMapper);
+        _studentProfileMapper = new StudentProfileMapper(autoMapper);
+        _tutorProfileMapper = new TutorProfileMapper(autoMapper);
+        _tutorsSearchMapper = new TutorsSearchMapper(autoMapper);
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -45,11 +48,11 @@ public class ProfileController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetStudentProfile([FromBody] UserProfileRequest userProfileRequest)
+    public async Task<IActionResult> GetStudentProfile([FromBody] ProfileDataRequest profileDataRequest)
     {
-        
+        // TODO: map from bll to public
         Guid userId = User.GetUserId();
-        return Ok(await _bll.StudentsService.GetStudentProfile(userId, userProfileRequest.VisitedUserId));
+        return Ok(_studentProfileMapper.Map(await _bll.StudentsService.GetStudentProfile(userId, profileDataRequest.VisitedUserId)));
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -57,11 +60,17 @@ public class ProfileController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetTutorProfile([FromBody] UserProfileRequest userProfileRequest)
+    public async Task<IActionResult> GetTutorProfile([FromBody] ProfileDataRequest profileDataRequest)
     {
         
         Guid userId = User.GetUserId();
-        return Ok(await _bll.TutorsService.GetTutorProfile(userId, userProfileRequest.VisitedUserId));
+        // return
+        //     Ok(await _bll.TutorsService.GetTutorProfile(userId,
+        //         profileDataRequest
+        //             .VisitedUserId)); 
+        // TODO: Fix the mapping
+        return Ok(_tutorProfileMapper.Map(await _bll.TutorsService
+             .GetTutorProfile(userId, profileDataRequest.VisitedUserId)));
     }
 
     [Produces(MediaTypeNames.Application.Json)]
@@ -71,7 +80,7 @@ public class ProfileController: ControllerBase
     public async Task<IActionResult> GetTutorsList([FromBody] TutorSearchFilters tutorSearchFilters)
     {
         
-        return Ok(await 
-            _bll.TutorsService.GetTutorsWithFilters(tutorSearchFilters));
+        var res = await _bll.TutorsService.GetTutorsWithFilters(tutorSearchFilters);
+        return Ok(res.Select(ts => _tutorsSearchMapper.Map(ts)));
     }
 }

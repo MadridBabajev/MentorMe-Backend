@@ -17,6 +17,7 @@ public class Subject: BaseDomainEntity, IDomainEntityId
     public string Description { get; set; } = default!;
     public byte[]? SubjectPicture { get; set; }
     
+    // Nav
     public virtual ICollection<TutorSubject>? TutorSubjects { get; set; }
     public virtual ICollection<StudentSubject>? StudentSubjects { get; set; }
 }

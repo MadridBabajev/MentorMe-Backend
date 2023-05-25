@@ -1,6 +1,7 @@
 using Base.DAL.Contracts;
 using Domain;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace App.DAL.Contracts;
 
@@ -8,6 +9,10 @@ public interface IStudentsRepository : IBaseRepository<Student>, IStudentsReposi
 {
     // add here custom methods for repo only
     Task<Student> FindStudentById(Guid userId);
+
+    Task<List<StudentPaymentMethod>> GetStudentPaymentMethods(Guid userId);
+
+    Task<bool> UserIsStudent(Guid userId);
 }
 
 public interface IStudentsRepositoryCustom<TEntity>

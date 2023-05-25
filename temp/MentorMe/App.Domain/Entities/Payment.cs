@@ -15,7 +15,9 @@ public class Payment: BaseDomainEntity
     [MinLength(2)]
     [MaxLength(128)]
     public string Description { get; set; } = default!;
-    public EPaymentMethod PaymentMethod { get; set; }
+    
+    public Guid StudentPaymentMethodId { get; set; }
+    public StudentPaymentMethod? StudentPaymentMethod { get; set; }
     public EPaymentStatus PaymentStatus { get; set; }
     
     // Nav

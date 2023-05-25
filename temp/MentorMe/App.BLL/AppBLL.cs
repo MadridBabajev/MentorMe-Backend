@@ -17,6 +17,7 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
     private ITutorsService? _tutors;
     private IStudentsService? _students;
     private ISubjectsService? _subjects;
+    private ILessonsService? _lessons;
 
     public AppBLL(IAppUOW uow, IMapper mapper) : base(uow)
     {
@@ -35,4 +36,6 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
             new SubjectDetailsMapper(_mapper),
             _mapper);
     
+    public ILessonsService LessonsService =>
+        _lessons ??= new LessonsService(Uow, new LessonDataMapper(_mapper), _mapper);
 }

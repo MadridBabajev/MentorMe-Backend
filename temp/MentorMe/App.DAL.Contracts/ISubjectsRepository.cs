@@ -12,6 +12,8 @@ public interface ISubjectsRepository : IBaseRepository<Subject>, ISubjectsReposi
     
     public Task<IEnumerable<BLLSubjectListElement>> AllSubjectsAsync();
     public Task<Subject?> FindAsyncWithDetails(Guid id);
+    public Task<IEnumerable<Subject?>?> GetUserSubjects(Guid? id);
+    
 }
 
 public interface ISubjectsRepositoryCustom<TEntity>

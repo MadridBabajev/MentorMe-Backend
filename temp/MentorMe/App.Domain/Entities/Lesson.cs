@@ -13,7 +13,8 @@ public class Lesson: BaseDomainEntity, IDomainEntityId
     public int LessonDuration { get; set; } // minutes
     [Range(typeof(decimal), "1", "11")] 
     public int ParticipantCount { get; set; } = 1;
-    public bool IsCanceled { get; set; }
+
+    public bool IsCanceled { get; set; } = false;
     public ELessonType LessonType { get; set; }
     public ELessonState LessonState { get; set; }
     
