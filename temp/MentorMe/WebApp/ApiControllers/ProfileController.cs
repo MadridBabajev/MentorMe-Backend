@@ -3,8 +3,6 @@ using System.Net.Mime;
 using App.BLL.Contracts;
 using Asp.Versioning;
 using AutoMapper;
-using BLL.DTO.Profiles;
-using Domain.Entities;
 using Domain.Enums;
 using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +12,7 @@ using Public.DTO.Mappers;
 using Public.DTO.v1;
 using Public.DTO.v1.Identity;
 using Public.DTO.v1.Profiles;
+using Public.DTO.v1.Profiles.Secondary;
 
 namespace WebApp.ApiControllers;
 
@@ -29,6 +28,9 @@ public class ProfileController: ControllerBase
     private readonly StudentProfileMapper _studentProfileMapper;
     private readonly TutorProfileMapper _tutorProfileMapper;
     private readonly TutorsSearchMapper _tutorsSearchMapper;
+    private readonly BankingDetailsMapper _bankingDetailsMapper;
+    private readonly EditProfileMapper _editProfileMapper;
+    private readonly UpdatedProfileDataMapper _updatedProfileDataMapper;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubjectsController"/> class.
@@ -41,6 +43,9 @@ public class ProfileController: ControllerBase
         _studentProfileMapper = new StudentProfileMapper(autoMapper);
         _tutorProfileMapper = new TutorProfileMapper(autoMapper);
         _tutorsSearchMapper = new TutorsSearchMapper(autoMapper);
+        _bankingDetailsMapper = new BankingDetailsMapper(autoMapper);
+        _editProfileMapper = new EditProfileMapper(autoMapper);
+        _updatedProfileDataMapper = new UpdatedProfileDataMapper(autoMapper);
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -50,9 +55,18 @@ public class ProfileController: ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetStudentProfile([FromBody] ProfileDataRequest profileDataRequest)
     {
-        // TODO: map from bll to public
-        Guid userId = User.GetUserId();
-        return Ok(_studentProfileMapper.Map(await _bll.StudentsService.GetStudentProfile(userId, profileDataRequest.VisitedUserId)));
+        try
+        {
+            Guid userId = User.GetUserId();
+            return Ok(_studentProfileMapper.Map(await 
+                _bll.StudentsService.GetStudentProfile(userId, profileDataRequest.VisitedUserId)));
+
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error retrieving student data: {e.Message}");
+        }
+        
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -64,13 +78,17 @@ public class ProfileController: ControllerBase
     {
         
         Guid userId = User.GetUserId();
-        // return
-        //     Ok(await _bll.TutorsService.GetTutorProfile(userId,
-        //         profileDataRequest
-        //             .VisitedUserId)); 
-        // TODO: Fix the mapping
-        return Ok(_tutorProfileMapper.Map(await _bll.TutorsService
-             .GetTutorProfile(userId, profileDataRequest.VisitedUserId)));
+
+        try
+        {
+            var res = Ok(_tutorProfileMapper.Map(await 
+                _bll.TutorsService.GetTutorProfile(userId, profileDataRequest.VisitedUserId)));
+            return res;
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error retrieving tutor data: {e.Message}");
+        }
     }
 
     [Produces(MediaTypeNames.Application.Json)]
@@ -79,8 +97,118 @@ public class ProfileController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetTutorsList([FromBody] TutorSearchFilters tutorSearchFilters)
     {
-        
-        var res = await _bll.TutorsService.GetTutorsWithFilters(tutorSearchFilters);
-        return Ok(res.Select(ts => _tutorsSearchMapper.Map(ts)));
+        try
+        {
+            var res = await _bll.TutorsService.GetTutorsWithFilters(tutorSearchFilters);
+            return Ok(res.Select(ts => _tutorsSearchMapper.Map(ts)));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error retrieving tutor list: {e.Message}");
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(TutorBankingDetails), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetTutorBankingDetails()
+    {
+        try
+        {
+            Guid tutorId = User.GetUserId();
+            
+            var bankingDetails = await _bll.TutorsService.GetTutorBankingDetails(tutorId);
+            return Ok(_bankingDetailsMapper.Map(bankingDetails));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error finding the payment: {e.Message}");
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> EditTutorBankingDetails([FromBody] TutorBankingDetailsWithoutType updatedBankingDetails)
+    {
+        try
+        {
+            Guid tutorId = User.GetUserId();
+            var tutorBankingDetailsWithType = new TutorBankingDetails
+            {
+                BankAccountName = updatedBankingDetails.BankAccountName,
+                BankAccountNumber = updatedBankingDetails.BankAccountNumber,
+                BankAccountType = updatedBankingDetails.BankAccountType == 0
+                    ? EBankAccountType.Personal
+                    : EBankAccountType.Business
+            };
+            
+            await _bll.TutorsService.EditTutorBankingDetails(tutorId, tutorBankingDetailsWithType);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error editing the banking details: {e.Message}");
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(UpdatedProfileData),  StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetEditProfileData()
+    {
+        try
+        {
+            Guid userId = User.GetUserId();
+            
+            var editProfileData = await _bll.StudentsService.GetUserEditableData(userId);
+            return Ok(_editProfileMapper.Map(editProfileData));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error finding the payment: {e.Message}");
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType( StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> EditProfileData([FromBody] UpdateProfileDataRequest updatedProfileDataRequest)
+    {
+        try
+        {
+            Guid userId = User.GetUserId();
+            var updatedProfileData = _updatedProfileDataMapper.Map(updatedProfileDataRequest);
+
+            if (updatedProfileData!.UserType == "Student")
+            {
+                await _bll.StudentsService.UpdateStudentProfile(userId, updatedProfileData);
+            }
+            else
+            {
+                await _bll.TutorsService.UpdateTutorProfile(userId, updatedProfileData);
+            }
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error updating the profile data: {e.Message}");
+        }
+    }
+    
+    private ActionResult FormatErrorResponse(string message) {
+        return BadRequest(new RestApiErrorResponse {
+            Status = HttpStatusCode.BadRequest,
+            Error = message
+        });
     }
 }

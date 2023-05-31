@@ -12,4 +12,6 @@ public interface IAppBLL : IBaseBLL
     ISubjectsService SubjectsService { get; }
     
     ILessonsService LessonsService { get; }
+    IAvailabilityService AvailabilityService { get; }
+    IPaymentMethodService PaymentMethodService { get; }
 }

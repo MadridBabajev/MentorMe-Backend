@@ -12,5 +12,6 @@ public class SubjectDetails
     
     public int LearnedBy { get; set; }
     
-    public byte[]? SubjectPicture { get; set; } = default!;
+    public byte[]? SubjectPicture { get; set; }
+    public bool? IsAdded { get; set; }
 }

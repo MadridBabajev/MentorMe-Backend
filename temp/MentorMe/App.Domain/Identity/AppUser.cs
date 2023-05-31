@@ -11,10 +11,10 @@ public class AppUser : IdentityUser<Guid>, IDomainEntityId
 {
     public bool NotificationsEnabled { get; set; }
     public bool IsBlocked { get; set; }
-    [MinLength(2)]
+    [MinLength(1)]
     [MaxLength(32)]
     public string FirstName { get; set; } = default!;
-    [MinLength(2)]
+    [MinLength(1)]
     [MaxLength(32)]
     public string LastName { get; set; } = default!;
     [MinLength(8)]
@@ -23,7 +23,7 @@ public class AppUser : IdentityUser<Guid>, IDomainEntityId
     public string MobilePhone { get; set; } = default!;
     public EUserType AppUserType { get; set; } = EUserType.Student;
     [Column(TypeName = "decimal(7, 2)")] 
-    public double Balance { get; set; } = 0.0;
+    public double Balance { get; set; }
 
     public ECountry Country { get; set; } = ECountry.Estonia;
     

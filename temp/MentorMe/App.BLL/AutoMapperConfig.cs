@@ -4,6 +4,7 @@ using BLL.DTO.Profiles;
 using BLL.DTO.Subjects;
 using Domain.Entities;
 using Domain.Enums;
+using Public.DTO.v1.Profiles;
 
 namespace App.BLL;
 
@@ -139,7 +140,6 @@ public class AutoMapperConfig: Profile
             );
 
         // === Profile card mappings ===
-
         CreateMap<Student, BLLProfileCardData>()
             .ForMember(
                 dest => dest.FullName,
@@ -209,9 +209,46 @@ public class AutoMapperConfig: Profile
             dest => dest.PaymentId,
             opt => opt.MapFrom(src => src.Payments!.First().Payment!.Id)
         );
+        
+        // === Student edit data mapping ===
+        CreateMap<Student, BLLUpdatedProfileData>()
+            .ForMember(dest => dest.FirstName,
+                opt => opt.MapFrom(src => src.AppUser!.FirstName))
+            .ForMember(dest => dest.LastName, 
+                opt => opt.MapFrom(src => src.AppUser!.LastName))
+            .ForMember(dest => dest.MobilePhone, 
+                opt => opt.MapFrom(src => src.AppUser!.MobilePhone))
+            .ForMember(dest => dest.Title, 
+                opt => opt.MapFrom(src => src.AppUser!.Title))
+            .ForMember(dest => dest.Bio,
+                opt => opt.MapFrom(src => src.AppUser!.Bio))
+            .ForMember(dest => dest.ProfilePicture,
+                opt => opt.MapFrom(src => src.AppUser!.ProfilePicture))
+            .ForMember(dest => dest.UserType,
+                opt => opt.MapFrom(src => src.AppUser!.AppUserType.ToString()))
+            .ForMember(dest => dest.HourlyRate, 
+                opt => opt.MapFrom(src => (double?)null));
 
-        // === Lessons list element Data mapping ===
+        // === Tutor edit data mapping ===
+        CreateMap<Tutor, BLLUpdatedProfileData>()
+            .ForMember(dest => dest.FirstName,
+                opt => opt.MapFrom(src => src.AppUser!.FirstName))
+            .ForMember(dest => dest.LastName, 
+                opt => opt.MapFrom(src => src.AppUser!.LastName))
+            .ForMember(dest => dest.MobilePhone, 
+                opt => opt.MapFrom(src => src.AppUser!.MobilePhone))
+            .ForMember(dest => dest.Title, 
+                opt => opt.MapFrom(src => src.AppUser!.Title))
+            .ForMember(dest => dest.Bio, 
+                opt => opt.MapFrom(src => src.AppUser!.Bio))
+            .ForMember(dest => dest.ProfilePicture, 
+                opt => opt.MapFrom(src => src.AppUser!.ProfilePicture))
+            .ForMember(dest => dest.UserType, 
+                opt => opt.MapFrom(src => src.AppUser!.AppUserType.ToString()))
+            .ForMember(dest => dest.HourlyRate, 
+                opt => opt.MapFrom(src => src.HourlyRate));
 
+        // === Lessons list element data mapping ===
         CreateMap<Lesson, BLLLessonListElement>()
             .ForMember(
                 dest => dest.TutorFullName,
@@ -258,8 +295,57 @@ public class AutoMapperConfig: Profile
 
         CreateMap<Subject, BLLSubjectListElement>();
         CreateMap<Subject, BLLSubjectsFilterElement>();
-        CreateMap<TutorAvailability, BLLTutorAvailability>();
+
+        // === Payment mapping ===
+        CreateMap<Payment, BLLPayment>()
+            .AfterMap((src, dest, context) =>
+            {
+                var lessonPayment = src.LessonPayments?.FirstOrDefault();
+                if (lessonPayment != null)
+                {
+                    // Retrieve Student who is the sender
+                    var student = context.Mapper.Map<Student>(lessonPayment.Student);
+                    if (student != null && student.AppUser != null)
+                    {
+                        dest.SenderStudentFullName = $"{student.AppUser.FirstName} {student.AppUser.LastName}";
+                    }
+
+                    // Retrieve Tutor who is the recipient
+                    var tutor = context.Mapper.Map<Tutor>(lessonPayment.Tutor);
+                    if (tutor != null && tutor.AppUser != null)
+                    {
+                        dest.RecipientTutorFullName = $"{tutor.AppUser.FirstName} {tutor.AppUser.LastName}";
+                    }
+                }
+            })
+            .ForMember(dest => dest.PaymentMethodType, 
+                opt => opt.MapFrom(src => src.StudentPaymentMethod!.PaymentMethodType));
+        
+        // === Student Payment Methods mapping ===
+        CreateMap<StudentPaymentMethod, BLLPaymentMethodDetailed>()
+            .AfterMap((src, dest, context) =>
+            {
+                // Retrieve Student who is the owner of the payment method
+                var student = context.Mapper.Map<Student>(src.Student);
+                if (student != null && student.AppUser != null)
+                {
+                    dest.OwnerFullName = $"{student.AppUser.FirstName} {student.AppUser.LastName}";
+                    dest.OwnerCountry = student.AppUser.Country;
+                }
+            })
+            .ForMember(dest => dest.Details, 
+                opt => opt.MapFrom(src => src.Details ?? "N/A"))
+            .ForMember(dest => dest.CardCvv, 
+                opt => opt.MapFrom(src => src.CardCvv ?? "N/A"))
+            .ForMember(dest => dest.CardExpirationDate, 
+                opt => opt.MapFrom(src => src.CardExpirationDate ?? "N/A"))
+            .ForMember(dest => dest.CardNumber, 
+                opt => opt.MapFrom(src => src.CardNumber ?? "N/A"));
+        
+        // === Additional mappings ===
+        CreateMap<TutorAvailability, BLLAvailability>();
         CreateMap<StudentPaymentMethod, BLLStudentPaymentMethod>();
+        CreateMap<TutorBankingDetails, BLLTutorBankingDetails>();
         CreateMap<Tag, BLLTag>()
             .ForMember(
                 dest => dest.AddedAt,

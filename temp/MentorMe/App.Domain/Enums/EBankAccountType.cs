@@ -1,6 +1,6 @@
 namespace Domain.Enums;
 
-public enum EAccountType
+public enum EBankAccountType
 {
     Personal,
     Business

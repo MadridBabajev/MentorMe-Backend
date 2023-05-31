@@ -6,6 +6,7 @@ using Base.BLL;
 using Base.DAL.Contracts;
 using Base.Mapper.Contracts;
 using BLL.DTO.Subjects;
+using Public.DTO.v1.Subjects;
 using DomainSubject = Domain.Entities.Subject;
 
 namespace App.BLL.Services;
@@ -18,12 +19,12 @@ public class SubjectsService :
     protected readonly IMapper<BLLSubjectsFilterElement, DomainSubject> SubjectsFilterMapper;
 
     public SubjectsService(IAppUOW uow, IMapper<BLLSubjectListElement, DomainSubject> subjectListMapper, IMapper<BLLSubjectDetails, DomainSubject> subjectDetailsMapper, 
-        IMapper autoMapper)
+        IMapper<BLLSubjectsFilterElement, DomainSubject> subjectsFilterMapper)
         : base(uow.SubjectsRepository, subjectListMapper)
     {
         Uow = uow;
         SubjectDetailsMapper = subjectDetailsMapper;
-        SubjectsFilterMapper = new SubjectsFilterMapper(autoMapper);
+        SubjectsFilterMapper = subjectsFilterMapper;
     }
     
     public async Task<IEnumerable<BLLSubjectListElement>> AllSubjects()
@@ -47,15 +48,43 @@ public class SubjectsService :
         return res.Select(s => SubjectsFilterMapper.Map(s));
     }
 
-    public new async Task<BLLSubjectDetails?> FindAsync(Guid id)
+    public async Task AddRemoveUserSubject(UserSubjectAction userSubjectAction, Guid userId)
     {
-        var subject = await Uow.SubjectsRepository.FindAsyncWithDetails(id);
+        if (await Uow.StudentsRepository.UserIsStudent(userId))
+        {
+            if (userSubjectAction.SubjectAction == ESubjectAction.AddSubject)
+            {
+                await Uow.SubjectsRepository.AddStudentSubject(userId, userSubjectAction.SubjectId);
+            }
+            else
+            {
+                await Uow.SubjectsRepository.RemoveStudentSubject(userId, userSubjectAction.SubjectId);
+            }
+        }
+        else
+        {
+            if (userSubjectAction.SubjectAction == ESubjectAction.AddSubject)
+            {
+                await Uow.SubjectsRepository.AddTutorSubject(userId, userSubjectAction.SubjectId);
+            }
+            else
+            {
+                await Uow.SubjectsRepository.RemoveTutorSubject(userId, userSubjectAction.SubjectId);
+            }
+        }
+    }
 
-        var x = SubjectDetailsMapper.Map(subject);
-        return x;
-        //
-        // var x = SubjectDetailsMapper.Map(await Uow.SubjectsRepository.FindAsyncWithDetails(id));
-        // return x;
+    public async Task<BLLSubjectDetails?> FindSubjectAsync(Guid subjectId, Guid? userId)
+    {
+        var subject = await Uow.SubjectsRepository.FindAsyncWithDetails(subjectId);
+
+        bool? isAdded = userId == null ? 
+            null : await Uow.SubjectsRepository.CheckIfSubjectIsAdded(subject!, userId);
+        
+        var mappedSubject = SubjectDetailsMapper.Map(subject);
+        mappedSubject!.IsAdded = isAdded;
+        
+        return mappedSubject;
     }
 
     public BLLSubjectDetails Add(BLLSubjectDetails entity)

@@ -7,6 +7,7 @@ using App.DAL.EF.Seeding;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Domain.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -69,6 +70,15 @@ builder.Services
             ClockSkew = TimeSpan.Zero,
         };
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Optional", policy =>
+    {
+        policy.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAssertion(_ => true);
+    });
+});
 
 // MVC Pages
 // builder.Services.AddControllersWithViews();
@@ -139,6 +149,7 @@ app.UseRouting();
 
 app.UseCors("CorsAllowAll");
 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.UseSwagger();

@@ -25,8 +25,8 @@ public class LessonsController: ControllerBase
     private readonly IAppBLL _bll;
     private readonly ReserveLessonMapper _reserveLessonMapper;
     private readonly LessonDataMapper _lessonDataMapper;
-    private readonly LessonListMapper _LessonListMapper;
-    // private readonly SubjectDetailsMapper _detailsMapper;
+    private readonly LessonListMapper _lessonListMapper;
+    private readonly PaymentMapper _paymentMapper;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SubjectsController"/> class.
@@ -38,7 +38,8 @@ public class LessonsController: ControllerBase
         _bll = bll;
         _reserveLessonMapper = new ReserveLessonMapper(autoMapper);
         _lessonDataMapper = new LessonDataMapper(autoMapper);
-        _LessonListMapper = new LessonListMapper(autoMapper);
+        _lessonListMapper = new LessonListMapper(autoMapper);
+        _paymentMapper = new PaymentMapper(autoMapper);
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -48,11 +49,19 @@ public class LessonsController: ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetReserveLessonData([FromBody] ProfileDataRequest profileDataRequest)
     {
-        Guid studentId = User.GetUserId();
-        var res = await _bll.LessonsService
-            .GetReserveLessonData(studentId, profileDataRequest.VisitedUserId);
+
+        try
+        {
+            Guid studentId = User.GetUserId();
+            var res = await _bll.LessonsService
+                .GetReserveLessonData(studentId, profileDataRequest.VisitedUserId);
         
-        return Ok(_reserveLessonMapper.Map(res));
+            return Ok(_reserveLessonMapper.Map(res));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error getting the lesson reserve data: {e.Message}");
+        }
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -63,10 +72,16 @@ public class LessonsController: ControllerBase
     public async Task<IActionResult> ReserveLesson(ReserveLessonRequest reserveLessonRequest)
     {
         Guid studentId = User.GetUserId();
-        
-        // Create lesson and return the lessonId
-        Guid lessonId = await _bll.LessonsService.CreateLesson(reserveLessonRequest, studentId);
-        return Ok(new ReserveLessonResponse{ LessonId = lessonId });
+
+        try
+        {
+            Guid lessonId = await _bll.LessonsService.CreateLesson(reserveLessonRequest, studentId);
+            return Ok(new ReserveLessonResponse{ LessonId = lessonId });
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error reserving the lesson {e.Message}");
+        }
     }
 
     [Produces(MediaTypeNames.Application.Json)]
@@ -100,9 +115,17 @@ public class LessonsController: ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetLessonsList()
     {
-        Guid userId = User.GetUserId();
-        var res = await  _bll.LessonsService.GetLessonsList(userId);
-        return Ok(res.Select(l => _LessonListMapper.Map(l)));
+        try
+        {
+            Guid userId = User.GetUserId();
+            var res = await  _bll.LessonsService.GetLessonsList(userId);
+            return Ok(res.Select(l => _lessonListMapper.Map(l)));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error retrieving the lesson list: {e.Message}");
+        }
+        
     }
     
     [Produces(MediaTypeNames.Application.Json)]
@@ -110,18 +133,18 @@ public class LessonsController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public Task<IActionResult> LeaveReview([FromBody] UserReview userReview)
+    public async Task<IActionResult> LeaveReview([FromBody] UserReview userReview)
     {
         try
         {
             Guid userId = User.GetUserId();
-            _bll.LessonsService.LeaveReview(userReview, userId);
+            await _bll.LessonsService.LeaveReview(userReview, userId);
             
-            return Task.FromResult<IActionResult>(Ok());
+            return Ok();
         }
         catch (Exception e)
         {
-            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when adding a review: {e}"));
+            return FormatErrorResponse($"Error occured when adding a review: {e}");
         }
     }
     
@@ -130,17 +153,17 @@ public class LessonsController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public Task<IActionResult> AddTag([FromBody] NewTag tag)
+    public async Task<IActionResult> AddTag([FromBody] NewTag tag)
     {
         try
         {
             Guid tutorId = User.GetUserId();
-            _bll.LessonsService.AddTag(tag, tutorId);
-            return Task.FromResult<IActionResult>(Ok());
+            await _bll.LessonsService.AddTag(tag, tutorId);
+            return Ok();
         }
         catch (Exception e)
         {
-            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when adding a tag: {e}"));
+            return FormatErrorResponse($"Error occured when adding a tag: {e}");
         }
     }
     
@@ -149,16 +172,16 @@ public class LessonsController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public Task<IActionResult> RemoveTag([FromBody] RemoveTag tag)
+    public async Task<IActionResult> RemoveTag([FromBody] RemoveTag tag)
     {
         try
         {
-            _bll.LessonsService.DeleteTag(tag.TagId);
-            return Task.FromResult<IActionResult>(Ok());
+            await _bll.LessonsService.DeleteTag(tag.TagId);
+            return Ok();
         }
         catch (Exception e)
         {
-            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when removing a tag: {e}"));
+            return FormatErrorResponse($"Error occured when removing a tag: {e}");
         }
     }
     
@@ -167,16 +190,16 @@ public class LessonsController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost("{lessonId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public Task<IActionResult> CancelLesson(Guid lessonId)
+    public async Task<IActionResult> CancelLesson(Guid lessonId)
     {
         try
         {
-            _bll.LessonsService.CancelLesson(lessonId);
-            return Task.FromResult<IActionResult>(Ok());
+            await _bll.LessonsService.CancelLesson(lessonId);
+            return Ok();
         }
         catch (Exception e)
         {
-            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when cancelling a lesson: {e}"));
+            return FormatErrorResponse($"Error occured when cancelling a lesson: {e}");
         }
     }
     
@@ -185,16 +208,34 @@ public class LessonsController: ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public Task<IActionResult> AcceptDeclineLesson([FromBody] AcceptDeclineRequest acceptDeclineRequest)
+    public async Task<IActionResult> AcceptDeclineLesson([FromBody] AcceptDeclineRequest acceptDeclineRequest)
     {
         try
         {
-            _bll.LessonsService.AcceptDeclineLesson(acceptDeclineRequest.LessonId, acceptDeclineRequest.TutorDecision);
-            return Task.FromResult<IActionResult>(Ok());
+            await _bll.LessonsService.AcceptDeclineLesson(acceptDeclineRequest.LessonId, acceptDeclineRequest.TutorDecision);
+            return Ok();
         }
         catch (Exception e)
         {
-            return Task.FromResult<IActionResult>(FormatErrorResponse($"Error occured when accepting/declining a lesson: {e}"));
+            return FormatErrorResponse($"Error occured when accepting/declining a lesson: {e}");
+        }
+    }
+    
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(Payment),  StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("{paymentId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetPayment(Guid paymentId)
+    {
+        try
+        {
+            var payment = await _bll.LessonsService.GetPaymentData(paymentId);
+            return Ok(_paymentMapper.Map(payment));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error finding the payment: {e.Message}");
         }
     }
     

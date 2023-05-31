@@ -1,9 +1,8 @@
-using Base.DAL.Contracts;
 using Domain.Enums;
 
-namespace BLL.DTO.Profiles;
+namespace Public.DTO.v1.Profiles.Secondary;
 
-public class BLLTutorAvailability: IDomainEntityId
+public class Availability
 {
     public Guid Id { get; set; }
     public TimeSpan FromHours { get; set; }

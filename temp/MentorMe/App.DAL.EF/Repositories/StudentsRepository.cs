@@ -1,9 +1,8 @@
 using App.DAL.Contracts;
 using Base.DAL.EF;
-using Domain;
 using Domain.Entities;
-using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Public.DTO.v1.Profiles;
 
 namespace App.DAL.EF.Repositories;
 
@@ -14,7 +13,7 @@ public class StudentsRepository:
     {
     }
 
-    public async Task<Student> FindStudentById(Guid userId)
+    public async Task<Student> FindStudentById(Guid? userId)
     {
         return await RepositoryDbSet
             .Include(s => s.AppUser)
@@ -40,6 +39,33 @@ public class StudentsRepository:
     public async Task<bool> UserIsStudent(Guid userId)
     {
         var user = await RepositoryDbSet.FirstOrDefaultAsync(u => u.AppUserId == userId);
-        return user == null;
+        return user != null;
+    }
+
+    public async Task<Student> GetStudentEditProfileData(Guid userId) 
+        => (await RepositoryDbSet
+            .Include(s => s.AppUser)
+            .FirstOrDefaultAsync(s => s.AppUserId == userId))!;
+
+    public async Task UpdateStudentProfileData(Guid studentId, UpdatedProfileData updatedProfileData)
+    {
+        var student = await RepositoryDbSet
+            .Include(s => s.AppUser)
+            .FirstOrDefaultAsync(s => s.AppUserId == studentId);
+
+        if (student == null)
+        {
+            throw new Exception("Student not found");
+        }
+        
+        student.AppUser!.FirstName = updatedProfileData.FirstName;
+        student.AppUser.LastName = updatedProfileData.LastName;
+        student.AppUser.MobilePhone = updatedProfileData.MobilePhone;
+        student.AppUser.Title = updatedProfileData.Title;
+        student.AppUser.Bio = updatedProfileData.Bio;
+        student.AppUser.ProfilePicture = updatedProfileData.ProfilePicture;
+        
+        RepositoryDbSet.Update(student);
+        await RepositoryDbContext.SaveChangesAsync();
     }
 }

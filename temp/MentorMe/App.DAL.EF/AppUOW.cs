@@ -16,6 +16,8 @@ public class AppUOW : EFBaseUOW<ApplicationDbContext>, IAppUOW
     private ITutorsRepository? _tutorsRepository;
     private ILessonsRepository? _lessonsRepository;
     private ISubjectsRepository? _subjectsRepository;
+    private IAvailabilityRepository? _availabilityRepository;
+    private IPaymentMethodRepository? _paymentMethodRepository;
 
     public IStudentsRepository StudentsRepository =>
         _studentsRepository ??= new StudentsRepository(UowDbContext);
@@ -28,4 +30,10 @@ public class AppUOW : EFBaseUOW<ApplicationDbContext>, IAppUOW
     
     public ISubjectsRepository SubjectsRepository =>
         _subjectsRepository ??= new SubjectsRepository(UowDbContext);
+    
+    public IAvailabilityRepository AvailabilityRepository =>
+        _availabilityRepository ??= new AvailabilityRepository(UowDbContext);
+    
+    public IPaymentMethodRepository PaymentMethodRepository =>
+        _paymentMethodRepository ??= new PaymentMethodRepository(UowDbContext);
 }

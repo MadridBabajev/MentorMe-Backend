@@ -1,7 +1,9 @@
 #nullable enable
 using Base.DAL.Contracts;
+using BLL.DTO.Lessons;
 using Domain.Entities;
 using Public.DTO.v1.Lessons;
+using Payment = Domain.Entities.Payment;
 using Tag = Domain.Entities.Tag;
 
 namespace App.DAL.Contracts;
@@ -12,12 +14,13 @@ public interface ILessonsRepository : IBaseRepository<Lesson>, ILessonsRepositor
     Task<Lesson> FindLessonById(Guid lessonId);
     Task<IEnumerable<Lesson>> GetLessonsList(Guid userId);
     Task<Guid> CreateLesson(ReserveLessonRequest reserveLessonRequest, Guid studentId);
-    void AddTag(Tag tag);
-    void DeleteTag(Guid tagId);
-    void CancelLesson(Guid lessonId);
-    void AcceptLesson(Guid lessonId);
-    void DeclineLesson(Guid lessonId);
-    void AddReview(Review review);
+    Task AddTag(Tag tag);
+    Task DeleteTag(Guid tagId);
+    Task CancelLesson(Guid lessonId);
+    Task AcceptLesson(Guid lessonId);
+    Task DeclineLesson(Guid lessonId);
+    Task AddReview(Review review);
+    Task<Payment> GetLessonPayment(Guid paymentId);
 }
 
 public interface ILessonsRepositoryCustom<TEntity>

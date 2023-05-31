@@ -4,6 +4,9 @@ using App.BLL.Contracts;
 using Asp.Versioning;
 using AutoMapper;
 using Domain.Entities;
+using Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Public.DTO.Mappers;
 using Public.DTO.v1;
@@ -48,8 +51,15 @@ public class SubjectsController : ControllerBase
     {
         // TODO: Implement adding removing subjects for tutors and students
         // Retrieve subjects from the database
-        var subjects = await _bll.SubjectsService.AllSubjects();
-        return subjects.Select(e => _mapper.MapListSubject(e)).ToList();
+        try
+        {
+            var subjects = await _bll.SubjectsService.AllSubjects();
+            return subjects.Select(e => _mapper.MapListSubject(e)).ToList();
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error retrieving the subject list: {e.Message}");
+        }
     }
 
     /// <summary>
@@ -59,24 +69,37 @@ public class SubjectsController : ControllerBase
     /// <returns>The image file associated with the subject.</returns>
     [HttpGet("{subjectId}")]
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(FileContentResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SubjectDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Optional")]
     public async Task<IActionResult> GetSubjectDetails(Guid subjectId)
     {
-        // Retrieve subject image from the database
-        var subject = await _bll.SubjectsService.FindAsync(subjectId);
-        if (subject != null) return Ok(_detailsMapper.MapDetailsSubject(subject));
-        return NotFound(new RestApiErrorResponse
+        Guid? userId;
+
+        try
         {
-            Status = HttpStatusCode.NotFound,
-            Error = $"Couldn't find the subject with id {subjectId}"
-        });
+            userId = User.GetUserId();
+        }
+        catch (Exception)
+        {
+            userId = null;
+        }
+
+        try
+        {
+            var subject = await _bll.SubjectsService.FindSubjectAsync(subjectId, userId);
+            if (subject != null) return Ok(_detailsMapper.MapDetailsSubject(subject));
+            return FormatErrorResponse($"Error finding the subject:");
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error modifying the subject details: {e.Message}");
+        }
     }
     
     /// <summary>
-    /// Get the subject details.
+    /// Get the subject filters.
     /// </summary>
-    /// <param name=>The ID of the subject.</param>
     /// <returns>The image file associated with the subject.</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<SubjectsFilterElement>), StatusCodes.Status200OK)]
@@ -84,7 +107,41 @@ public class SubjectsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetSubjectFilters()
     {
-        var res = await _bll.SubjectsService.AllSubjectFilters();
-        return Ok(res.Select(s => _subjectsFilterMapper.Map(s)));
+        try
+        {
+            var res = await _bll.SubjectsService.AllSubjectFilters();
+            return Ok(res.Select(s => _subjectsFilterMapper.Map(s)));
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error retrieving subjects as filters: {e.Message}");
+        }
+    }
+
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> AddRemoveSubject([FromBody] UserSubjectAction userSubjectAction)
+    {
+        Guid userId = User.GetUserId();
+
+        try
+        {
+            await _bll.SubjectsService.AddRemoveUserSubject(userSubjectAction, userId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return FormatErrorResponse($"Error adding/removing the subject: {e.Message}");
+        }
+    }
+    
+    private ActionResult FormatErrorResponse(string message) {
+        return BadRequest(new RestApiErrorResponse {
+            Status = HttpStatusCode.BadRequest,
+            Error = message
+        });
     }
 }

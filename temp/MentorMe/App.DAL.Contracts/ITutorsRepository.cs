@@ -1,7 +1,10 @@
 using Base.DAL.Contracts;
+using BLL.DTO.Profiles;
 using Domain.Entities;
 using Public.DTO.v1.Profiles;
 using TutorAvailability = Domain.Entities.TutorAvailability;
+using DomainTutorBankingDetails = Domain.Entities.TutorBankingDetails;
+using TutorBankingDetails = Public.DTO.v1.Profiles.Secondary.TutorBankingDetails;
 
 namespace App.DAL.Contracts;
 
@@ -13,6 +16,10 @@ public interface ITutorsRepository : IBaseRepository<Tutor>, ILessonsRepositoryC
     Task<Tutor> FindTutorById(Guid? userId);
 
     Task<List<TutorAvailability>> GetTutorAvailabilities(Guid? id);
+    Task<DomainTutorBankingDetails> GetTutorBankingDetails(Guid tutorId);
+    Task UpdateBankingDetails(Guid tutorId, TutorBankingDetails updatedBankingDetails);
+    Task<Tutor> GetTutorEditProfileData(Guid userId);
+    Task UpdateTutorProfileData(Guid tutorId, UpdatedProfileData updatedProfileData);
 }
 
 public interface ITutorsRepositoryCustom<TEntity>

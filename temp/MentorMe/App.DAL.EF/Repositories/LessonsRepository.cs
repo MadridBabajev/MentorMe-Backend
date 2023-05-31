@@ -6,6 +6,7 @@ using DomainTag = Domain.Entities.Tag;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Public.DTO.v1.Lessons;
+using Payment = Domain.Entities.Payment;
 
 namespace App.DAL.EF.Repositories;
 
@@ -17,7 +18,7 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
     
     public async Task<Lesson> FindLessonById(Guid lessonId)
     {
-        return await RepositoryDbSet
+        var lesson = await RepositoryDbSet
             .Include(l => l.Tutor)
                 .ThenInclude(t => t!.AppUser)
             .Include(l => l.Tutor)
@@ -34,15 +35,21 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
             .Include(l => l.Subject)
             .Include(l => l.Tags)
             .FirstAsync(l => l.Id == lessonId);
+        
+        UpdateLessonState(lesson);
+        await RepositoryDbContext.SaveChangesAsync();
+
+        return lesson;
     }
     
     public async Task<IEnumerable<Lesson>> GetLessonsList(Guid userId)
     {
         var user = await RepositoryDbContext.AppUsers.FirstAsync(u => u.Id == userId);
+        List<Lesson> lessons;
         if (user.AppUserType == EUserType.Tutor)
         {
             // If user is a Tutor, fetch lessons directly from Tutor's Lessons
-            return await RepositoryDbContext.Lessons
+            lessons = await RepositoryDbContext.Lessons
                 .Include(l => l.Tutor)
                     .ThenInclude(t => t!.AppUser)
                 .Include(l => l.Subject)
@@ -52,17 +59,45 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
                 .Where(l => l.Tutor!.AppUserId == userId)
                 .ToListAsync();
         }
+        else
+        {
+            lessons = await RepositoryDbContext.Lessons
+                .Include(l => l.Tutor)
+                    .ThenInclude(t => t!.AppUser)
+                .Include(l => l.Subject)
+                .Include(l => l.LessonParticipations)!
+                    .ThenInclude(lp => lp.Student)
+                        .ThenInclude(s => s!.AppUser)
+                .Where(l => l.LessonParticipations!.First().Student!.AppUserId == userId)
+                .ToListAsync();
+        }
+        
+        lessons.ForEach(UpdateLessonState);
+        await RepositoryDbContext.SaveChangesAsync();
+        
+        return lessons;
+    }
+    
+    private void UpdateLessonState(Lesson lesson)
+    {
+        // If the lesson has already ended or been canceled, we don't need to do anything.
+        if (lesson.LessonState == ELessonState.Finished || lesson.LessonState == ELessonState.Canceled)
+        {
+            return;
+        }
 
-        // If user is a Student, fetch lessons from LessonParticipation
-        return (await RepositoryDbContext.Lessons
-            .Include(l => l.Tutor)
-                .ThenInclude(t => t!.AppUser)
-            .Include(l => l.Subject)
-            .Include(l => l.LessonParticipations)!
-                .ThenInclude(lp => lp.Student)
-                    .ThenInclude(s => s!.AppUser)
-            .Where(l => l.LessonParticipations!.First().Student!.AppUserId == userId)
-            .ToListAsync());
+        // If the end time of the lesson is in the past, change the state to Finished.
+        if (DateTime.UtcNow > lesson.EndTime 
+            && lesson.LessonState == ELessonState.Upcoming)
+        {
+            lesson.LessonState = ELessonState.Finished;
+        }
+        // If the lesson state was Pending, change it to Canceled.
+        else if (DateTime.UtcNow > lesson.EndTime 
+                 && lesson.LessonState == ELessonState.Pending)
+        {
+            lesson.LessonState = ELessonState.Canceled;
+        }
     }
 
     public async Task<Guid> CreateLesson(ReserveLessonRequest reserveLessonRequest, Guid studentId)
@@ -116,7 +151,7 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
         {
             Date = lesson.EndTime,
             Amount = lesson.LessonDuration * lessonTutor.HourlyRate / 60,
-            Description = $"Payment for the lesson, which will happen on {lesson.StartTime}",
+            Description = $"Payment for the {lesson.StartTime} lesson",
             StudentPaymentMethodId = reserveLessonRequest.PaymentMethodId,
             PaymentStatus = EPaymentStatus.Reserved,
             LessonPayments = new List<LessonPayment>()
@@ -146,13 +181,13 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
         return lesson.Id;
     }
 
-    public async void AddTag(DomainTag tag)
+    public async Task AddTag(DomainTag tag)
     {
         RepositoryDbContext.Tags.Add(tag);
         await RepositoryDbContext.SaveChangesAsync();
     }
     
-    public async void DeleteTag(Guid tagId)
+    public async Task DeleteTag(Guid tagId)
     {
         var tag = await RepositoryDbContext.Tags.FirstAsync(t => t.Id == tagId);
         RepositoryDbContext.Tags.Remove(tag);
@@ -160,7 +195,7 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
         await RepositoryDbContext.SaveChangesAsync();
     }
 
-    public async void CancelLesson(Guid lessonId)
+    public async Task CancelLesson(Guid lessonId)
     {
         var lesson = await RepositoryDbSet
             .Include(l => l.Payments)!
@@ -188,7 +223,7 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
         await RepositoryDbContext.SaveChangesAsync();
     }
 
-    public async void AcceptLesson(Guid lessonId)
+    public async Task AcceptLesson(Guid lessonId)
     {
         var lesson = await RepositoryDbSet.FirstAsync(l => l.Id == lessonId);
         lesson.LessonState = ELessonState.Upcoming;
@@ -196,7 +231,7 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
         await RepositoryDbContext.SaveChangesAsync();
     }
 
-    public async void DeclineLesson(Guid lessonId)
+    public async Task DeclineLesson(Guid lessonId)
     {
         var lesson = await RepositoryDbSet.FirstAsync(l => l.Id == lessonId);
         lesson.LessonState = ELessonState.Canceled;
@@ -204,10 +239,23 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
         await RepositoryDbContext.SaveChangesAsync();
     }
 
-    public async void AddReview(Review review)
+    public async Task AddReview(Review review)
     {
         RepositoryDbContext.Reviews.Add(review);
         
         await RepositoryDbContext.SaveChangesAsync();
+    }
+
+    public async Task<Payment> GetLessonPayment(Guid paymentId)
+    {
+        return await RepositoryDbContext.Payments
+            .Include(p => p.StudentPaymentMethod)
+            .Include(p => p.LessonPayments)!
+                .ThenInclude(lp => lp.Student)
+                    .ThenInclude(s => s!.AppUser)
+            .Include(p => p.LessonPayments)!
+                .ThenInclude(lp => lp.Tutor)
+                    .ThenInclude(t => t!.AppUser)
+            .FirstAsync(p => p.Id == paymentId);
     }
 }

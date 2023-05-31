@@ -1,5 +1,6 @@
 using Domain.Enums;
 using Public.DTO.v1.Profiles;
+using Public.DTO.v1.Profiles.Secondary;
 using Public.DTO.v1.Subjects;
 
 namespace Public.DTO.v1.Lessons;

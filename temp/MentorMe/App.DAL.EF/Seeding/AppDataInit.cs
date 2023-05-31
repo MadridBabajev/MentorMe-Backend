@@ -279,9 +279,9 @@ public static class AppDataInit
                 StudentId = dataGuids.StudentId,
                 PaymentMethodType = EPaymentMethod.Cash,
                 Details = "Cash payment",
-                CardCvv = null,
-                CardExpirationDate = null,
-                CardNumber = null,
+                CardCvv = "N/A",
+                CardExpirationDate = "N/A",
+                CardNumber = "N/A",
                 IsBlocked = false
             });
     }
@@ -297,7 +297,7 @@ public static class AppDataInit
                 BankAccountNumber = "1111222233334444",
                 BankAccountName = "Tutor1 Test",
                 IsValidated = true,
-                AccountType = EAccountType.Personal
+                BankAccountType = EBankAccountType.Personal
             },
             new TutorBankingDetails
             {
@@ -305,7 +305,7 @@ public static class AppDataInit
                 BankAccountNumber = "2222333344445555",
                 BankAccountName = "Tutor2 Test",
                 IsValidated = true,
-                AccountType = EAccountType.Business
+                BankAccountType = EBankAccountType.Business
             });
     }
     
@@ -547,7 +547,7 @@ public static class AppDataInit
             var payment = new Payment
             {
                 Amount = 15,
-                Description = $"Payment for lesson {lesson.Id}",
+                Description = $"Payment for the {lesson.StartTime} lesson",
                 StudentPaymentMethodId = studentPaymentMethodId,
                 PaymentStatus = EPaymentStatus.Reserved 
             };

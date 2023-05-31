@@ -6,5 +6,5 @@ public class BLLTutorProfile: BLLBaseProfile
 {
     [Column(TypeName = "decimal(4, 2)")] 
     public double HourlyRate { get; set; } = 15.0;
-    public ICollection<BLLTutorAvailability>? Availabilities { get; set; }
+    public ICollection<BLLAvailability>? Availabilities { get; set; }
 }

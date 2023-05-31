@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using Base.DAL.Contracts;
 using Base.DomainEntity;
 using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class StudentPaymentMethod: BaseDomainEntity
+public class StudentPaymentMethod: BaseDomainEntity, IDomainEntityId
 {
     public EPaymentMethod PaymentMethodType { get; set; }
     [MinLength(2)]

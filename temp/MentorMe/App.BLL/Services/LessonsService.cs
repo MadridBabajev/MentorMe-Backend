@@ -1,15 +1,13 @@
 using App.BLL.Contracts;
-using App.BLL.Mappers;
 using App.DAL.Contracts;
-using AutoMapper;
 using Base.BLL;
 using Base.Mapper.Contracts;
 using BLL.DTO.Lessons;
 using BLL.DTO.Profiles;
 using BLL.DTO.Subjects;
 using Domain.Entities;
-using Domain.Enums;
 using Public.DTO.v1.Lessons;
+using Payment = Domain.Entities.Payment;
 using Tag = Domain.Entities.Tag;
 
 namespace App.BLL.Services;
@@ -18,28 +16,30 @@ public class LessonsService:
     BaseEntityService<BLLLessonData, Lesson, ILessonsRepository>, ILessonsService
 {
     protected readonly IAppUOW Uow;
-    protected readonly IMapper<BLLLessonData, Lesson> LessonDataMapper;
     protected readonly IMapper<BLLLessonListElement, Lesson> LessonListMapper;
     protected readonly IMapper<BLLStudentPaymentMethod, StudentPaymentMethod> PaymentMethodMapper;
-    protected readonly IMapper<BLLTutorAvailability, TutorAvailability> TutorAvailabilityMapper;
+    protected readonly IMapper<BLLAvailability, TutorAvailability> TutorAvailabilityMapper;
     protected readonly IMapper<BLLSubjectsFilterElement, Subject> SubjectsFilterMapper;
+    protected readonly IMapper<BLLPayment, Payment> PaymentMapper;
     
-    public LessonsService(IAppUOW uow, IMapper<BLLLessonData, Lesson> mapper, IMapper automapper)
-        : base(uow.LessonsRepository, mapper)
+    public LessonsService(IAppUOW uow, IMapper<BLLLessonData, Lesson> dataMapper, IMapper<BLLLessonListElement, Lesson> listMapper,
+        IMapper<BLLStudentPaymentMethod, StudentPaymentMethod> paymentMethodMapper, IMapper<BLLAvailability, TutorAvailability> availabilityMapper,
+        IMapper<BLLSubjectsFilterElement, Subject> subjectsFilterMapper, IMapper<BLLPayment, Payment> paymentMapper)
+        : base(uow.LessonsRepository, dataMapper)
     {
         Uow = uow;
-        LessonDataMapper = mapper;
-        LessonListMapper = new LessonListMapper(automapper);
-        PaymentMethodMapper = new PaymentMethodMapper(automapper);
-        TutorAvailabilityMapper = new TutorAvailabilityMapper(automapper);
-        SubjectsFilterMapper = new SubjectsFilterMapper(automapper);
+        LessonListMapper = listMapper;
+        PaymentMethodMapper = paymentMethodMapper;
+        TutorAvailabilityMapper = availabilityMapper;
+        SubjectsFilterMapper = subjectsFilterMapper;
+        PaymentMapper = paymentMapper;
     }
 
     public async Task<BLLLessonData?> GetLessonData(Guid userId, Guid lessonId)
     {
         var lesson = await Uow.LessonsRepository.FindLessonById(lessonId);
         var mappedLesson = Mapper.Map(lesson)!;
-        mappedLesson.ViewedByTutor = await Uow.StudentsRepository.UserIsStudent(userId);
+        mappedLesson.ViewedByTutor = !await Uow.StudentsRepository.UserIsStudent(userId);
         return mappedLesson;
     }
 
@@ -62,15 +62,13 @@ public class LessonsService:
         };
     }
 
-    public async Task<Guid> CreateLesson(ReserveLessonRequest reserveLessonRequest, Guid studentId)
-    {
-        return await Uow.LessonsRepository.CreateLesson(reserveLessonRequest, studentId);
-    }
+    public async Task<Guid> CreateLesson(ReserveLessonRequest reserveLessonRequest, Guid studentId) 
+        => await Uow.LessonsRepository.CreateLesson(reserveLessonRequest, studentId);
 
     public bool LessonBelongsToUser(BLLLessonData lesson, Guid userId)
         => lesson.LessonStudent.Id == userId || lesson.LessonTutor.Id == userId;
 
-    public void LeaveReview(UserReview userReview, Guid userId)
+    public Task LeaveReview(UserReview userReview, Guid userId)
     {
         var review = new Review
         {
@@ -82,10 +80,11 @@ public class LessonsService:
             StudentId = userReview.StudentId
         };
         
-        Uow.LessonsRepository.AddReview(review);
+        return Uow.LessonsRepository.AddReview(review);
+        
     }
 
-    public void AddTag(NewTag tag, Guid tutorId)
+    public Task AddTag(NewTag tag, Guid tutorId)
     {
         var domainTag = new Tag
         {
@@ -95,29 +94,28 @@ public class LessonsService:
             TutorId = tutorId
         };
         
-        Uow.LessonsRepository.AddTag(domainTag);
+        return Uow.LessonsRepository.AddTag(domainTag);
     }
 
-    public void DeleteTag(Guid tagId)
-    {
-        Uow.LessonsRepository.DeleteTag(tagId);
-    }
+    public Task DeleteTag(Guid tagId)
+        => Uow.LessonsRepository.DeleteTag(tagId);
 
-    public void CancelLesson(Guid lessonId)
+    public Task CancelLesson(Guid lessonId)
     {
         // TODO: Calculate penalty here
-        Uow.LessonsRepository.CancelLesson(lessonId);
+        return Uow.LessonsRepository.CancelLesson(lessonId);
     }
 
-    public void AcceptDeclineLesson(Guid lessonId, ETutorDecision tutorDecision)
+    public Task AcceptDeclineLesson(Guid lessonId, ETutorDecision tutorDecision)
     {
         if (tutorDecision == ETutorDecision.Accept)
         {
-            Uow.LessonsRepository.AcceptLesson(lessonId);
+            return Uow.LessonsRepository.AcceptLesson(lessonId);
         }
-        else
-        {
-            Uow.LessonsRepository.DeclineLesson(lessonId);
-        }
+        return Uow.LessonsRepository.DeclineLesson(lessonId);
     }
+
+    public async Task<BLLPayment> GetPaymentData(Guid paymentId) 
+        => PaymentMapper.Map(await Uow.LessonsRepository.GetLessonPayment(paymentId))!;
+    
 }

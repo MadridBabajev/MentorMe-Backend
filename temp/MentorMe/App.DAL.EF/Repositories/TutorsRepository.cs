@@ -4,6 +4,8 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Public.DTO.v1.Profiles;
 using TutorAvailability = Domain.Entities.TutorAvailability;
+using DomainTutorBankingDetails = Domain.Entities.TutorBankingDetails;
+using TutorBankingDetailsPublic = Public.DTO.v1.Profiles.Secondary.TutorBankingDetails;
 
 namespace App.DAL.EF.Repositories;
 
@@ -14,12 +16,11 @@ public class TutorsRepository:
     {
     }
     
-    public override async Task<IEnumerable<Tutor>> AllAsync()
-    {
-        return await RepositoryDbSet
+    public override async Task<IEnumerable<Tutor>> AllAsync() 
+        => await RepositoryDbSet
             .OrderBy(e => e.CreatedAt)
             .ToListAsync();
-    }
+    
 
     public async Task<Tutor> FindTutorById(Guid? userId)
     {
@@ -46,6 +47,62 @@ public class TutorsRepository:
             throw new Exception($"Tutor with id {id} not found.");
 
         return tutor.Availabilities!.ToList();
+    }
+
+    public async Task<DomainTutorBankingDetails> GetTutorBankingDetails(Guid tutorId) 
+        => await RepositoryDbContext.TutorBankingDetails
+            .Include(tbd => tbd.Tutor)
+            .FirstAsync(tbd => tbd.TutorId == tutorId);
+    
+
+    public async Task UpdateBankingDetails(Guid tutorId, TutorBankingDetailsPublic updatedBankingDetails)
+    {
+        var tutor = await RepositoryDbSet
+            .Include(t => t.BankingDetails)
+            .FirstOrDefaultAsync(t => t.AppUserId == tutorId);
+        
+        if(tutor == null)
+        {
+            throw new Exception("Tutor not found");
+        }
+
+        tutor.BankingDetails ??= new TutorBankingDetails();
+
+        tutor.BankingDetails.BankAccountNumber = updatedBankingDetails.BankAccountNumber;
+        tutor.BankingDetails.BankAccountName = updatedBankingDetails.BankAccountName;
+        tutor.BankingDetails.BankAccountType = updatedBankingDetails.BankAccountType;
+
+        RepositoryDbSet.Update(tutor);
+        await RepositoryDbContext.SaveChangesAsync();
+    }
+
+    public async Task<Tutor> GetTutorEditProfileData(Guid userId) 
+        => (await RepositoryDbSet
+            .Include(t => t.AppUser)
+            .FirstOrDefaultAsync(t => t.AppUserId == userId))!;
+    
+
+    public async Task UpdateTutorProfileData(Guid tutorId, UpdatedProfileData updatedProfileData)
+    {
+        var tutor = await RepositoryDbSet
+            .Include(t => t.AppUser)
+            .FirstOrDefaultAsync(t => t.AppUserId == tutorId);
+
+        if (tutor == null)
+        {
+            throw new Exception("Tutor not found");
+        }
+        
+        tutor.AppUser!.FirstName = updatedProfileData.FirstName;
+        tutor.AppUser.LastName = updatedProfileData.LastName;
+        tutor.AppUser.MobilePhone = updatedProfileData.MobilePhone;
+        tutor.AppUser.Title = updatedProfileData.Title;
+        tutor.AppUser.Bio = updatedProfileData.Bio;
+        tutor.AppUser.ProfilePicture = updatedProfileData.ProfilePicture;
+        tutor.HourlyRate = updatedProfileData.HourlyRate ?? tutor.HourlyRate;
+        
+        RepositoryDbSet.Update(tutor);
+        await RepositoryDbContext.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Tutor>> AllFilteredAsync(TutorSearchFilters filters)

@@ -18,7 +18,7 @@ public class BaseProfileData
     [MinLength(8)]
     [MaxLength(14)]
     public string MobilePhone { get; set; } = default!;
-    // public EUserType AppUserType { get; set; } = default!;
+    
     [Column(TypeName = "decimal(7, 2)")] 
     public double Balance { get; set; } = 0.0;
     [Column(TypeName = "decimal(2, 1)")] 
