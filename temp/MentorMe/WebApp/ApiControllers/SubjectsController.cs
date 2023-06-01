@@ -49,8 +49,7 @@ public class SubjectsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Subject>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SubjectListElement>>> GetAllSubjects()
     {
-        // TODO: Implement adding removing subjects for tutors and students
-        // Retrieve subjects from the database
+        // Get subjects from the database
         try
         {
             var subjects = await _bll.SubjectsService.AllSubjects();
@@ -118,6 +117,11 @@ public class SubjectsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Endpoint for adding or removing a subject for users
+    /// </summary>
+    /// <param name="userSubjectAction">The action of the user</param>
+    /// <returns></returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

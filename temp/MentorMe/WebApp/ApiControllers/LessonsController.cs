@@ -15,7 +15,7 @@ using Public.DTO.v1.Lessons;
 namespace WebApp.ApiControllers;
 
 /// <summary>
-/// API controller for handling requests related to profiles.
+/// API controller for handling requests related to lessons.
 /// </summary>
 [ApiController]
 [ApiVersion("1.0")]
@@ -29,7 +29,7 @@ public class LessonsController: ControllerBase
     private readonly PaymentMapper _paymentMapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SubjectsController"/> class.
+    /// Initializes a new instance of the <see cref="LessonsController"/> class.
     /// </summary>
     /// <param name="bll">The business logic layer instance.</param>
     /// <param name="autoMapper">The AutoMapper instance.</param>
@@ -42,6 +42,11 @@ public class LessonsController: ControllerBase
         _paymentMapper = new PaymentMapper(autoMapper);
     }
     
+    /// <summary>
+    /// Getting the necessary data for lesson reservation
+    /// </summary>
+    /// <param name="profileDataRequest">Specifies, which tutor we want to reserve a lesson from</param>
+    /// <returns>Lesson Reservation data</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(ReserveLessonData), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,6 +69,11 @@ public class LessonsController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Reserving and creating a lesson
+    /// </summary>
+    /// <param name="reserveLessonRequest">Data the user specified during the reservation process</param>
+    /// <returns>New lesson id wrapped inside of an object</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(ReserveLessonResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,6 +94,11 @@ public class LessonsController: ControllerBase
         }
     }
 
+    /// <summary>
+    /// Getting the lesson data
+    /// </summary>
+    /// <param name="lessonId">The lesson id</param>
+    /// <returns>Lesson data</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(LessonData), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -108,6 +123,10 @@ public class LessonsController: ControllerBase
         return Ok(_lessonDataMapper.Map(lesson));
     }
     
+    /// <summary>
+    /// Getting a list of user lessons
+    /// </summary>
+    /// <returns>User lessons list</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<LessonListElement>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -128,6 +147,10 @@ public class LessonsController: ControllerBase
         
     }
     
+    /// <summary>
+    /// Adds a review from one user to another once the lesson is finished
+    /// </summary>
+    /// <param name="userReview">User review</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -148,6 +171,10 @@ public class LessonsController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Adds a new tag to the lesson
+    /// </summary>
+    /// <param name="tag">New tag</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -167,6 +194,10 @@ public class LessonsController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Removes a tag
+    /// </summary>
+    /// <param name="tag">Tag to remove</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -185,6 +216,10 @@ public class LessonsController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Cancels a lesson
+    /// </summary>
+    /// <param name="lessonId">Specifies the lesson to cancel</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -203,6 +238,10 @@ public class LessonsController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Accepts or declines an incoming lesson request
+    /// </summary>
+    /// <param name="acceptDeclineRequest">Specifies the action of the tutor</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -221,6 +260,11 @@ public class LessonsController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Getting the lesson payment data
+    /// </summary>
+    /// <param name="paymentId">Specifies the payment id</param>
+    /// <returns></returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(Payment),  StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

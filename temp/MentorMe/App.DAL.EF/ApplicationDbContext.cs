@@ -38,11 +38,9 @@ public class ApplicationDbContext: IdentityDbContext<AppUser, AppRole, Guid>
         _configuration = configuration;
     }
     
-    // TODO Last migration -> Initial
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        // TODO var persons = ctx.Users.AsNoTracking().ToList() - For No-Tracking approach
         // Remove Cascade delete on all the entities
         foreach (var relationship in modelBuilder.Model
                      .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))

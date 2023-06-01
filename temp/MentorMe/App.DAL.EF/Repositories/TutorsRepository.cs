@@ -149,9 +149,9 @@ public class TutorsRepository:
             tutors = tutors.Where(t => t.Lessons!.Count <= filters.MaxClassesCount.Value);
         }
 
-        if (filters.SubjectIds.Any())
+        if (filters.SubjectIds!.Any())
         {
-            tutors = tutors.Where(t => t.TutorSubjects!.Any(ts => filters.SubjectIds.Contains(ts.SubjectId)));
+            tutors = tutors.Where(t => t.TutorSubjects!.Any(ts => filters.SubjectIds!.Contains(ts.SubjectId)));
         }
 
         return await tutors

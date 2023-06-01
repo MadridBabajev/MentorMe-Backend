@@ -13,6 +13,9 @@ using PaymentMethodDetailedMapper = Public.DTO.Mappers.PaymentMethodDetailedMapp
 
 namespace WebApp.ApiControllers;
 
+/// <summary>
+/// Controller for handling payment method operations
+/// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]/[action]")]
@@ -21,12 +24,21 @@ public class PaymentMethodController: ControllerBase
     private readonly IAppBLL _bll;
     private readonly PaymentMethodDetailedMapper _paymentMethodDetailedMapper;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProfileController"/> class.
+    /// </summary>
+    /// <param name="bll">The business logic layer instance.</param>
+    /// <param name="autoMapper">The AutoMapper instance.</param>
     public PaymentMethodController(IAppBLL bll, IMapper autoMapper)
     {
         _bll = bll;
         _paymentMethodDetailedMapper = new PaymentMethodDetailedMapper(autoMapper);
     }
     
+    /// <summary>
+    /// Getting list of all the student's payment methods
+    /// </summary>
+    /// <returns>List of payment methods</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<PaymentMethodDetailed>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,6 +58,10 @@ public class PaymentMethodController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Removing a payment method
+    /// </summary>
+    /// <param name="paymentMethod">Specifies what payment method to delete</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,6 +80,10 @@ public class PaymentMethodController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Adding a new payment method
+    /// </summary>
+    /// <param name="newPaymentMethod">Details of a new payment method</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

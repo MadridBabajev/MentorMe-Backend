@@ -4,11 +4,10 @@ using Domain.Enums;
 namespace Public.DTO.v1.Identity;
 
 /// <summary>
-/// 
+/// Register DTO that contains all the necessary data in order to become a user
 /// </summary>
 public class Register
 {
-    // TODO Implement a better fields checking
     /// <summary>
     /// An email address the user is trying to register with.
     /// </summary>

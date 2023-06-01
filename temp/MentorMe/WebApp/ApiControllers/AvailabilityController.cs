@@ -13,6 +13,9 @@ using Public.DTO.v1.Profiles.Secondary;
 
 namespace WebApp.ApiControllers;
 
+/// <summary>
+/// API controller for handling requests related to availabilities.
+/// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]/[action]")]
@@ -21,12 +24,21 @@ public class AvailabilityController: ControllerBase
     private readonly IAppBLL _bll;
     private readonly AvailabilityMapper _availabilityMapper;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AvailabilityController"/> class.
+    /// </summary>
+    /// <param name="bll">The business logic layer instance.</param>
+    /// <param name="autoMapper">The AutoMapper instance.</param>
     public AvailabilityController(IAppBLL bll, IMapper autoMapper)
     {
         _bll = bll;
         _availabilityMapper = new AvailabilityMapper(autoMapper);
     }
     
+    /// <summary>
+    /// Getting a list of all user's availabilities
+    /// </summary>
+    /// <returns>A list of availabilities</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<Availability>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,6 +58,10 @@ public class AvailabilityController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Removing an availability
+    /// </summary>
+    /// <param name="availability">Specifies the availability to remove</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,6 +81,10 @@ public class AvailabilityController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Adds a new availability
+    /// </summary>
+    /// <param name="newAvailability">Data of the new availability</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

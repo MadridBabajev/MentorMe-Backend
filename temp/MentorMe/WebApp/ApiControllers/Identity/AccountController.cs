@@ -30,7 +30,6 @@ public class AccountController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AccountController> _logger;
-    private readonly Random _rnd = new();
     private readonly ApplicationDbContext _context;
 
     /// <summary>
@@ -192,8 +191,6 @@ public class AccountController : ControllerBase
     {
         if (expiresInSeconds <= 0) expiresInSeconds = int.MaxValue;
 
-        // TODO right now it doesn't check for the user type
-        
         // verify if the user exists
         var appUsers = await _userManager.Users
             .Where(u => u.Email == loginData.Email).ToListAsync();

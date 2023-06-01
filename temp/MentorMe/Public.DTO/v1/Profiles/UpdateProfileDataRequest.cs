@@ -3,26 +3,57 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Public.DTO.v1.Profiles;
 
+/// <summary>
+/// Represents a request to update profile data for a user.
+/// </summary>
 public class UpdateProfileDataRequest
 {
+    /// <summary>
+    /// Gets or sets the updated first name of the user.
+    /// </summary>
     [MinLength(2)]
     [MaxLength(32)]
     public string FirstName { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the updated last name of the user.
+    /// </summary>
     [MinLength(2)]
     [MaxLength(32)]
     public string LastName { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the updated mobile phone number of the user.
+    /// </summary>
     [MinLength(8)]
     [MaxLength(14)]
     public string MobilePhone { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the updated title of the user.
+    /// </summary>
     [MaxLength(128)]
     public string Title { get; set; } = "";
-    
+
+    /// <summary>
+    /// Gets or sets the updated biography of the user.
+    /// </summary>
     [MaxLength(2048)]
     public string Bio { get; set; } = "";
 
-    public string? ProfilePicture { get; set; } // Base64 string
-    public string UserType { get; set; }
-    
-    [Column(TypeName = "decimal(4, 2)")] 
-    public double? HourlyRate { get; set; } // is a null for students
+    /// <summary>
+    /// Gets or sets the updated profile picture of the user as a Base64 string (if available).
+    /// </summary>
+    public string? ProfilePicture { get; set; }
+
+    /// <summary>
+    /// Gets or sets the updated user type.
+    /// </summary>
+    public string UserType { get; set; } = default!;
+
+    /// <summary>
+    /// Gets or sets the updated hourly rate of the user. (Null for students)
+    /// </summary>
+    [Column(TypeName = "decimal(4, 2)")]
+    public double? HourlyRate { get; set; }
 }

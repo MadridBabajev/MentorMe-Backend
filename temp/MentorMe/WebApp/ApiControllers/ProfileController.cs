@@ -33,7 +33,7 @@ public class ProfileController: ControllerBase
     private readonly UpdatedProfileDataMapper _updatedProfileDataMapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SubjectsController"/> class.
+    /// Initializes a new instance of the <see cref="ProfileController"/> class.
     /// </summary>
     /// <param name="bll">The business logic layer instance.</param>
     /// <param name="autoMapper">The AutoMapper instance.</param>
@@ -48,6 +48,12 @@ public class ProfileController: ControllerBase
         _updatedProfileDataMapper = new UpdatedProfileDataMapper(autoMapper);
     }
     
+    /// <summary>
+    /// Getting the student profile
+    /// </summary>
+    /// <param name="profileDataRequest">Field specifying whether
+    /// the user want to see the page's information as a guest or the owner</param>
+    /// <returns>Student profile details</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(StudentProfile), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -69,6 +75,12 @@ public class ProfileController: ControllerBase
         
     }
     
+    /// <summary>
+    /// Getting the tutor profile
+    /// </summary>
+    /// <param name="profileDataRequest">Field specifying whether
+    /// the user want to see the page's information as a guest or the owner</param>
+    /// <returns>Tutor profile details</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(TutorProfile), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -91,6 +103,11 @@ public class ProfileController: ControllerBase
         }
     }
 
+    /// <summary>
+    /// Getting a filtered list of tutors
+    /// </summary>
+    /// <param name="tutorSearchFilters">Filters</param>
+    /// <returns>List of filtered users</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(IEnumerable<TutorSearch>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -108,6 +125,10 @@ public class ProfileController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Getting user banking details
+    /// </summary>
+    /// <returns>Tutor banking details data</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(TutorBankingDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -128,6 +149,10 @@ public class ProfileController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Edits tutor banking details
+    /// </summary>
+    /// <param name="updatedBankingDetails">Updated banking details</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -156,6 +181,10 @@ public class ProfileController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Getting editable user data
+    /// </summary>
+    /// <returns>Editable user data</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(UpdatedProfileData),  StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -176,6 +205,10 @@ public class ProfileController: ControllerBase
         }
     }
     
+    /// <summary>
+    /// Editing user profile details
+    /// </summary>
+    /// <param name="updatedProfileDataRequest">New profile data set by user</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

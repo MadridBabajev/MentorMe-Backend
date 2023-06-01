@@ -16,5 +16,8 @@ public class JWTResponse
     /// </summary>
     public string RefreshToken { get; set; } = default!;
     
+    /// <summary>
+    /// Field that describes the JWT token expiration in secods
+    /// </summary>
     public int ExpiresIn { get; set; }
 }

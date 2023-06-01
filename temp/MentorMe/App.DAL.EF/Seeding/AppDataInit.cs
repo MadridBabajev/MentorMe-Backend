@@ -63,8 +63,7 @@ public static class AppDataInit
             notificationsEnabled, EUserType userType, ECountry country, string title, string bio) userData,
         UserManager<AppUser> userManager, ApplicationDbContext ctx)
     {
-        // TODO Implement better identity seeding 
-        // TODO currently it is not possible to create 2 users with the same email
+        
         AppUser? user = userManager.FindByEmailAsync(userData.email).Result;
         if (user == null)
         {
@@ -153,8 +152,7 @@ public static class AppDataInit
         GetStudentTutorProfile(DataGuids dataGuids)
         => (dataGuids.StudentTutorAccountId, "testStudent@app.com", "Foo.bar.student1", "53983030",
             "StudentTutor", "Test", false, false, EUserType.Tutor, ECountry.Estonia, "Title text", DescriptionFiller);
-
-    // TODO seed lessons, dialogs, etc.
+    
     public static void SeedAppData(ApplicationDbContext context, IWebHostEnvironment env, DataGuids guids)
     {
         SeedSubjects(context, env, guids);
