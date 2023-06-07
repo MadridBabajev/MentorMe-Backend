@@ -86,7 +86,7 @@ public class LessonsServiceUnitTests
             Subject = bllSubjectData,
             LessonStudent = bllStudent,
             LessonTutor = bllTutor,
-            Tags = new List<BLLTag>(),
+            Tags = new List<BLLTag>()
         };
 
         _uowMock.Setup(u => u.LessonsRepository.FindLessonById(It.Is<Guid>(id => id == lessonId))).ReturnsAsync(lesson);
