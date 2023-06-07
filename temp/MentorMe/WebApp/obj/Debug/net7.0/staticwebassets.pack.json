@@ -9,6 +9,26 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\imgs\\backend_img.jpg",
+      "PackagePath": "staticwebassets\\imgs\\backend_img.jpg"
+    },
+    {
+      "Id": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\imgs\\english_img.jpg",
+      "PackagePath": "staticwebassets\\imgs\\english_img.jpg"
+    },
+    {
+      "Id": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\imgs\\frontend_img.jpg",
+      "PackagePath": "staticwebassets\\imgs\\frontend_img.jpg"
+    },
+    {
+      "Id": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\imgs\\maths_img.jpg",
+      "PackagePath": "staticwebassets\\imgs\\maths_img.jpg"
+    },
+    {
+      "Id": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\imgs\\physics_img.jpg",
+      "PackagePath": "staticwebassets\\imgs\\physics_img.jpg"
+    },
+    {
       "Id": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

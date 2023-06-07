@@ -9,9 +9,9 @@ public class BLLLessonListElement: IDomainEntityId
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public ELessonState LessonState { get; set; }
-    public string TutorFullName { get; set; }
-    public string StudentFullName { get; set; }
-    public string SubjectName { get; set; }
+    public string TutorFullName { get; set; } = default!;
+    public string StudentFullName { get; set; } = default!;
+    public string SubjectName { get; set; } = default!;
     
     public double LessonPrice { get; set; }
 }

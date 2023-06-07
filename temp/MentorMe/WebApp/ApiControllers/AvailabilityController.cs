@@ -57,22 +57,23 @@ public class AvailabilityController: ControllerBase
             return FormatErrorResponse($"Error retrieving the payment method list: {e.Message}");
         }
     }
-    
+
     /// <summary>
     /// Removing an availability
     /// </summary>
-    /// <param name="availability">Specifies the availability to remove</param>
+    /// <param name="availabilityId">Specifies the availability to remove</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> RemoveAvailability([FromBody] RemoveAvailability availability)
+    public async Task<IActionResult> RemoveAvailability([FromQuery] string availabilityId)
     {
 
         try
         {
-            await _bll.AvailabilityService.DeleteAvailability(availability.AvailabilityId);
+            // await _bll.AvailabilityService.DeleteAvailability(availability.AvailabilityId);
+            await _bll.AvailabilityService.DeleteAvailability(Guid.Parse(availabilityId));
             return Ok();
         }
         catch (Exception e)

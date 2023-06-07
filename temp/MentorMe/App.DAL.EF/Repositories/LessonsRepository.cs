@@ -199,28 +199,17 @@ public class LessonsRepository: EFBaseRepository<Lesson, ApplicationDbContext>, 
     {
         var lesson = await RepositoryDbSet
             .Include(l => l.Payments)!
-            .ThenInclude(lp => lp.Payment)
+                .ThenInclude(lp => lp.Payment)
             .FirstAsync(l => l.Id == lessonId);
         lesson.IsCanceled = true;
         lesson.LessonState = ELessonState.Canceled;
-        
-        var cancellation = new Cancellation
-        {
-            Reason = "",
-            Penalty = .0,
-            CancellationType = ECancellationType.BySystem,
-            LessonId = lessonId
-        };
-        
-        RepositoryDbContext.Cancellations.Add(cancellation);
-        
-        lesson.Cancellation = cancellation;
 
         var payment = lesson.Payments!.First().Payment;
 
         payment!.PaymentStatus = EPaymentStatus.Refunded;
         
         await RepositoryDbContext.SaveChangesAsync();
+
     }
 
     public async Task AcceptLesson(Guid lessonId)

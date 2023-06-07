@@ -23,17 +23,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Postgres DB connection
 
 // change to DefaultConnection once you get to another machine
-var connectionString = builder.Configuration.GetConnectionString("SQLiteConnection") ??
-                       throw new InvalidOperationException("Connection string 'SQLiteConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 // Postgres connection line
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseNpgsql(connectionString));
-// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add the SQLite connection code
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseSqlite(connectionString));
 
 // Register our UOW with scoped lifecycle
 builder.Services.AddScoped<IAppUOW, AppUOW>();
@@ -166,13 +169,11 @@ app.UseSwaggerUI(options =>
     }
 );
 
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-// app.MapRazorPages();
 
-// ===================== Run the Web server and wait for requests =====================
+// ===================== Run the server and start waiting for requests =====================
 
 app.Run();
 
@@ -214,6 +215,8 @@ static void SetupAppData(IApplicationBuilder app, IConfiguration configuration, 
     {
         logger.LogWarning("Dropping database");
         AppDataInit.DropDatabase(context);
+        // logger.LogWarning("Clearing database data");
+        // AppDataInit.ClearData(context);
     }
 
     if (configuration.GetValue<bool>("DataInit:MigrateDatabase"))
@@ -236,7 +239,7 @@ static void SetupAppData(IApplicationBuilder app, IConfiguration configuration, 
 }
 
 /// <summary>
-/// Partial Program class for running the SetupAppData function
+/// Partial Program class for running the SetupAppData function 
 /// </summary>
 public partial class Program
 {

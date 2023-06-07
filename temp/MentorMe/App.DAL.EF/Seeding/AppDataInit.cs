@@ -27,14 +27,24 @@ namespace App.DAL.EF.Seeding;
 public static class AppDataInit
 {
     private static readonly string DescriptionFiller =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ornare mauris eu magna mollis, quis blandit ex sagittis. Pellentesque pulvinar, ligula feugiat finibus venenatis, lectus erat hendrerit dui, et malesuada nunc orci mollis ipsum. Donec egestas justo sit amet iaculis dapibus. Etiam arcu massa, hendrerit eget sapien fermentum, eleifend suscipit dolor. Duis egestas nulla lobortis lectus blandit fringilla. Maecenas felis mi, accumsan id felis eu, tincidunt gravida lorem. In non pretium lorem, in imperdiet elit. Phasellus nisl felis, cursus at ultrices id, mattis nec odio. Integer nisi tellus, venenatis non orci at, laoreet porta neque.";
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ornare mauris eu magna mollis, quis blandit ex sagittis. Pellentesque pulvinar, ligula feugiat finibus venenatis, lectus erat hendrerit dui, et malesuada nunc orci mollis ipsum. Donec egestas justo sit amet iaculis dapibus. Etiam arcu massa, hendrerit eget sapien fermentum, eleifend suscipit dolor. Duis egestas nulla lobortis lectus blandit fringilla. Maecenas felis mi, accumsan id felis eu, tincidunt gravida lorem.";
 
     public static void MigrateDatabase(ApplicationDbContext context)
         => context.Database.Migrate();
 
     public static void DropDatabase(ApplicationDbContext context)
         => context.Database.EnsureDeleted();
+     
+    public static void ClearData(ApplicationDbContext context)
+    {
+        foreach (var tableName in context.Model.GetEntityTypes().Select(t => t.GetTableName()).Distinct())
+        {
+            context.Database.ExecuteSqlRaw($"TRUNCATE TABLE \"{tableName}\" CASCADE");
+        }
+        context.SaveChanges();
+    }
 
+    
     public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, ApplicationDbContext ctx, DataGuids guids)
     {
         var studentData = GetStudentData(guids);

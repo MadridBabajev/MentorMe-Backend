@@ -193,21 +193,21 @@ public class LessonsController: ControllerBase
             return FormatErrorResponse($"Error occured when adding a tag: {e}");
         }
     }
-    
+
     /// <summary>
     /// Removes a tag
     /// </summary>
-    /// <param name="tag">Tag to remove</param>
+    /// <param name="tagId">Tag to remove</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> RemoveTag([FromBody] RemoveTag tag)
+    public async Task<IActionResult> RemoveTag([FromQuery] string tagId)
     {
         try
         {
-            await _bll.LessonsService.DeleteTag(tag.TagId);
+            await _bll.LessonsService.DeleteTag(Guid.Parse(tagId));
             return Ok();
         }
         catch (Exception e)
@@ -215,21 +215,20 @@ public class LessonsController: ControllerBase
             return FormatErrorResponse($"Error occured when removing a tag: {e}");
         }
     }
-    
+
     /// <summary>
     /// Cancels a lesson
     /// </summary>
-    /// <param name="lessonId">Specifies the lesson to cancel</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost("{lessonId}")]
+    [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> CancelLesson(Guid lessonId)
+    public async Task<IActionResult> CancelLesson([FromBody] ILessonDeletion lessonDeletion)
     {
         try
         {
-            await _bll.LessonsService.CancelLesson(lessonId);
+            await _bll.LessonsService.CancelLesson(lessonDeletion.LessonId);
             return Ok();
         }
         catch (Exception e)
@@ -245,7 +244,7 @@ public class LessonsController: ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> AcceptDeclineLesson([FromBody] AcceptDeclineRequest acceptDeclineRequest)
     {
