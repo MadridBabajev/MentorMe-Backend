@@ -1,8 +1,25 @@
 version: "3.9"
 
 services:
-  mb-distributed-22-23s-postgres-v2:
-    container_name: mb-distributed-22-23s-postgres-v2
+  dist-22-23s-app:
+    container_name: mb-distributed-22-23s-app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - mb-distributed-22-23s-postgres-v3
+    environment:
+      - ConnectionStrings:DefaultConnection=Host=mb-distributed-22-23s-postgres-v3;Port=5432;Database=postgres;Username=postgres;Password=postgres
+
+  mb-distributed-22-23s-postgres-v3:
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: mb-distributed-22-23s-postgres-v3
     image: "postgres:15.2-bullseye"
     restart: unless-stopped
     environment:
@@ -13,10 +30,12 @@ services:
         max-size: 10m
         max-file: "3"
     ports:
-      # external:internal
       - "5445:5432"
     volumes:
-      - mb-distributed-22-23s-postgres-v2-volume:/var/lib/postgresql/data
+      - data-protection-keys:/root/.aspnet/DataProtection-Keys
+      - mb-distributed-22-23s-postgres-v3-volume:/var/lib/postgresql/data
 
 volumes:
-  mb-distributed-22-23s-postgres-v2-volume:
+  data-protection-keys:
+  mb-distributed-22-23s-postgres-v3-volume:
+    

@@ -66,10 +66,10 @@ public class SubjectsController : ControllerBase
     /// </summary>
     /// <param name="subjectId">The ID of the subject.</param>
     /// <returns>The image file associated with the subject.</returns>
-    [HttpGet("{subjectId}")]
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(SubjectDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("{subjectId}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "Optional")]
     public async Task<IActionResult> GetSubjectDetails(Guid subjectId)
     {
@@ -125,7 +125,7 @@ public class SubjectsController : ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> AddRemoveSubject([FromBody] UserSubjectAction userSubjectAction)
     {

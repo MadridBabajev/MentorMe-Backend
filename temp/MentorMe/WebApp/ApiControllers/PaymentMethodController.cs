@@ -57,21 +57,21 @@ public class PaymentMethodController: ControllerBase
             return FormatErrorResponse($"Error retrieving the payment method list: {e.Message}");
         }
     }
-    
+
     /// <summary>
     /// Removing a payment method
     /// </summary>
-    /// <param name="paymentMethod">Specifies what payment method to delete</param>
+    /// <param name="paymentMethodId">Specifies what payment method to delete</param>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> RemovePaymentMethod([FromBody] RemovePaymentMethod paymentMethod)
+    public async Task<IActionResult> RemovePaymentMethod([FromQuery] string paymentMethodId)
     {
         try
         {
-            await _bll.PaymentMethodService.DeletePaymentMethod(paymentMethod.PaymentMethodId);
+            await _bll.PaymentMethodService.DeletePaymentMethod(Guid.Parse(paymentMethodId));
             return Ok();
         }
         catch (Exception e)

@@ -47,25 +47,26 @@ public class ProfileController: ControllerBase
         _editProfileMapper = new EditProfileMapper(autoMapper);
         _updatedProfileDataMapper = new UpdatedProfileDataMapper(autoMapper);
     }
-    
+
     /// <summary>
     /// Getting the student profile
     /// </summary>
-    /// <param name="profileDataRequest">Field specifying whether
+    /// <param name="visitedUserId">Field specifying whether
     /// the user want to see the page's information as a guest or the owner</param>
     /// <returns>Student profile details</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(StudentProfile), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpGet]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetStudentProfile([FromBody] ProfileDataRequest profileDataRequest)
+    public async Task<IActionResult> GetStudentProfile([FromQuery] string? visitedUserId)
     {
         try
         {
             Guid userId = User.GetUserId();
             return Ok(_studentProfileMapper.Map(await 
-                _bll.StudentsService.GetStudentProfile(userId, profileDataRequest.VisitedUserId)));
+                _bll.StudentsService.GetStudentProfile(userId, visitedUserId != null ?
+                    Guid.Parse(visitedUserId) : null)));
 
         }
         catch (Exception e)
@@ -74,19 +75,19 @@ public class ProfileController: ControllerBase
         }
         
     }
-    
+
     /// <summary>
     /// Getting the tutor profile
     /// </summary>
-    /// <param name="profileDataRequest">Field specifying whether
+    /// <param name="visitedUserId">Field specifying whether
     /// the user want to see the page's information as a guest or the owner</param>
     /// <returns>Tutor profile details</returns>
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType(typeof(TutorProfile), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpGet]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public async Task<IActionResult> GetTutorProfile([FromBody] ProfileDataRequest profileDataRequest)
+    public async Task<IActionResult> GetTutorProfile([FromQuery] string? visitedUserId)
     {
         
         Guid userId = User.GetUserId();
@@ -94,7 +95,8 @@ public class ProfileController: ControllerBase
         try
         {
             var res = Ok(_tutorProfileMapper.Map(await 
-                _bll.TutorsService.GetTutorProfile(userId, profileDataRequest.VisitedUserId)));
+                _bll.TutorsService.GetTutorProfile(userId, visitedUserId != null ?
+                    Guid.Parse(visitedUserId) : null)));
             return res;
         }
         catch (Exception e)
@@ -156,7 +158,7 @@ public class ProfileController: ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> EditTutorBankingDetails([FromBody] TutorBankingDetailsWithoutType updatedBankingDetails)
     {
@@ -212,7 +214,7 @@ public class ProfileController: ControllerBase
     [Produces(MediaTypeNames.Application.Json)]
     [ProducesResponseType( StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpPost]
+    [HttpPut]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> EditProfileData([FromBody] UpdateProfileDataRequest updatedProfileDataRequest)
     {

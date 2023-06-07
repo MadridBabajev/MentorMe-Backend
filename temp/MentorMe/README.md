@@ -42,25 +42,7 @@ dotnet aspnet-codegenerator controller -m Student -name StudentsController -outD
 dotnet aspnet-codegenerator controller -m Student -name StudentsController -outDir ApiControllers -api -dc ApplicationDbContext -udl -f
 ~~~
 
-# 3. Run Docker Compose
-
-~~~bash
-# Start the DB service 
-cd icd0021-22-23-s
-docker-compose build
-docker-compose up #-d to run the service in the background
-# End the DB service
-docker-compose down
-~~~
-
-# 4. Generate Identity UI
-
-~~~bash
-cd WebApp
-dotnet aspnet-codegenerator identity -dc DAL.EF.App.ApplicationDbContext --userClass AppUser -f 
-~~~
-
-# 5. Required Nuget packages
+# 3. Download required Nuget packages
 * Microsoft.AspNetCore.Authentication.JwtBearer
 * Microsoft.IdentityModel.Tokens
 * AutoMapper.Extensions.Microsoft.DependencyInjection
@@ -69,10 +51,21 @@ dotnet aspnet-codegenerator identity -dc DAL.EF.App.ApplicationDbContext --userC
 * Microsoft.AspNetCore.Mvc.Versioning
 * Asp.Versioning.Mvc.ApiExplorer
 
-# 6. Run the live server
+# 4. Run the live server (To see the swagger documentation)
 
 ~~~bash
 dotnet watch run --project WebApp
+~~~
+
+# 7. Docker deployment
+
+~~~bash
+# Updating and running the containers (locally)
+docker-compose up -d --build
+# Deploying the container to the DockerHub
+docker buildx build --progress=plain  -t webapp:latest .
+docker tag webapp madridbabajev/mb-distributed-22-23-app:latest
+docker push madridbabajev/mb-distributed-22-23-app:latest
 ~~~
 
 # Student Data
