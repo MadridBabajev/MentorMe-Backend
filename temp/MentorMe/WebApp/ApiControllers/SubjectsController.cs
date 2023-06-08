@@ -3,7 +3,6 @@ using System.Net.Mime;
 using App.BLL.Contracts;
 using Asp.Versioning;
 using AutoMapper;
-using Domain.Entities;
 using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -46,7 +45,7 @@ public class SubjectsController : ControllerBase
     /// <returns>A list of subjects.</returns>
     [HttpGet]
     [Produces(MediaTypeNames.Application.Json)]
-    [ProducesResponseType(typeof(IEnumerable<Subject>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<SubjectListElement>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<SubjectListElement>>> GetAllSubjects()
     {
         // Get subjects from the database
@@ -88,7 +87,7 @@ public class SubjectsController : ControllerBase
         {
             var subject = await _bll.SubjectsService.FindSubjectAsync(subjectId, userId);
             if (subject != null) return Ok(_detailsMapper.MapDetailsSubject(subject));
-            return FormatErrorResponse($"Error finding the subject:");
+            return FormatErrorResponse("Error finding the subject:");
         }
         catch (Exception e)
         {

@@ -93,7 +93,6 @@ public class AvailabilityController: ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> AddAvailability([FromBody] NewAvailability newAvailability)
     {
-
         try
         {
             Guid tutorId = User.GetUserId();

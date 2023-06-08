@@ -11,6 +11,8 @@ using Domain.Enums;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Moq;
+using Public.DTO.v1.Lessons;
+using Payment = Domain.Entities.Payment;
 
 namespace ProjectTests.Unit;
 
@@ -48,7 +50,7 @@ public class LessonsServiceUnitTests
     [Fact]
     public async Task GetLessonData_ShouldReturnLessonData_WhenGivenValidLessonId()
     {
-        // Arrange
+        // Success
         var lessonId = dataGuids.Lesson1Id;
         var userId = Guid.NewGuid();
 
@@ -86,7 +88,7 @@ public class LessonsServiceUnitTests
             Subject = bllSubjectData,
             LessonStudent = bllStudent,
             LessonTutor = bllTutor,
-            Tags = new List<BLLTag>()
+            Tags = new List<BLLTag>(),
         };
 
         _uowMock.Setup(u => u.LessonsRepository.FindLessonById(It.Is<Guid>(id => id == lessonId))).ReturnsAsync(lesson);
@@ -101,7 +103,7 @@ public class LessonsServiceUnitTests
         Assert.Equal(bllLessonData, result);
     }
 
-    [Fact]
+    [Fact] // Success
     public async Task GetLessonsList_ShouldReturnLessonList_WhenCalledWithValidUserId()
     {
         // Arrange
@@ -109,15 +111,15 @@ public class LessonsServiceUnitTests
 
         var lessons = new List<Lesson>
         {
-            new() { Id = dataGuids.Lesson1Id },
-            new() { Id = dataGuids.Lesson2Id }
+            new() { Id = Guid.NewGuid() },
+            new() { Id = Guid.NewGuid() }
         };
 
-        var bllLessonListElements = lessons.Select(l => new BLLLessonListElement { Id = l.Id });
+        var bllLessonListElements = lessons.Select(l => new BLLLessonListElement { Id = l.Id }).ToList();
 
-        _uowMock.Setup(u => u.LessonsRepository.GetLessonsList(It.Is<Guid>(id => id == userId))).ReturnsAsync(lessons);
-        _listMapperMock.Setup(m => m.Map(It.IsAny<Lesson>()))
-            .Returns((Lesson l) => bllLessonListElements.First(b => b.Id == l.Id));
+        _uowMock.Setup(u => u.LessonsRepository.GetLessonsList(userId)).ReturnsAsync(lessons);
+
+        _listMapperMock.Setup(m => m.Map(It.IsAny<Lesson>())).Returns<Lesson>(l => bllLessonListElements.First(b => b.Id == l.Id));
 
         // Act
         var result = await _lessonsService.GetLessonsList(userId);
@@ -126,52 +128,73 @@ public class LessonsServiceUnitTests
         Assert.NotNull(result);
         Assert.Equal(bllLessonListElements, result);
     }
-
-// Test method for GetReserveLessonData method
+    
     [Fact]
-    public async Task GetReserveLessonData_ShouldReturnReserveLessonData_WhenCalledWithValidStudentIdAndTutorId()
+    public async Task CreateLesson_ShouldReturnLessonId_WhenGivenValidReserveLessonRequestAndStudentId()
     {
         // Arrange
         var studentId = Guid.NewGuid();
-        var tutorId = Guid.NewGuid();
-
-        var studentPaymentMethods = new List<StudentPaymentMethod>
+        var reserveLessonRequest = new ReserveLessonRequest
         {
-            new StudentPaymentMethod { PaymentMethodType = EPaymentMethod.InApp },
-            new StudentPaymentMethod { PaymentMethodType = EPaymentMethod.Other }
+            TutorId = Guid.NewGuid(),
+            PaymentMethodId = Guid.NewGuid(),
+            SubjectId = Guid.NewGuid(),
+            LessonStartTime = DateTime.UtcNow.AddDays(1),
+            LessonEndTime = DateTime.UtcNow.AddDays(1).AddHours(1)
         };
 
-        var tutorAvailabilities = new List<TutorAvailability>
-        {
-            new TutorAvailability { DayOfTheWeek = EAvailabilityDayOfTheWeek.Monday },
-            new TutorAvailability { DayOfTheWeek = EAvailabilityDayOfTheWeek.Tuesday }
-        };
+        var expectedLessonId = Guid.NewGuid();
 
-        var tutorSubjects = new List<Subject>
-        {
-            new Subject { Id = dataGuids.SubjectMathId },
-            new Subject { Id = dataGuids.SubjectPhysicsId }
-        };
-
-        var bllReserveLessonData = new BLLReserveLessonData
-        {
-            PaymentMethods = studentPaymentMethods.Select(s => _paymentMethodMapperMock.Object.Map(s)),
-            Availabilities = tutorAvailabilities.Select(t => _availabilityMapperMock.Object.Map(t)),
-            Subjects = tutorSubjects.Select(t => _subjectsFilterMapperMock.Object.Map(t))
-        };
-
-        _uowMock.Setup(u => u.StudentsRepository.GetStudentPaymentMethods(It.Is<Guid>(id => id == studentId)))
-            .ReturnsAsync(studentPaymentMethods);
-        _uowMock.Setup(u => u.TutorsRepository.GetTutorAvailabilities(It.Is<Guid?>(id => id == tutorId)))
-            .ReturnsAsync(tutorAvailabilities);
-        _uowMock.Setup(u => u.SubjectsRepository.GetUserSubjects(It.Is<Guid?>(id => id == tutorId)))
-            .ReturnsAsync(tutorSubjects);
+        _uowMock.Setup(u => u.LessonsRepository.CreateLesson(It.Is<ReserveLessonRequest>(req => req == reserveLessonRequest), It.Is<Guid>(id => id == studentId)))
+            .ReturnsAsync(expectedLessonId);
 
         // Act
-        var result = await _lessonsService.GetReserveLessonData(studentId, tutorId);
+        var result = await _lessonsService.CreateLesson(reserveLessonRequest, studentId);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(bllReserveLessonData, result);
+        Assert.Equal(expectedLessonId, result);
     }
+    
+    [Fact]
+    public async Task CancelLesson_ShouldCallRepository_WhenGivenValidLessonId()
+    {
+        // Arrange
+        var lessonId = Guid.NewGuid();
+
+        _uowMock.Setup(u => u.LessonsRepository.CancelLesson(It.Is<Guid>(id => id == lessonId))).Returns(Task.CompletedTask);
+
+        // Act
+        await _lessonsService.CancelLesson(lessonId);
+
+        // Assert
+        _uowMock.Verify(u => u.LessonsRepository.CancelLesson(It.Is<Guid>(id => id == lessonId)), Times.Once);
+    }
+
+    [Theory]
+    [InlineData(ETutorDecision.Accept)]
+    [InlineData(ETutorDecision.Decline)]
+    public async Task AcceptDeclineLesson_ShouldCallRepository_WhenGivenValidLessonIdAndDecision(ETutorDecision decision)
+    {
+        // Arrange
+        var lessonId = Guid.NewGuid();
+
+        _uowMock.Setup(u => u.LessonsRepository.AcceptLesson(It.Is<Guid>(id => id == lessonId))).Returns(Task.CompletedTask);
+        _uowMock.Setup(u => u.LessonsRepository.DeclineLesson(It.Is<Guid>(id => id == lessonId))).Returns(Task.CompletedTask);
+
+        // Act
+        await _lessonsService.AcceptDeclineLesson(lessonId, decision);
+
+        // Assert
+        if (decision == ETutorDecision.Accept)
+        {
+            _uowMock.Verify(u => u.LessonsRepository.AcceptLesson(It.Is<Guid>(id => id == lessonId)), Times.Once);
+            _uowMock.Verify(u => u.LessonsRepository.DeclineLesson(It.IsAny<Guid>()), Times.Never);
+        }
+        else
+        {
+            _uowMock.Verify(u => u.LessonsRepository.DeclineLesson(It.Is<Guid>(id => id == lessonId)), Times.Once);
+            _uowMock.Verify(u => u.LessonsRepository.AcceptLesson(It.IsAny<Guid>()), Times.Never);
+        }
+    }
+    
 }

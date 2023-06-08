@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ProjectTests.Helpers;
 
 namespace ProjectTests;
 
@@ -38,6 +39,9 @@ public class CustomWebAppFactory<TStartup> : WebApplicationFactory<TStartup>
             using var scope = sp.CreateScope();
             var scopedServices = scope.ServiceProvider;
             var db = scopedServices.GetRequiredService<ApplicationDbContext>();
+            
+            // Test data seeding
+            SeedTestData.Initialize(scopedServices);
             var logger = scopedServices
                 .GetRequiredService<ILogger<CustomWebAppFactory<TStartup>>>();
 

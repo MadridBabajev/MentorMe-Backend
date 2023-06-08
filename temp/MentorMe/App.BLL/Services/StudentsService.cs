@@ -33,7 +33,7 @@ public class StudentsService:
             await Uow.StudentsRepository.FindStudentById(visitedUserId!);
         var bllStudent = StudentProfileMapper.Map(domainStudent);
 
-        bllStudent!.IsPublic = visitedUserId != null;;
+        bllStudent!.IsPublic = visitedUserId != null;
 
         return bllStudent;
     }

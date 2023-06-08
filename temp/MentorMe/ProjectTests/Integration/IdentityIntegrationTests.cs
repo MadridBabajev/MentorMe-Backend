@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Public.DTO.v1.Identity;
 using Xunit.Abstractions;
 
-namespace ProjectTests.Integration.Identity;
+namespace ProjectTests.Integration;
 
 // ReSharper disable InconsistentNaming
 public class IdentityIntegrationTests : IClassFixture<CustomWebAppFactory<Program>>

@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit.Abstractions;
 
@@ -8,8 +9,7 @@ public class HomePageTests : IClassFixture<CustomWebAppFactory<Program>>
     private readonly HttpClient _client;
     private readonly CustomWebAppFactory<Program> _factory;
     private readonly ITestOutputHelper _testOutputHelper;
-
-
+    
     public HomePageTests(CustomWebAppFactory<Program> factory, ITestOutputHelper testOutputHelper)
     {
         _factory = factory;
@@ -20,7 +20,7 @@ public class HomePageTests : IClassFixture<CustomWebAppFactory<Program>>
         });
     }
 
-    [Fact(DisplayName = "GET - check that home page loads")]
+    [Fact(DisplayName = "GET - check that the user gets redirected to the swagger page when going to the root")]
     public async Task DefaultHomePageTest()
     {
         // Arrange
@@ -29,9 +29,9 @@ public class HomePageTests : IClassFixture<CustomWebAppFactory<Program>>
         var response = await _client.GetAsync("/");
 
         // Assert
-        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/swagger", response.Headers.Location!.OriginalString);
         
         _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
-        
     }
 }

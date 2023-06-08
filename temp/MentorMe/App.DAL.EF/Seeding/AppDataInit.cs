@@ -8,20 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace App.DAL.EF.Seeding;
 
 /// <summary>
-/// Seeds all entities:
-/// * 1 - student
-/// * 6 - tutors
-/// * 5 - subjects
-/// * 2 - student subjects
-/// * 2 - 4 tutor subjects
-/// * 1 - student payment methods
-/// * 2 - tutor banking details
-/// * 4 - tutor availabilities
-/// * 3 - reviews
-/// * 2 - lessons
-/// * 2 - lesson participation
-/// * 1 - cancellation
-/// * 1 - tag
+/// Seeds initial entities
 /// </summary>
 
 public static class AppDataInit
