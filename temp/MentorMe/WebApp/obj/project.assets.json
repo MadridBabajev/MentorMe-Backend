@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net7.0": {
+    "net8.0": {
       "Asp.Versioning.Abstractions/7.0.0": {
         "type": "package",
         "dependencies": {
@@ -4346,7 +4346,7 @@
       },
       "App.BLL/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.BLL.Contracts": "1.0.0",
           "App.DAL.Contracts": "1.0.0",
@@ -4365,7 +4365,7 @@
       },
       "App.BLL.Contracts/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.DAL.Contracts": "1.0.0",
           "BLL.DTO": "1.0.0",
@@ -4382,7 +4382,7 @@
       },
       "App.DAL.Contracts/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.Domain": "1.0.0",
           "BLL.DTO": "1.0.0",
@@ -4399,7 +4399,7 @@
       },
       "App.DAL.EF/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.DAL.Contracts": "1.0.0",
           "App.Domain": "1.0.0",
@@ -4422,7 +4422,7 @@
       },
       "App.Domain/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.Domain": "1.0.0",
           "Base.Domain.Contracts": "1.0.0",
@@ -4442,7 +4442,7 @@
       },
       "Base.BLL/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.BLL.Contracts": "1.0.0",
           "Base.DAL.Contracts": "1.0.0",
@@ -4457,7 +4457,7 @@
       },
       "Base.BLL.Contracts/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.DAL.Contracts": "1.0.0",
           "Base.Domain.Contracts": "1.0.0"
@@ -4471,7 +4471,7 @@
       },
       "Base.DAL/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "Base.Mapper.Contracts": "1.0.0"
@@ -4485,7 +4485,7 @@
       },
       "Base.DAL.Contracts/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.Domain.Contracts": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.3"
@@ -4499,7 +4499,7 @@
       },
       "Base.DAL.EF/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.DAL.Contracts": "1.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.3",
@@ -4514,7 +4514,7 @@
       },
       "Base.Domain/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.Domain.Contracts": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "7.0.3"
@@ -4528,7 +4528,7 @@
       },
       "Base.Domain.Contracts/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "compile": {
           "bin/placeholder/Base.Domain.Contracts.dll": {}
         },
@@ -4538,7 +4538,7 @@
       },
       "Base.Mapper.Contracts/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Base.DAL.Contracts": "1.0.0"
         },
@@ -4551,7 +4551,7 @@
       },
       "BLL.DTO/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.Domain": "1.0.0",
           "Base.Domain.Contracts": "1.0.0"
@@ -4565,7 +4565,7 @@
       },
       "Helpers/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.Domain": "1.0.0",
           "Microsoft.IdentityModel.Tokens": "6.29.0",
@@ -4582,7 +4582,7 @@
       },
       "Public.DTO/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "App.Domain": "1.0.0",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
@@ -12617,7 +12617,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net7.0": [
+    "net8.0": [
       "App.BLL >= 1.0.0",
       "App.BLL.Contracts >= 1.0.0",
       "App.DAL.EF >= 1.0.0",
@@ -12643,48 +12643,47 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\rbaba\\.nuget\\packages\\": {}
+    "C:\\Users\\madri\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\WebApp.csproj",
+      "projectUniqueName": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\WebApp\\WebApp.csproj",
       "projectName": "WebApp",
-      "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\WebApp.csproj",
-      "packagesPath": "C:\\Users\\rbaba\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\WebApp\\obj\\",
+      "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\WebApp\\WebApp.csproj",
+      "packagesPath": "C:\\Users\\madri\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\WebApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\rbaba\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\madri\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net7.0"
+        "net8.0"
       ],
       "sources": {
-        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net7.0": {
-          "targetAlias": "net7.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.BLL.Contracts\\App.BLL.Contracts.csproj": {
-              "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.BLL.Contracts\\App.BLL.Contracts.csproj"
+            "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.BLL.Contracts\\App.BLL.Contracts.csproj": {
+              "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.BLL.Contracts\\App.BLL.Contracts.csproj"
             },
-            "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.BLL\\App.BLL.csproj": {
-              "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.BLL\\App.BLL.csproj"
+            "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.BLL\\App.BLL.csproj": {
+              "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.BLL\\App.BLL.csproj"
             },
-            "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj": {
-              "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj"
+            "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj": {
+              "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.DAL.EF\\App.DAL.EF.csproj"
             },
-            "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
-              "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
+            "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.Domain\\App.Domain.csproj": {
+              "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\App.Domain\\App.Domain.csproj"
             },
-            "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj": {
-              "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Helpers\\Helpers.csproj"
+            "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\Helpers\\Helpers.csproj": {
+              "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\Helpers\\Helpers.csproj"
             },
-            "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj": {
-              "projectPath": "C:\\Users\\rbaba\\RiderProjects\\icd0021-22-23-s\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj"
+            "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj": {
+              "projectPath": "C:\\Users\\madri\\dev\\RiderProjects\\MentorMe-Backend\\temp\\MentorMe\\Public.DTO\\Public.DTO.csproj"
             }
           }
         }
@@ -12693,11 +12692,16 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
-      "net7.0": {
-        "targetAlias": "net7.0",
+      "net8.0": {
+        "targetAlias": "net8.0",
         "dependencies": {
           "Asp.Versioning.Http": {
             "target": "Package",
@@ -12785,39 +12789,49 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
     {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.IdentityModel.Tokens.Jwt' 6.29.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
+      "libraryId": "System.IdentityModel.Tokens.Jwt",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Asp.Versioning.WebApi 7.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Asp.Versioning.WebApi 7.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
       "libraryId": "Asp.Versioning.WebApi",
       "targetGraphs": [
-        "net7.0"
+        "net8.0"
       ]
     },
     {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Asp.Versioning.WebApi.ApiExplorer 7.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Asp.Versioning.WebApi.ApiExplorer 7.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
       "libraryId": "Asp.Versioning.WebApi.ApiExplorer",
       "targetGraphs": [
-        "net7.0"
+        "net8.0"
       ]
     },
     {
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Microsoft.AspNet.WebApi.Core 5.2.7' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Microsoft.AspNet.WebApi.Core 5.2.7' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.AspNet.WebApi.Core",
       "targetGraphs": [
-        "net7.0"
+        "net8.0"
       ]
     }
   ]

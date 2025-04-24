@@ -157,18 +157,21 @@ app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
+{
+    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    foreach (var description in provider.ApiVersionDescriptions)
     {
-        var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-        foreach (var description in provider.ApiVersionDescriptions)
-        {
-            options.SwaggerEndpoint(
-                $"/swagger/{description.GroupName}/swagger.json",
-                description.GroupName
-            );
-        }
+        options.SwaggerEndpoint(
+            $"/swagger/{description.GroupName}/swagger.json",
+            description.GroupName
+        );
     }
-);
+});
 
+// Application is set to listen on all interfaces
+builder.WebHost.UseUrls("http://*:80");
+
+// Map routes for controllers
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
