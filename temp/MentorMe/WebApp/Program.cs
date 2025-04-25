@@ -121,6 +121,7 @@ builder.Services.AddApiVersioning(options =>
         options.SubstituteApiVersionInUrl = true;
     });
 
+// Add endpoints and Swagger support
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen();
@@ -132,7 +133,7 @@ var app = builder.Build();
 // ===================== Pipeline Setup =====================
 
 // Set up the database configurations and seed the initial data
-SetupAppData(app, app.Configuration, app.Environment);
+await SetupAppData(app, app.Configuration, app.Environment);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -180,13 +181,19 @@ app.MapControllerRoute(
 
 app.Run();
 
-static void SetupAppData(IApplicationBuilder app, IConfiguration configuration, IWebHostEnvironment env)
+static async Task SetupAppData(IApplicationBuilder app, IConfiguration configuration, IWebHostEnvironment env)
 {
+    // ==== Eagerly preload ML models ====
+    using var scope = app.ApplicationServices.CreateScope();
+    var bll = scope.ServiceProvider.GetRequiredService<IAppBLL>();
+    await bll.OcrInferenceService.LoadModelAsync();
+    await bll.SummarizationInferenceService.LoadModelAsync();
+    
     using var serviceScope = app.ApplicationServices
         .GetRequiredService<IServiceScopeFactory>()
         .CreateScope();
-    using var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
+    await using var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+    
     // Get the DataGuids instance from the DI container
     var guids = serviceScope.ServiceProvider.GetRequiredService<DataGuids>();
     

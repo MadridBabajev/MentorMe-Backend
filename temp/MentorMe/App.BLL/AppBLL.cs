@@ -1,6 +1,7 @@
 ﻿using App.BLL.Contracts;
 using App.BLL.Mappers;
 using App.BLL.Services;
+using App.BLL.Services.ML;
 using App.DAL.Contracts;
 using AutoMapper;
 using Base.BLL;
@@ -31,6 +32,8 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
     private ILessonsService? _lessons;
     private IAvailabilityService? _availabilities;
     private IPaymentMethodService? _paymentMethods;
+    private IOcrInferenceService? _ocrInference;
+    private ISummarizationInferenceService? _summarizationInference;
 
     public AppBLL(IAppUOW uow, IMapper mapper) : base(uow)
     {
@@ -67,4 +70,10 @@ public class AppBLL : BaseBLL<IAppUOW>, IAppBLL
     
     public IPaymentMethodService PaymentMethodService =>
         _paymentMethods ??= new PaymentMethodService(Uow, new PaymentMethodDetailedMapper(_mapper));
+    
+    public IOcrInferenceService OcrInferenceService =>
+        _ocrInference ??= new OcrInferenceService();
+    
+    public ISummarizationInferenceService SummarizationInferenceService =>
+        _summarizationInference ??= new SummarizationInferenceService();
 }

@@ -6,12 +6,11 @@ namespace App.BLL.Contracts;
 public interface IAppBLL : IBaseBLL
 {
     ITutorsService TutorsService { get; }
-
     IStudentsService StudentsService { get; }
-
     ISubjectsService SubjectsService { get; }
-    
     ILessonsService LessonsService { get; }
     IAvailabilityService AvailabilityService { get; }
     IPaymentMethodService PaymentMethodService { get; }
+    IOcrInferenceService OcrInferenceService { get; }
+    ISummarizationInferenceService SummarizationInferenceService { get; }
 }
