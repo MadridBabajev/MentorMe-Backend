@@ -57,8 +57,7 @@ namespace App.BLL.Services.ML
                 addBatchDimensionInput: false);
 
             // 4) bind to an empty IDataView
-            var emptyDv = _mlContext.Data.LoadFromEnumerable(
-                new List<SummarizationInput>());
+            var emptyDv = _mlContext.Data.LoadFromEnumerable(new List<SummarizationInput>());
             _mlModel = pipeline.Fit(emptyDv);
             _predictionEngine = _mlContext.Model
                 .CreatePredictionEngine<SummarizationInput, SummarizationOutput>(_mlModel);

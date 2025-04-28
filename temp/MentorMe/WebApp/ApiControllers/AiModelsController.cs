@@ -2,7 +2,6 @@ using System.Net.Mime;
 using App.BLL.Contracts;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Public.DTO.v1.ML;
 
 namespace WebApp.ApiControllers;
@@ -105,7 +104,7 @@ public class AiModelsController : ControllerBase
             // Extract text from the image and summarize
             using var stream = file.OpenReadStream();
             var lines = await _bll.OcrInferenceService.RunInferenceAsync(stream);
-            var summarizedText = await _bll.SummarizationInferenceService.RunInferenceAsync(String.Join(" ", lines));
+            var summarizedText = await _bll.SummarizationInferenceService.RunInferenceAsync(string.Join(" ", lines));
             
             return Ok(summarizedText);
         }

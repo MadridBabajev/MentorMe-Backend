@@ -121,9 +121,7 @@ namespace App.BLL.Services.ML
                     if (score > max) { max = score; best = v; }
                 }
 
-                if (best != VocabSize - 1 && best != last)
-                    sb.Append(CharMap[best]);
-
+                if (best != VocabSize - 1 && best != last) sb.Append(CharMap[best]);
                 last = best;
             }
 
