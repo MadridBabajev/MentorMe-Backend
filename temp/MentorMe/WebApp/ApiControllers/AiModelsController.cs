@@ -68,7 +68,6 @@ public class AiModelsController : ControllerBase
         {
             var inferenceInput = summarizationText?.text;
             if (inferenceInput == null) return BadRequest(new { Error = "Please upload an image file." });
-            // enforce your 2000-char rule
             const int CHAR_LIMIT = 2000;
             if (inferenceInput.Length > CHAR_LIMIT) throw new ArgumentException($"Input is {inferenceInput.Length} chars; max allowed is {CHAR_LIMIT}.");
             

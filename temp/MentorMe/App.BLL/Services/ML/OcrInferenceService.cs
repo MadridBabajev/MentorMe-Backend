@@ -34,7 +34,7 @@ namespace App.BLL.Services.ML
         {
             if (_mlModel != null) return Task.CompletedTask;
 
-            // 1) Load your SavedModel directory
+            // 1) Load the SavedModel directory
             var tfModel = _mlContext.Model.LoadTensorFlowModel(MODEL_DIR);
 
             // 2) Wire up the pipeline
@@ -47,7 +47,7 @@ namespace App.BLL.Services.ML
             var emptyDv  = _mlContext.Data.LoadFromEnumerable(new List<OcrInput>());
             _mlModel = pipeline.Fit(emptyDv);
 
-            // 4) Finally get your PredictionEngine
+            // 4) Finally get the PredictionEngine
             _predictionEngine = _mlContext.Model.CreatePredictionEngine<OcrInput, OcrOutput>(_mlModel);
 
             return Task.CompletedTask;
