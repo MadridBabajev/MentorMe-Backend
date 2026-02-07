@@ -1,36 +1,84 @@
-# Common IntelliJ Platform excludes
-
-# User specific
-**/.idea/**/workspace.xml
-**/.idea/**/tasks.xml
-**/.idea/shelf/*
-**/.idea/dictionaries
-**/.idea/httpRequests/
-
-# Sensitive or high-churn files
-**/.idea/**/dataSources/
-**/.idea/**/dataSources.ids
-**/.idea/**/dataSources.xml
-**/.idea/**/dataSources.local.xml
-**/.idea/**/sqlDataSources.xml
-**/.idea/**/dynamic.xml
-
-# Rider
-# Rider auto-generates .iml files, and contentModel.xml
-**/.idea/**/*.iml
-**/.idea/**/contentModel.xml
-**/.idea/**/modules.xml
-
-*.suo
-*.user
-.vs/
-[Bb]in/
-[Oo]bj/
-_UpgradeReport_Files/
-[Pp]ackages/
-
+# OS
+.DS_Store
 Thumbs.db
 Desktop.ini
-.DS_Store
-./temp/MentorMe/WebApp/Models/OCR/
-./temp/MentorMe/WebApp/Models/Summarization/
+
+# Rider / IntelliJ
+**/.idea/
+*.sln.iml
+
+# Visual Studio / MSBuild
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cache
+*.log
+
+# .NET build artifacts
+**/bin/
+**/obj/
+**/[Bb]in/
+**/[Oo]bj/
+TestResults/
+*.nupkg
+*.snupkg
+*.nuspec
+.nuget/
+packages/
+_UpgradeReport_Files/
+
+# Publish / artifacts
+**/publish/
+**/artifacts/
+**/out/
+
+# ASP.NET / tooling
+**/wwwroot/lib/
+appsettings.*.json.user
+secrets.json
+*.pfx
+
+# Logs
+logs/
+*.log
+
+# Node / JavaScript
+**/node_modules/
+**/dist/
+**/build/
+**/.parcel-cache/
+**/.next/
+**/.nuxt/
+**/.svelte-kit/
+**/.vite/
+**/.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Coverage
+**/coverage/
+**/*.coverage
+**/*.coveragexml
+
+# Local env
+.env
+.env.*
+!.env.example
+
+# ReSharper / DotCover
+_ReSharper*/
+*.DotSettings.user
+**/dotCover.Output/
+
+# Azure / Docker local artifacts (common)
+.azure/
+docker-data/
+
+# Project-specific generated model outputs
+WebApp/Models/OCR/
+WebApp/Models/Summarization/
