@@ -56,6 +56,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.BLL", "App.BLL\App.BLL.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.BLL.Contracts", "App.BLL.Contracts\App.BLL.Contracts.csproj", "{2EC93CFB-BE18-4ABF-95EC-2E6B8F85014A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "visual", "visual", "{C6DBD6C2-BB40-4176-8E78-C9A467FDEAF4}"
+	ProjectSection(SolutionItems) = preProject
+		docs\images\mentorme-erd.png = docs\images\mentorme-erd.png
+		docs\images\running-integrated-model-flow.png = docs\images\running-integrated-model-flow.png
+		docs\images\swagger-endpoints-1.png = docs\images\swagger-endpoints-1.png
+		docs\images\swagger-endpoints-2.png = docs\images\swagger-endpoints-2.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,5 +168,6 @@ Global
 		{93477728-68C0-4B83-BDB5-AD583DA39ADC} = {4B52B182-BF7B-4CE2-99E1-C9D64FBAC46C}
 		{75BA6024-FE54-4647-9F9B-9E8142829EA5} = {C23A0A27-F16E-4214-842C-3B61825388DF}
 		{2EC93CFB-BE18-4ABF-95EC-2E6B8F85014A} = {14C6E266-66F3-428D-A126-F89C8EAFB2CD}
+		{C6DBD6C2-BB40-4176-8E78-C9A467FDEAF4} = {670382E4-65C4-40FA-A4C4-7D17A224F155}
 	EndGlobalSection
 EndGlobal
